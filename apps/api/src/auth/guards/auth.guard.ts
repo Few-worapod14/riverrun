@@ -4,14 +4,12 @@ import { JwtService } from '@nestjs/jwt'
 import { Request } from 'express'
 import { jwtConstants } from '../constants'
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator'
-import { UserService } from '../services/user.service'
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
-    private reflector: Reflector,
-    private readonly authService: UserService
+    private reflector: Reflector
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -34,14 +32,7 @@ export class AuthGuard implements CanActivate {
         secret: jwtConstants.secret
       })
 
-      const admin = await this.authService.findById(payload.sub)
-      if (!admin) {
-        throw new UnauthorizedException()
-      }
-      request['user'] = {
-        id: payload.sub,
-        mobile: payload.mobile
-      }
+      request['user'] = payload
       return true
     } catch {
       throw new UnauthorizedException()

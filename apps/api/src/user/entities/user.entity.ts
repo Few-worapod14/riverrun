@@ -1,4 +1,11 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
+} from 'typeorm'
 
 @Entity({
   name: 'users'
@@ -6,9 +13,6 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateCol
 export class User {
   @PrimaryGeneratedColumn()
   id: number
-
-  @Column()
-  username?: string
 
   @Column()
   email: string
@@ -25,13 +29,12 @@ export class User {
   @Column()
   lastName: string
 
-  @Column()
-  isActive:boolean
-
   @CreateDateColumn()
   createdAt: Date
 
   @UpdateDateColumn()
   updatedAt: Date
 
+  @DeleteDateColumn()
+  deletedAt: Date
 }

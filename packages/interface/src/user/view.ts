@@ -1,3 +1,5 @@
+import { USER_ROLE } from '../constant'
+
 export class UserDto {
   id: number
 
@@ -9,7 +11,7 @@ export class UserDto {
 
   lastName: string
 
-  isActive: boolean
+  role: USER_ROLE
 
   createdAt: Date
 

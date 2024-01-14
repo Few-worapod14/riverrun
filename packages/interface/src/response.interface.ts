@@ -1,4 +1,4 @@
-export interface ResponsePaginateDto {
+export interface IResponsePaginate {
   success: boolean
   data: any
   currentPage: number
@@ -22,7 +22,7 @@ export class ResponsePaginate<T> {
   }
 }
 
-export interface ResponseDataDto {
+export interface IResponseData {
   success: boolean
   data?: any
   message?: string | null

@@ -71,6 +71,9 @@ importers:
       '@nestjs/common':
         specifier: ^10.0.0
         version: 10.3.0(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/config':
+        specifier: ^3.1.1
+        version: 3.1.1(@nestjs/common@10.3.0)(reflect-metadata@0.1.13)
       '@nestjs/core':
         specifier: ^10.0.0
         version: 10.3.0(@nestjs/common@10.3.0)(@nestjs/platform-express@10.3.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
@@ -95,6 +98,9 @@ importers:
       dayjs:
         specifier: ^1.11.10
         version: 1.11.10
+      dotenv:
+        specifier: ^16.3.1
+        version: 16.3.1
       passport:
         specifier: ^0.7.0
         version: 0.7.0
@@ -126,6 +132,9 @@ importers:
       '@riverrun/interface':
         specifier: workspace:*
         version: link:../../packages/interface
+      '@types/bcrypt':
+        specifier: ^5.0.2
+        version: 5.0.2
       '@types/express':
         specifier: ^4.17.17
         version: 4.17.21
@@ -1912,6 +1921,20 @@ packages:
       uuid: 8.3.2
     dev: false
 
+  /@nestjs/config@3.1.1(@nestjs/common@10.3.0)(reflect-metadata@0.1.13):
+    resolution: {integrity: sha512-qu5QlNiJdqQtOsnB6lx4JCXPQ96jkKUsOGd+JXfXwqJqZcOSAq6heNFg0opW4pq4J/VZoNwoo87TNnx9wthnqQ==}
+    peerDependencies:
+      '@nestjs/common': ^8.0.0 || ^9.0.0 || ^10.0.0
+      reflect-metadata: ^0.1.13
+    dependencies:
+      '@nestjs/common': 10.3.0(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      dotenv: 16.3.1
+      dotenv-expand: 10.0.0
+      lodash: 4.17.21
+      reflect-metadata: 0.1.13
+      uuid: 9.0.0
+    dev: false
+
   /@nestjs/core@10.3.0(@nestjs/common@10.3.0)(@nestjs/platform-express@10.3.0)(reflect-metadata@0.1.13)(rxjs@7.8.1):
     resolution: {integrity: sha512-N06P5ncknW/Pm8bj964WvLIZn2gNhHliCBoAO1LeBvNImYkecqKcrmLbY49Fa1rmMfEM3MuBHeDys3edeuYAOA==}
     requiresBuild: true
@@ -2821,6 +2844,12 @@ packages:
     resolution: {integrity: sha512-WXCyOcRtH37HAUkpXhUduaxdm82b4GSlyTqajXviN4EfiuPgNYR109xMCKvpl6zPIpua0DGlMEDCq+g8EdoheQ==}
     dependencies:
       '@babel/types': 7.23.6
+    dev: true
+
+  /@types/bcrypt@5.0.2:
+    resolution: {integrity: sha512-6atioO8Y75fNcbmj0G7UjI9lXN2pQ/IGJ2FWT4a/btd0Lk9lQalHLKhkgKVZ3r+spnmWUKfbMi1GEe9wyHQfNQ==}
+    dependencies:
+      '@types/node': 20.10.8
     dev: true
 
   /@types/body-parser@1.19.5:
@@ -4737,7 +4766,6 @@ packages:
   /dotenv-expand@10.0.0:
     resolution: {integrity: sha512-GopVGCpVS1UKH75VKHGuQFqS1Gusej0z4FyQkPdwjil2gNIv+LNsqBlboOzpJFZKVT95GkCyWJbBSdFEFUWI2A==}
     engines: {node: '>=12'}
-    dev: true
 
   /dotenv@16.3.1:
     resolution: {integrity: sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==}
@@ -10315,6 +10343,11 @@ packages:
 
   /uuid@8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
+    hasBin: true
+    dev: false
+
+  /uuid@9.0.0:
+    resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
     hasBin: true
     dev: false
 

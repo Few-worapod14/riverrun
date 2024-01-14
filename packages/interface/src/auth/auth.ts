@@ -1,17 +1,5 @@
-export interface IAuthUserRequest {
+export class UserSignIn {
   email: string
+
   password: string
-}
-
-export interface IAutUserResponse {
-  user: IUserInfo
-  accessToken: string
-}
-
-export interface IUserInfo {
-  id: number
-  email: string
-  mobile: string
-  firstName: string
-  lastName: string
 }
