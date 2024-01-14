@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { UserCreateDto, UserUpdateDto } from '@riverrun/interface'
+import { USER_ROLE, UserCreateDto, UserUpdateDto } from '@riverrun/interface'
 import { hashSync } from 'bcrypt'
 import * as dayjs from 'dayjs'
-import { Repository, UpdateResult } from 'typeorm'
+import { Not, Repository, UpdateResult } from 'typeorm'
 import { User } from '../entities/user.entity'
 
 @Injectable()
@@ -17,6 +17,7 @@ export class UserService {
     const password = hashSync(data.password, 10)
     const insert = {
       ...data,
+      role: USER_ROLE.USER,
       password: password
     }
     return this.userRepository.save(insert)
@@ -38,16 +39,29 @@ export class UserService {
     })
   }
 
-  findByEmail(email: string): Promise<User> {
+  findByCriteria(criteria: any, userId?: number): Promise<User> {
+    let filters = {
+      ...criteria
+    }
+    if (userId) {
+      filters.id = Not(userId)
+    }
+
     return this.userRepository.findOne({
-      where: {
-        email
-      }
+      where: filters
     })
   }
 
   update(id: number, data: UserUpdateDto): Promise<UpdateResult> {
-    return this.userRepository.update(id, data)
+    let update = {
+      ...data
+    }
+    if (data.password) {
+      const password = hashSync(data.password, 10)
+      update.password = password
+    }
+    console.log('zzz', update)
+    return this.userRepository.update(id, update)
   }
 
   remove(id: number): Promise<UpdateResult> {

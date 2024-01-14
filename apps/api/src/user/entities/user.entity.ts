@@ -1,3 +1,4 @@
+import { USER_ROLE } from '@riverrun/interface'
 import {
   Column,
   CreateDateColumn,
@@ -14,10 +15,10 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column()
+  @Column({ unique: true })
   email: string
 
-  @Column()
+  @Column({ unique: true })
   mobile: string
 
   @Column()
@@ -28,6 +29,9 @@ export class User {
 
   @Column()
   lastName: string
+
+  @Column({ enum: USER_ROLE, default: USER_ROLE.USER })
+  role: USER_ROLE
 
   @CreateDateColumn()
   createdAt: Date
