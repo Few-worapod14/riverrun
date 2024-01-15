@@ -25,7 +25,7 @@ export class UserService {
     if (!user) throw new Error('User not found.')
 
     const match = await compare(auth.password, user.password)
-    console.log('match', match)
+
     if (!match) throw new Error('Password incorrect')
 
     if (user && match) {

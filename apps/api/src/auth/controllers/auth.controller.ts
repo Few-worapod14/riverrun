@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpException, HttpStatus, Post, Res } from '@nestjs/common'
+import { Body, Controller, HttpException, HttpStatus, Post, Res } from '@nestjs/common'
 import { UserSignIn } from '@riverrun/interface'
 import { Response } from 'express'
 import { UserService } from '../services/user.service'
@@ -7,7 +7,6 @@ import { UserService } from '../services/user.service'
 export class AuthController {
   constructor(private authService: UserService) {}
 
-  @HttpCode(HttpStatus.OK)
   @Post('user')
   async userSignIn(@Res() res: Response, @Body() body: UserSignIn) {
     try {
@@ -27,6 +26,4 @@ export class AuthController {
       )
     }
   }
-
-  async adminSignIn() {}
 }

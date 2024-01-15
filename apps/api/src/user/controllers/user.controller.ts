@@ -10,11 +10,12 @@ import {
   Res,
   UseGuards
 } from '@nestjs/common'
-import { IResponseData, ResponseData, UserCreateDto, UserUpdateDto } from '@riverrun/interface'
+import { IResponseData, UserCreateDto, UserUpdateDto } from '@riverrun/interface'
 import { Response } from 'express'
 
 import { AuthGuard } from '../../auth/guards/auth.guard'
 import { IRequestWithUser } from '../../auth/requet.interface'
+import { User } from '../entities/user.entity'
 import { UserService } from '../services/user.service'
 
 @Controller('users')
@@ -45,13 +46,13 @@ export class UserController {
       }
 
       await this.userService.create(body)
-      const response: IResponseData = {
+      const response: IResponseData<string> = {
         message: 'Create user success',
         success: true
       }
       res.status(HttpStatus.CREATED).json(response)
     } catch (error) {
-      const msg: IResponseData = {
+      const msg: IResponseData<string> = {
         message: error?.message,
         success: false
       }
@@ -65,10 +66,13 @@ export class UserController {
     try {
       const userId = req.user.sub
       const query = await this.userService.findByID(userId)
-      const response = new ResponseData(true, query)
+      const response: IResponseData<User> = {
+        data: query,
+        success: true
+      }
       res.status(HttpStatus.OK).json(response)
     } catch (error) {
-      const msg: IResponseData = {
+      const msg: IResponseData<string> = {
         message: error?.message,
         success: false
       }
@@ -108,13 +112,13 @@ export class UserController {
       }
 
       await this.userService.update(userId, body)
-      const response: IResponseData = {
+      const response: IResponseData<string> = {
         success: true,
         message: 'Update user success'
       }
       res.status(HttpStatus.OK).json(response)
     } catch (error) {
-      const msg: IResponseData = {
+      const msg: IResponseData<string> = {
         message: error?.message,
         success: false
       }
