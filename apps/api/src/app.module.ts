@@ -4,6 +4,8 @@ import { ServeStaticModule } from '@nestjs/serve-static'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { join } from 'path'
 import { AuthModule } from './auth/auth.module'
+import { BookingModule } from './booking/booking.module'
+import { RoomModule } from './room/room.module'
 import { UserModule } from './user/user.module'
 @Module({
   imports: [
@@ -18,10 +20,7 @@ import { UserModule } from './user/user.module'
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       entities: [__dirname + '/**/entities/*.entity{.ts,.js}'],
-      // migrations: [__dirname + '/db/migrations/*'],
       synchronize: true
-      // logging: false,
-      // uuidExtension: 'uuid-ossp'
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../', 'assets'),
@@ -29,13 +28,9 @@ import { UserModule } from './user/user.module'
       exclude: ['/api/(.*)']
     }),
     UserModule,
-    AuthModule
-    // AdminModule,
-    // ContentModule,
-    // BookingModule,
-    // SettingModule,
-    // MenuModule,
-    // RoomModule,
+    AuthModule,
+    RoomModule,
+    BookingModule
   ],
   controllers: [],
   providers: []

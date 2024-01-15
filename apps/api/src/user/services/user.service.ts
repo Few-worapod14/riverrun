@@ -60,7 +60,7 @@ export class UserService {
       const password = hashSync(data.password, 10)
       update.password = password
     }
-    console.log('zzz', update)
+
     return this.userRepository.update(id, update)
   }
 
