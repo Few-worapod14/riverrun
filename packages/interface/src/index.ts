@@ -1,4 +1,5 @@
 export * from './auth'
+export * from './booking'
 export * from './constant'
 export * from './response.interface'
 export * from './room'
