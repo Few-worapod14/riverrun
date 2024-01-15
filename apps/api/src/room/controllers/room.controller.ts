@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common'
 import { IResponseData } from '@riverrun/interface'
 import { Response } from 'express'
+import { Room } from '../entities/room.entity'
 import { RoomService } from '../services/room.service'
 
 @Controller('rooms')
@@ -20,13 +21,13 @@ export class RoomController {
   async findByID(@Req() req: Request, @Res() res: Response, @Param('id', ParseIntPipe) id: number) {
     try {
       const query = await this.roomService.findByID(id)
-      const response: IResponseData = {
+      const response: IResponseData<Room> = {
         data: query,
         success: true
       }
       res.status(HttpStatus.OK).json(response)
     } catch (error) {
-      const msg: IResponseData = {
+      const msg: IResponseData<string> = {
         message: error?.message,
         success: false
       }

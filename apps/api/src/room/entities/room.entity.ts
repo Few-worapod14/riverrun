@@ -15,4 +15,7 @@ export class Room {
 
   @Column()
   detail: string
+
+  @Column()
+  isActive: boolean
 }

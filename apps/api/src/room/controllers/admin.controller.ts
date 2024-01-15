@@ -17,6 +17,7 @@ import {
 import { IResponseData, IResponsePaginate, RoomCreateDto, RoomUpdateDto } from '@riverrun/interface'
 import { Request, Response } from 'express'
 import { AdminGuard } from '../../auth/guards/admin.guard'
+import { Room } from '../entities/room.entity'
 import { RoomService } from '../services/room.service'
 
 @UseGuards(AdminGuard)
@@ -28,13 +29,13 @@ export class RoomAdminController {
   async create(@Req() req: Request, @Res() res: Response, @Body() body: RoomCreateDto) {
     try {
       const query = await this.roomService.create(body)
-      const response: IResponseData = {
-        data: query,
+      const response: IResponseData<string> = {
+        message: 'Room create successfully',
         success: true
       }
       res.status(HttpStatus.OK).json(response)
     } catch (error) {
-      const msg: IResponseData = {
+      const msg: IResponseData<string> = {
         message: error?.message,
         success: false
       }
@@ -54,7 +55,7 @@ export class RoomAdminController {
       const perPage = limit || 10
       const query = await this.roomService.findAll(currentPage, perPage)
       const total = await this.roomService.count()
-      const response: IResponsePaginate = {
+      const response: IResponsePaginate<Room[]> = {
         success: true,
         total: total,
         currentPage: currentPage,
@@ -74,13 +75,13 @@ export class RoomAdminController {
   async findByID(@Req() req: Request, @Res() res: Response, @Param('id', ParseIntPipe) id: number) {
     try {
       const query = await this.roomService.findByID(id)
-      const response: IResponseData = {
+      const response: IResponseData<Room> = {
         data: query,
         success: true
       }
       res.status(HttpStatus.OK).json(response)
     } catch (error) {
-      const msg: IResponseData = {
+      const msg: IResponseData<string> = {
         message: error?.message,
         success: false
       }
@@ -98,13 +99,13 @@ export class RoomAdminController {
     try {
       await this.roomService.update(id, body)
       const query = await this.roomService.findByID(id)
-      const response: IResponseData = {
+      const response: IResponseData<Room> = {
         data: query,
         success: true
       }
       res.status(HttpStatus.OK).json(response)
     } catch (error) {
-      const msg: IResponseData = {
+      const msg: IResponseData<string> = {
         message: error?.message,
         success: false
       }
@@ -116,13 +117,13 @@ export class RoomAdminController {
   async remove(@Req() req: Request, @Res() res: Response, @Param('id', ParseIntPipe) id: number) {
     try {
       await this.roomService.remove(id)
-      const response: IResponseData = {
+      const response: IResponseData<string> = {
         message: 'Delete successfully',
         success: true
       }
       res.status(HttpStatus.OK).json(response)
     } catch (error) {
-      const msg: IResponseData = {
+      const msg: IResponseData<string> = {
         message: error?.message,
         success: false
       }
