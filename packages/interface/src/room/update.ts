@@ -13,4 +13,7 @@ export class RoomUpdateDto {
 
   @IsOptional()
   detail?: string
+
+  @IsOptional()
+  isActive?: boolean
 }

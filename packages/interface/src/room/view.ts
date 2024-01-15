@@ -6,4 +6,6 @@ export class RoomDto {
   price: number
 
   detail?: string
+
+  isActive: boolean
 }
