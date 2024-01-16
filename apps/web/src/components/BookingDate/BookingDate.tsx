@@ -1,5 +1,6 @@
 import { DateInput, DateValue } from '@mantine/dates'
 import { useState } from 'react'
+import dayjs from 'dayjs';
 
 export const BookingDate = () => {
   const [booking, setBooking] = useState(null)
@@ -10,7 +11,14 @@ export const BookingDate = () => {
 
   return (
     <>
-      <DateInput onChange={handleBooking} />
+      {/* <DateInput onChange={handleBooking} /> */}
+      <DateInput
+      minDate={new Date()}
+      maxDate={dayjs(new Date()).add(1, 'month').toDate()}
+      label="Date input"
+      placeholder="Date input"
+      onChange={handleBooking}
+    />
     </>
   )
 }

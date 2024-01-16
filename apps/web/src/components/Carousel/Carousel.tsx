@@ -37,7 +37,6 @@ export const CarouselBox = () => {
         <Carousel
           loop
           height={300}
-
           // slideSize={{ base: '100%', sm: '50%' }}
           // slideGap={{ base: 'xl', sm: 2 }}
           // align="start"
