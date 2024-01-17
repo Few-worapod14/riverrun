@@ -55,7 +55,7 @@ export const Footer = () => {
             </div>
             <div className="">
               <p className="mb-4">
-                <a href="#!" className="text-neutral-600 dark:text-neutral-200">
+                <a href="/" className="text-neutral-600 dark:text-neutral-200">
                   Home
                 </a>
               </p>
