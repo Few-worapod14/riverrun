@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { BookingCreateDto, BookingUpdateDto } from '@riverrun/interface'
+import * as dayjs from 'dayjs'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
 import { Booking } from '../entities/booking.entity'
 
@@ -14,7 +15,15 @@ export class BookingService {
   create(userId: number, data: BookingCreateDto): Promise<Booking> {
     return this.bookingService.save({
       ...data,
-      userId: userId
+      startData: dayjs(data.startDate),
+      endDate: dayjs(data.endDate),
+      user: {
+        id: userId
+      },
+      room: {
+        id: data.roomId
+      },
+      paid: false
     })
   }
 

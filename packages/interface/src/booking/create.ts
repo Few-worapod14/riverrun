@@ -1,17 +1,14 @@
-import { IsBoolean, IsDate, IsInt } from 'class-validator'
+import { IsDateString, IsInt } from 'class-validator'
 
 export class BookingCreateDto {
-  @IsDate()
-  start_date: Date
+  @IsDateString()
+  startDate: Date
 
-  @IsDate()
-  end_date: Date
+  @IsDateString()
+  endDate: Date
 
   @IsInt()
   roomId: number
-
-  @IsInt()
-  userId?: number
 
   @IsInt()
   adult: number
@@ -21,7 +18,4 @@ export class BookingCreateDto {
 
   @IsInt()
   price: number
-
-  @IsBoolean()
-  paid: boolean
 }

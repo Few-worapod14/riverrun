@@ -67,7 +67,6 @@ export class BookingController {
       }
       res.status(HttpStatus.OK).json(response)
     } catch (error) {
-      console.log('xxx', error)
       const msg: IResponseData<string> = {
         message: error,
         success: false

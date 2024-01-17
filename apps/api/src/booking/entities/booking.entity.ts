@@ -17,10 +17,10 @@ export class Booking {
   id: number
 
   @Column()
-  start_date: Date
+  startDate: Date
 
   @Column()
-  end_date: Date
+  endDate: Date
 
   @ManyToOne(() => Room, (room) => room.id)
   room: Room
@@ -35,7 +35,13 @@ export class Booking {
   children: number
 
   @Column()
-  price: number
+  days: number
+
+  @Column()
+  discount: number
+
+  @Column()
+  total: number
 
   @Column()
   paid: boolean
