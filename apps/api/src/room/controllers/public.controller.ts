@@ -1,8 +1,8 @@
 import {
   Controller,
   Get,
-  HttpException,
   HttpStatus,
+  NotFoundException,
   Param,
   ParseIntPipe,
   Req,
@@ -19,19 +19,14 @@ export class RoomController {
 
   @Get(':id')
   async findByID(@Req() req: Request, @Res() res: Response, @Param('id', ParseIntPipe) id: number) {
-    try {
-      const query = await this.roomService.findByID(id)
-      const response: IResponseData<Room> = {
-        data: query,
-        success: true
-      }
-      res.status(HttpStatus.OK).json(response)
-    } catch (error) {
-      const msg: IResponseData<string> = {
-        message: error?.message,
-        success: false
-      }
-      throw new HttpException(msg, HttpStatus.FORBIDDEN)
+    const query = await this.roomService.findByID(id)
+    if (!query) {
+      throw new NotFoundException('id not found')
     }
+    const response: IResponseData<Room> = {
+      data: query,
+      success: true
+    }
+    res.status(HttpStatus.OK).json(response)
   }
 }

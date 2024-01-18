@@ -2,8 +2,8 @@ import {
   Body,
   Controller,
   Get,
-  HttpException,
   HttpStatus,
+  NotFoundException,
   Param,
   ParseIntPipe,
   Post,
@@ -26,23 +26,13 @@ export class BookingController {
 
   @Post('/')
   async create(@Req() req: IRequestWithUser, @Res() res: Response, @Body() body: BookingCreateDto) {
-    try {
-      const userId = req.user.sub
-      await this.bookingService.create(userId, body)
-      const response: IResponseData<string> = {
-        message: 'Booking room successfully',
-        success: true
-      }
-      res.status(HttpStatus.OK).json(response)
-    } catch (error) {
-      throw new HttpException(
-        {
-          message: error,
-          success: false
-        },
-        HttpStatus.BAD_REQUEST
-      )
+    const userId = req.user.sub
+    await this.bookingService.create(userId, body)
+    const response: IResponseData<string> = {
+      message: 'Booking room successfully',
+      success: true
     }
+    res.status(HttpStatus.OK).json(response)
   }
 
   @Get('/')
@@ -52,27 +42,19 @@ export class BookingController {
     @Query('page') page: number,
     @Query('limit') limit: number
   ) {
-    try {
-      const userId = req.user.sub
-      const currentPage = page || 1
-      const perPage = limit || 10
-      const query = await this.bookingService.findAllByUser(currentPage, perPage, userId)
-      const total = await this.bookingService.count()
-      const response: IResponsePaginate<Booking[]> = {
-        success: true,
-        total: total,
-        currentPage: currentPage,
-        perPage: perPage,
-        data: query
-      }
-      res.status(HttpStatus.OK).json(response)
-    } catch (error) {
-      const msg: IResponseData<string> = {
-        message: error,
-        success: false
-      }
-      throw new HttpException(msg, HttpStatus.BAD_REQUEST)
+    const userId = req.user.sub
+    const currentPage = page || 1
+    const perPage = limit || 10
+    const query = await this.bookingService.findAllByUser(currentPage, perPage, userId)
+    const total = await this.bookingService.count()
+    const response: IResponsePaginate<Booking[]> = {
+      success: true,
+      total: total,
+      currentPage: currentPage,
+      perPage: perPage,
+      data: query
     }
+    res.status(HttpStatus.OK).json(response)
   }
 
   @Get(':id')
@@ -81,21 +63,16 @@ export class BookingController {
     @Res() res: Response,
     @Param('id', ParseIntPipe) id: number
   ) {
-    try {
-      const userId = req.user.sub
-      const query = await this.bookingService.findByIDUser(id, userId)
-      const response: IResponseData<Booking> = {
-        data: query,
-        success: true
-      }
-
-      res.status(HttpStatus.OK).json(response)
-    } catch (error) {
-      const msg: IResponseData<string> = {
-        message: error,
-        success: false
-      }
-      throw new HttpException(msg, HttpStatus.BAD_REQUEST)
+    const userId = req.user.sub
+    const query = await this.bookingService.findByIDUser(id, userId)
+    if (!query) {
+      throw new NotFoundException('id not found')
     }
+    const response: IResponseData<Booking> = {
+      data: query,
+      success: true
+    }
+
+    res.status(HttpStatus.OK).json(response)
   }
 }
