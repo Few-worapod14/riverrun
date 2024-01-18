@@ -13,7 +13,6 @@ export interface IResponseData<T> {
 }
 
 export interface IErrorMessage {
-  field?: string
   message: string[]
 }
 

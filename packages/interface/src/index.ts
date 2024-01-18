@@ -1,6 +1,7 @@
 export * from './auth'
 export * from './booking'
 export * from './constant'
+export * from './contact'
 export * from './response.interface'
 export * from './room'
 export * from './user'
