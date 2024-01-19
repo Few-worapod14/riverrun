@@ -2,7 +2,7 @@ import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator'
 
 export class RoomCreateDto {
   @IsString()
-  name: string
+  roomNumber: string
 
   @IsNumber()
   price: number

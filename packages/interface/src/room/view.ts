@@ -1,11 +1,15 @@
 export class RoomDto {
   id: number
 
-  name: string
+  roomNumber: string
 
   price: number
 
   detail?: string
 
   isActive: boolean
+
+  createdAt: Date
+
+  updatedAt: Date
 }

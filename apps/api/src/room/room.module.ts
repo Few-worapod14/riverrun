@@ -3,9 +3,12 @@ import { MulterModule } from '@nestjs/platform-express'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { diskStorage } from 'multer'
 import { AuthModule } from '../auth/auth.module'
-import { RoomAdminController } from './controllers/admin.controller'
+import { RoomCategoryAdminController } from './controllers/admin-room-category.controller'
+import { RoomAdminController } from './controllers/admin-room.controller'
 import { RoomController } from './controllers/public.controller'
+import { RoomCategory } from './entities/category-room.entity'
 import { Room } from './entities/room.entity'
+import { RoomCategoryService } from './services/room-category.service'
 import { RoomService } from './services/room.service'
 
 @Module({
@@ -22,11 +25,11 @@ import { RoomService } from './services/room.service'
         }
       })
     }),
-    TypeOrmModule.forFeature([Room]),
+    TypeOrmModule.forFeature([RoomCategory, Room]),
     AuthModule
   ],
-  controllers: [RoomAdminController, RoomController],
-  providers: [RoomService],
-  exports: [RoomService]
+  controllers: [RoomCategoryAdminController, RoomAdminController, RoomController],
+  providers: [RoomCategoryService, RoomService],
+  exports: [RoomCategoryService, RoomService]
 })
 export class RoomModule {}
