@@ -36,8 +36,8 @@ export class RoomAdminController {
   ) {
     try {
       const query = await this.roomService.create(body)
-      const response: IResponseData<string> = {
-        message: 'Room create successfully',
+      const response: IResponseData<Room> = {
+        data: query,
         success: true
       }
       res.status(HttpStatus.OK).json(response)

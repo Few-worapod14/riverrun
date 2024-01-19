@@ -1,14 +1,16 @@
-import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator'
+import { IsBoolean, IsNumber, IsOptional } from 'class-validator'
 
 export class RoomCreateDto {
-  @IsString()
-  roomNumber: string
+  @IsNumber()
+  categoryId: number
+
+  @IsNumber()
+  amount: number
 
   @IsNumber()
   price: number
 
   @IsOptional()
-  @IsString()
   detail?: string
 
   @IsBoolean()

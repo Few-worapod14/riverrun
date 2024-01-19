@@ -35,8 +35,8 @@ export class RoomCategoryAdminController {
   async create(@Req() req: Request, @Res() res: Response, @Body() body: RoomCategoryCreateDto) {
     try {
       const query = await this.categoryService.create(body)
-      const response: IResponseData<string> = {
-        message: 'Room create successfully',
+      const response: IResponseData<RoomCategory> = {
+        data: query,
         success: true
       }
       res.status(HttpStatus.OK).json(response)

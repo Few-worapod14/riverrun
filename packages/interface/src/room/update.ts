@@ -1,19 +1,18 @@
-import { Type } from 'class-transformer'
-import { IsInt, IsOptional, IsString } from 'class-validator'
+import { IsBoolean, IsNumber, IsOptional } from 'class-validator'
 
 export class RoomUpdateDto {
-  @IsOptional()
-  @IsString()
-  name?: string
+  @IsNumber()
+  categoryId: number
+
+  @IsNumber()
+  amount: number
+
+  @IsNumber()
+  price: number
 
   @IsOptional()
-  @IsInt()
-  @Type(() => Number)
-  price?: number
+  detail: string
 
-  @IsOptional()
-  detail?: string
-
-  @IsOptional()
-  isActive?: boolean
+  @IsBoolean()
+  isActive: boolean
 }

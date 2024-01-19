@@ -12,14 +12,24 @@ export class RoomService {
   ) {}
 
   create(data: RoomCreateDto) {
-    return this.roomRepository.save(data)
+    const save = {
+      ...data,
+      category: {
+        id: data.categoryId
+      }
+    }
+    delete save.categoryId
+    return this.roomRepository.save(save)
   }
 
   findAll(page: number, limit: number) {
     const skip: number = page == 1 ? 0 : limit * (page - 1)
     return this.roomRepository.find({
       skip: skip,
-      take: limit
+      take: limit,
+      relations: {
+        category: true
+      }
     })
   }
 
@@ -27,12 +37,22 @@ export class RoomService {
     return this.roomRepository.findOne({
       where: {
         id
+      },
+      relations: {
+        category: true
       }
     })
   }
 
   update(id: number, data: RoomUpdateDto) {
-    return this.roomRepository.update(id, data)
+    const save = {
+      ...data,
+      category: {
+        id: data.categoryId
+      }
+    }
+    delete save.categoryId
+    return this.roomRepository.update(id, save)
   }
 
   remove(id: number) {
