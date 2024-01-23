@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { InjectRepository } from '@nestjs/typeorm'
-import { IAuthUserRequest, IAutUserResponse, IPayload } from '@riverrun/interface'
+import { IAutCustomerResponse, IAuthCustomerRequest, ICustomerPayload } from '@riverrun/interface'
 import { compare } from 'bcrypt'
 import { IsNull, Repository } from 'typeorm'
-import { User } from '../../user/entities/user.entity'
+import { Customer } from '../../customer/entities/customer.entity'
 
 @Injectable()
-export class UserService {
+export class CustomerService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    @InjectRepository(Customer)
+    private readonly customerRepository: Repository<Customer>,
     private readonly jwtService: JwtService
   ) {}
 
-  async validateUser(auth: IAuthUserRequest): Promise<IAutUserResponse> {
-    const user = await this.userRepository.findOne({
+  async validateUser(auth: IAuthCustomerRequest): Promise<IAutCustomerResponse> {
+    const user = await this.customerRepository.findOne({
       where: {
         email: auth.email,
         deletedAt: IsNull()
@@ -29,10 +29,10 @@ export class UserService {
     if (!match) throw new Error('Password incorrect')
 
     if (user && match) {
-      const payload: IPayload = { email: user.email, sub: user.id }
+      const payload: ICustomerPayload = { email: user.email, sub: user.id }
       const token = await this.jwtService.signAsync(payload)
 
-      const res: IAutUserResponse = {
+      const res: IAutCustomerResponse = {
         user: {
           id: user.id,
           email: user?.email,
@@ -47,7 +47,7 @@ export class UserService {
   }
 
   async findById(id: number) {
-    return this.userRepository.findOne({
+    return this.customerRepository.findOne({
       where: {
         id
       }

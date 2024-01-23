@@ -1,18 +1,69 @@
 import { Injectable } from '@nestjs/common'
-
+import { InjectRepository } from '@nestjs/typeorm'
+import { AdminCreateDto, AdminUpdateDto } from '@riverrun/interface'
+import { hashSync } from 'bcrypt'
+import { DeleteResult, Repository } from 'typeorm'
+import { Admin } from '../entities/admin.entity'
 @Injectable()
 export class AdminService {
-  constructor() {}
+  constructor(
+    @InjectRepository(Admin)
+    private readonly adminRepository: Repository<Admin>
+  ) {}
 
-  findAll() {}
+  async onModuleInit() {
+    const password = hashSync('sqlr00t', 10)
+    const insert = {
+      username: 'admin',
+      email: 'admin@admin.com',
+      password: password,
+      firstName: 'admin',
+      lastName: 'admin'
+    }
+    const check = await this.adminRepository.findOne({
+      where: {
+        username: 'admin'
+      }
+    })
+    if (!check) {
+      this.adminRepository.save(insert)
+    }
+  }
 
-  count() {}
+  async findAll(page: number, limit: number): Promise<Admin[]> {
+    const skip: number = page == 1 ? 0 : limit * (page - 1)
+    return this.adminRepository.find({
+      skip: skip,
+      take: limit
+    })
+  }
 
-  findOne() {}
+  count(): Promise<number> {
+    return this.adminRepository.count()
+  }
 
-  create() {}
+  findByID(id: number) {
+    return this.adminRepository.findOne({
+      where: {
+        id
+      }
+    })
+  }
 
-  update() {}
+  create(data: AdminCreateDto) {
+    const password = hashSync(data.password, 10)
+    const insert = {
+      ...data,
+      password: password
+    }
+    return this.adminRepository.save(insert)
+  }
 
-  remove() {}
+  update(id: number, data: AdminUpdateDto) {
+    return this.adminRepository.update(id, data)
+  }
+
+  async remove(id: number): Promise<DeleteResult> {
+    return this.adminRepository.delete(id)
+  }
 }

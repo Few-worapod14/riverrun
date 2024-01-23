@@ -1,24 +1,32 @@
+import { CustomerDto } from '../customer'
 import { RoomDto } from '../room'
-import { UserDto } from '../user'
 
 export class BookingDto {
   id: number
 
-  start_date: Date
+  startBookingDate: Date
 
-  end_date: Date
+  endBookingDate: Date
+
+  checkInDate?: Date
+
+  checkOutDate?: Date
 
   room: RoomDto
 
-  user?: UserDto
+  customer: CustomerDto
 
   adult: number
 
   children: number
 
-  price: number
+  discount: number
 
-  paid: boolean
+  total: number
+
+  totalAmount: number
+
+  status: string
 
   createdAt: Date
 

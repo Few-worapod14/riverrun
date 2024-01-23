@@ -1,6 +1,10 @@
-import { IPayload } from '@riverrun/interface'
+import { IAdminPayload, ICustomerPayload } from '@riverrun/interface'
 import { Request } from 'express'
 
 export interface IRequestWithUser extends Request {
-  user: IPayload
+  user: ICustomerPayload
+}
+
+export interface IRequestWithAdmin extends Request {
+  user: IAdminPayload
 }

@@ -1,45 +1,45 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { USER_ROLE, UserCreateDto, UserUpdateDto } from '@riverrun/interface'
+
+import { CustomerCreateDto, CustomerUpdateDto } from '@riverrun/interface'
 import { hashSync } from 'bcrypt'
 import * as dayjs from 'dayjs'
 import { Not, Repository, UpdateResult } from 'typeorm'
-import { User } from '../entities/user.entity'
+import { Customer } from '../entities/customer.entity'
 
 @Injectable()
-export class UserService {
+export class CustomerService {
   constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>
+    @InjectRepository(Customer)
+    private customerService: Repository<Customer>
   ) {}
 
-  create(data: UserCreateDto): Promise<User> {
+  create(data: CustomerCreateDto): Promise<Customer> {
     const password = hashSync(data.password, 10)
     const insert = {
       ...data,
-      role: USER_ROLE.USER,
       password: password
     }
-    return this.userRepository.save(insert)
+    return this.customerService.save(insert)
   }
 
-  findAll(page: number, limit: number): Promise<User[]> {
+  findAll(page: number, limit: number): Promise<Customer[]> {
     const skip: number = page == 1 ? 0 : limit * (page - 1)
-    return this.userRepository.find({
+    return this.customerService.find({
       skip: skip,
       take: limit
     })
   }
 
-  findByID(id: number): Promise<User> {
-    return this.userRepository.findOne({
+  findByID(id: number): Promise<Customer> {
+    return this.customerService.findOne({
       where: {
         id
       }
     })
   }
 
-  findByCriteria(criteria: any, userId?: number): Promise<User> {
+  findByCriteria(criteria: any, userId?: number): Promise<Customer> {
     let filters = {
       ...criteria
     }
@@ -47,12 +47,12 @@ export class UserService {
       filters.id = Not(userId)
     }
 
-    return this.userRepository.findOne({
+    return this.customerService.findOne({
       where: filters
     })
   }
 
-  update(id: number, data: UserUpdateDto): Promise<UpdateResult> {
+  update(id: number, data: CustomerUpdateDto): Promise<UpdateResult> {
     let update = {
       ...data
     }
@@ -61,18 +61,18 @@ export class UserService {
       update.password = password
     }
 
-    return this.userRepository.update(id, update)
+    return this.customerService.update(id, update)
   }
 
   remove(id: number): Promise<UpdateResult> {
     const now = dayjs()
 
-    return this.userRepository.update(id, {
+    return this.customerService.update(id, {
       deletedAt: now
     })
   }
 
   count(): Promise<number> {
-    return this.userRepository.count()
+    return this.customerService.count()
   }
 }

@@ -6,8 +6,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm'
+import { Customer } from '../../customer/entities/customer.entity'
 import { Room } from '../../room/entities/room.entity'
-import { User } from '../../user/entities/user.entity'
 
 @Entity({
   name: 'bookings'
@@ -17,16 +17,22 @@ export class Booking {
   id: number
 
   @Column()
-  startDate: Date
+  startBookingDate: Date
 
   @Column()
-  endDate: Date
+  endBookingDate: Date
+
+  @Column({ nullable: true })
+  checkInDate?: Date
+
+  @Column({ nullable: true })
+  checkOutDate?: Date
 
   @ManyToOne(() => Room, (room) => room.id)
   room: Room
 
-  @ManyToOne(() => User, (user) => user.id)
-  user?: User
+  @ManyToOne(() => Customer, (customer) => customer.id)
+  customer: Customer
 
   @Column()
   adult: number
@@ -44,7 +50,10 @@ export class Booking {
   total: number
 
   @Column()
-  paid: boolean
+  totalAmount: number
+
+  @Column()
+  status: string
 
   @CreateDateColumn()
   createdAt: Date

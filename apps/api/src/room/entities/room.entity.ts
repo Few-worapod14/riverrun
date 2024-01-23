@@ -3,9 +3,11 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm'
+import { Booking } from '../../booking/entities/booking.entity'
 import { RoomCategory } from './category-room.entity'
 
 @Entity({
@@ -19,20 +21,23 @@ export class Room {
   category: RoomCategory
 
   @Column()
-  amount: number
+  name: string
 
   @Column()
-  price: number
+  pricePerNight: number
 
   @Column()
   detail: string
 
   @Column()
-  isActive: boolean
+  isAvailable: boolean
 
   @CreateDateColumn()
   createdAt: Date
 
   @UpdateDateColumn()
   updatedAt: Date
+
+  @OneToMany(() => Booking, (booking) => booking.room)
+  bookings: Booking[]
 }

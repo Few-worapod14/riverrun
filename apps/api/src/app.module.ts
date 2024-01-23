@@ -3,11 +3,12 @@ import { ConfigModule } from '@nestjs/config'
 import { ServeStaticModule } from '@nestjs/serve-static'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { join } from 'path'
+import { AdminModule } from './admin/admin.module'
 import { AuthModule } from './auth/auth.module'
 import { BookingModule } from './booking/booking.module'
 import { ContactModule } from './contact/contact.module'
+import { CustomerModule } from './customer/customer.module'
 import { RoomModule } from './room/room.module'
-import { UserModule } from './user/user.module'
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -28,7 +29,8 @@ import { UserModule } from './user/user.module'
       serveRoot: '/assets/',
       exclude: ['/api/(.*)']
     }),
-    UserModule,
+    AdminModule,
+    CustomerModule,
     AuthModule,
     RoomModule,
     BookingModule,

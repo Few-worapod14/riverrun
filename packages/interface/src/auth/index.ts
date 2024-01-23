@@ -1,2 +1,2 @@
-export * from './auth'
-export * from './auth.interface'
+export * from './admin'
+export * from './customer'

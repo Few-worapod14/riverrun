@@ -10,21 +10,21 @@ import {
   Res,
   UseGuards
 } from '@nestjs/common'
-import { IResponseData, UserCreateDto, UserUpdateDto } from '@riverrun/interface'
+import { CustomerCreateDto, CustomerUpdateDto, IResponseData } from '@riverrun/interface'
 import { Response } from 'express'
 
 import { AuthGuard } from '../../auth/guards/auth.guard'
 import { IRequestWithUser } from '../../auth/requet.interface'
-import { User } from '../entities/user.entity'
-import { UserService } from '../services/user.service'
+import { Customer } from '../entities/customer.entity'
+import { CustomerService } from '../services/customer.service'
 
-@Controller('users')
-export class UserController {
-  constructor(private readonly userService: UserService) {}
+@Controller('customers')
+export class CustomerController {
+  constructor(private readonly customerService: CustomerService) {}
 
   @Post('/')
-  async create(@Req() req: Request, @Res() res: Response, @Body() body: UserCreateDto) {
-    const checkEmail = await this.userService.findByCriteria({
+  async create(@Req() req: Request, @Res() res: Response, @Body() body: CustomerCreateDto) {
+    const checkEmail = await this.customerService.findByCriteria({
       email: body.email
     })
     if (checkEmail) {
@@ -34,7 +34,7 @@ export class UserController {
       throw new HttpException(message, HttpStatus.BAD_REQUEST)
     }
 
-    const checkMobile = await this.userService.findByCriteria({
+    const checkMobile = await this.customerService.findByCriteria({
       mobile: body.mobile
     })
     if (checkMobile) {
@@ -44,7 +44,7 @@ export class UserController {
       throw new HttpException(message, HttpStatus.BAD_REQUEST)
     }
 
-    await this.userService.create(body)
+    await this.customerService.create(body)
     const response: IResponseData<string> = {
       message: 'Create user success',
       success: true
@@ -56,8 +56,8 @@ export class UserController {
   @Get('/me')
   async findMe(@Req() req: IRequestWithUser, @Res() res: Response) {
     const userId = req.user.sub
-    const query = await this.userService.findByID(userId)
-    const response: IResponseData<User> = {
+    const query = await this.customerService.findByID(userId)
+    const response: IResponseData<Customer> = {
       data: query,
       success: true
     }
@@ -66,9 +66,13 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @Put('/me')
-  async updateMe(@Req() req: IRequestWithUser, @Res() res: Response, @Body() body: UserUpdateDto) {
+  async updateMe(
+    @Req() req: IRequestWithUser,
+    @Res() res: Response,
+    @Body() body: CustomerUpdateDto
+  ) {
     const userId = req.user.sub
-    const checkEmail = await this.userService.findByCriteria(
+    const checkEmail = await this.customerService.findByCriteria(
       {
         email: body.email
       },
@@ -81,7 +85,7 @@ export class UserController {
       throw new HttpException(message, HttpStatus.BAD_REQUEST)
     }
 
-    const checkMobile = await this.userService.findByCriteria(
+    const checkMobile = await this.customerService.findByCriteria(
       {
         mobile: body.mobile
       },
@@ -94,7 +98,7 @@ export class UserController {
       throw new HttpException(message, HttpStatus.BAD_REQUEST)
     }
 
-    await this.userService.update(userId, body)
+    await this.customerService.update(userId, body)
     const response: IResponseData<string> = {
       success: true,
       message: 'Update user success'

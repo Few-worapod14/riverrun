@@ -1,6 +1,4 @@
-import { USER_ROLE } from '../constant'
-
-export class UserDto {
+export class CustomerDto {
   id: number
 
   email: string
@@ -10,8 +8,6 @@ export class UserDto {
   firstName: string
 
   lastName: string
-
-  role: USER_ROLE
 
   createdAt: Date
 

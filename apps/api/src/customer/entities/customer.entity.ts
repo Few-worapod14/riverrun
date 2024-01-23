@@ -1,4 +1,3 @@
-import { USER_ROLE } from '@riverrun/interface'
 import {
   Column,
   CreateDateColumn,
@@ -7,11 +6,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm'
+import { Booking } from '../../booking/entities/booking.entity'
 
 @Entity({
-  name: 'users'
+  name: 'customers'
 })
-export class User {
+export class Customer {
   @PrimaryGeneratedColumn()
   id: number
 
@@ -30,9 +30,6 @@ export class User {
   @Column()
   lastName: string
 
-  @Column({ enum: USER_ROLE, default: USER_ROLE.USER })
-  role: USER_ROLE
-
   @CreateDateColumn()
   createdAt: Date
 
@@ -41,4 +38,6 @@ export class User {
 
   @DeleteDateColumn()
   deletedAt: Date
+
+  bookings: Booking
 }

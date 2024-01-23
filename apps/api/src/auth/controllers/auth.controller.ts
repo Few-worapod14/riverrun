@@ -1,29 +1,46 @@
 import { Body, Controller, HttpException, HttpStatus, Post, Res } from '@nestjs/common'
-import { UserSignIn } from '@riverrun/interface'
+
+import { CustomerSignIn } from '@riverrun/interface'
 import { Response } from 'express'
-import { UserService } from '../services/user.service'
+import { AdminService } from '../services/admin.service'
+import { CustomerService } from '../services/customer.service'
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: UserService) {}
+  constructor(
+    private customerService: CustomerService,
+    private adminService: AdminService
+  ) {}
 
-  @Post('user')
-  async userSignIn(@Res() res: Response, @Body() body: UserSignIn) {
-    try {
-      const validate = await this.authService.validateUser(body)
-      if (!validate) {
-        throw Error('Email or password not match.')
-      }
-
-      res.status(HttpStatus.OK).json(validate)
-    } catch (error) {
+  @Post('users')
+  async userSignIn(@Res() res: Response, @Body() body: CustomerSignIn) {
+    const validate = await this.customerService.validateUser(body)
+    if (!validate) {
       throw new HttpException(
         {
-          message: error,
+          message: 'Email or password not match.',
           success: false
         },
         HttpStatus.UNAUTHORIZED
       )
     }
+
+    res.status(HttpStatus.OK).json(validate)
+  }
+
+  @Post('admins')
+  async adminSignIn(@Res() res: Response, @Body() body: CustomerSignIn) {
+    const validate = await this.adminService.validateUser(body)
+    if (!validate) {
+      throw new HttpException(
+        {
+          message: 'Email or password not match.',
+          success: false
+        },
+        HttpStatus.UNAUTHORIZED
+      )
+    }
+
+    res.status(HttpStatus.OK).json(validate)
   }
 }

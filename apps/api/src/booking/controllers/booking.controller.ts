@@ -16,18 +16,26 @@ import { BookingCreateDto, IResponseData, IResponsePaginate } from '@riverrun/in
 import { Response } from 'express'
 import { IRequestWithUser } from 'src/auth/requet.interface'
 import { AuthGuard } from '../../auth/guards/auth.guard'
+import { RoomService } from '../../room/services/room.service'
 import { Booking } from '../entities/booking.entity'
 import { BookingService } from '../services/booking.service'
 
 @UseGuards(AuthGuard)
 @Controller('bookings')
 export class BookingController {
-  constructor(private bookingService: BookingService) {}
+  constructor(
+    private bookingService: BookingService,
+    private roomService: RoomService
+  ) {}
 
   @Post('/')
   async create(@Req() req: IRequestWithUser, @Res() res: Response, @Body() body: BookingCreateDto) {
     const userId = req.user.sub
-    await this.bookingService.create(userId, body)
+    const room = await this.roomService.findByID(body.roomId)
+    if (!room) {
+      throw new NotFoundException('id not found')
+    }
+    const query = await this.bookingService.create(userId, body)
     const response: IResponseData<string> = {
       message: 'Booking room successfully',
       success: true

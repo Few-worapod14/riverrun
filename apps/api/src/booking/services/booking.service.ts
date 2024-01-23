@@ -3,28 +3,57 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { BookingCreateDto, BookingUpdateDto } from '@riverrun/interface'
 import * as dayjs from 'dayjs'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
+import { Room } from '../../room/entities/room.entity'
 import { Booking } from '../entities/booking.entity'
 
 @Injectable()
 export class BookingService {
   constructor(
     @InjectRepository(Booking)
-    private bookingService: Repository<Booking>
+    private bookingService: Repository<Booking>,
+    @InjectRepository(Room)
+    private roomService: Repository<Room>
   ) {}
 
-  create(userId: number, data: BookingCreateDto): Promise<Booking> {
-    return this.bookingService.save({
-      ...data,
-      startData: dayjs(data.startDate),
-      endDate: dayjs(data.endDate),
+  async create(userId: number, data: BookingCreateDto): Promise<Booking> {
+    const startDate = dayjs(data.startDate)
+    const endDate = dayjs(data.endDate)
+    const days = endDate.diff(startDate, 'days')
+
+    const room = await this.roomService.findOne({
+      where: {
+        id: data.roomId
+      },
+      relations: {
+        bookings: true
+      }
+    })
+
+    console.log('----', room)
+
+    const total: number = days * room.pricePerNight
+    const discount = 0
+    const netTotal: number = total - discount
+
+    const save = {
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
       user: {
         id: userId
       },
       room: {
         id: data.roomId
       },
+      adult: data.adult,
+      children: data.children,
+      days: days,
+      total: total,
+      discount: discount,
+      netTotal: netTotal,
       paid: false
-    })
+    }
+
+    return await this.bookingService.save(save)
   }
 
   findAll(page: number, limit: number): Promise<Booking[]> {
@@ -61,7 +90,7 @@ export class BookingService {
       skip: skip,
       take: limit,
       where: {
-        user: {
+        customer: {
           id: userId
         }
       }
@@ -72,7 +101,7 @@ export class BookingService {
     return this.bookingService.findOne({
       where: {
         id,
-        user: {
+        customer: {
           id: userId
         }
       }
@@ -82,7 +111,7 @@ export class BookingService {
   countByUser(userId: number): Promise<number> {
     return this.bookingService.count({
       where: {
-        user: {
+        customer: {
           id: userId
         }
       }
