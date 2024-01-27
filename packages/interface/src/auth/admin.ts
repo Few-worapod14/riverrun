@@ -20,7 +20,7 @@ export interface IAdminInfo {
 
 export interface IAdminPayload {
   sub: number
-  email: string
+  username: string
 }
 
 export class AdminSignIn {

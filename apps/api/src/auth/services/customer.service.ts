@@ -26,7 +26,7 @@ export class CustomerService {
 
     const match = await compare(auth.password, user.password)
 
-    if (!match) throw new Error('Password incorrect')
+    if (!match) throw new Error('Password incorrect.')
 
     if (user && match) {
       const payload: ICustomerPayload = { email: user.email, sub: user.id }

@@ -27,7 +27,7 @@ import { Admin } from '../entities/admin.entity'
 import { AdminService } from '../services/admin.service'
 
 @UseGuards(AdminGuard)
-@Controller('admins')
+@Controller('admins/users')
 export class AdminController {
   constructor(private adminService: AdminService) {}
 

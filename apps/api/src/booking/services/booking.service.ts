@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { BookingCreateDto, BookingUpdateDto } from '@riverrun/interface'
+import { BOOKING_STATUS, BookingCreateDto, BookingUpdateDto } from '@riverrun/interface'
 import * as dayjs from 'dayjs'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
 import { Room } from '../../room/entities/room.entity'
 import { Booking } from '../entities/booking.entity'
+import { RoomBooked } from '../entities/room-booked.entity'
 
 @Injectable()
 export class BookingService {
@@ -12,12 +13,14 @@ export class BookingService {
     @InjectRepository(Booking)
     private bookingService: Repository<Booking>,
     @InjectRepository(Room)
-    private roomService: Repository<Room>
+    private roomService: Repository<Room>,
+    @InjectRepository(RoomBooked)
+    private roomBookedService: Repository<RoomBooked>
   ) {}
 
   async create(userId: number, data: BookingCreateDto): Promise<Booking> {
-    const startDate = dayjs(data.startDate)
-    const endDate = dayjs(data.endDate)
+    const startDate = dayjs(data.startBookingDate)
+    const endDate = dayjs(data.endBookingDate)
     const days = endDate.diff(startDate, 'days')
 
     const room = await this.roomService.findOne({
@@ -29,15 +32,25 @@ export class BookingService {
       }
     })
 
-    console.log('----', room)
+    const bookingRoom = {
+      room: {
+        id: room.id
+      },
+      customer: {
+        id: userId
+      },
+      startBookingDate: startDate.format('YYYY-MM-DD 14:00:00'),
+      endBookingDate: endDate.format('YYYY-MM-DD 12:00:00')
+    }
+    await this.roomBookedService.save(bookingRoom)
 
     const total: number = days * room.pricePerNight
-    const discount = 0
-    const netTotal: number = total - discount
+    const discount = data.discount
+    const totalAmount: number = total - discount
 
     const save = {
-      startDate: startDate.toISOString(),
-      endDate: endDate.toISOString(),
+      startBookingDate: startDate.format('YYYY-MM-DD 14:00:00'),
+      endBookingDate: endDate.format('YYYY-MM-DD 12:00:00'),
       user: {
         id: userId
       },
@@ -49,8 +62,8 @@ export class BookingService {
       days: days,
       total: total,
       discount: discount,
-      netTotal: netTotal,
-      paid: false
+      totalAmount: totalAmount,
+      status: BOOKING_STATUS.BOOKING
     }
 
     return await this.bookingService.save(save)

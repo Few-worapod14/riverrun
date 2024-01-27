@@ -36,8 +36,9 @@ export class RoomAdminController {
   ) {
     try {
       const query = await this.roomService.create(body)
+      const room = await this.roomService.findByID(query.id)
       const response: IResponseData<Room> = {
-        data: query,
+        data: room,
         success: true
       }
       res.status(HttpStatus.OK).json(response)

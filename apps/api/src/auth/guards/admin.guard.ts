@@ -1,15 +1,18 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { JwtService } from '@nestjs/jwt'
+import { IAdminPayload } from '@riverrun/interface'
 import { Request } from 'express'
 import { jwtConstants } from '../constants'
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator'
+import { AdminService } from '../services/admin.service'
 
 @Injectable()
 export class AdminGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
-    private reflector: Reflector
+    private reflector: Reflector,
+    private readonly adminService: AdminService
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -28,10 +31,14 @@ export class AdminGuard implements CanActivate {
       throw new UnauthorizedException()
     }
     try {
-      const payload = await this.jwtService.verifyAsync(token, {
+      const payload: IAdminPayload = await this.jwtService.verifyAsync(token, {
         secret: jwtConstants.secret
       })
 
+      const find = await this.adminService.findByAuth(payload.sub, payload.username)
+      if (!find) {
+        throw new UnauthorizedException()
+      }
       request['user'] = payload
       return true
     } catch {

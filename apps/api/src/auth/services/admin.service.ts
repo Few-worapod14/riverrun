@@ -10,25 +10,25 @@ import { Admin } from '../../admin/entities/admin.entity'
 export class AdminService {
   constructor(
     @InjectRepository(Admin)
-    private readonly customerRepository: Repository<Admin>,
+    private readonly adminRepository: Repository<Admin>,
     private readonly jwtService: JwtService
   ) {}
 
   async validateUser(auth: IAuthAdminRequest): Promise<IAutAdminResponse> {
-    const user = await this.customerRepository.findOne({
+    const user = await this.adminRepository.findOne({
       where: {
         email: auth.email
       },
-      select: ['id', 'email', 'password', 'firstName', 'lastName']
+      select: ['id', 'username', 'email', 'password', 'firstName', 'lastName']
     })
-    if (!user) throw new Error('User not found.')
+    if (!user) throw new Error('Admin not found.')
 
     const match = await compare(auth.password, user.password)
 
-    if (!match) throw new Error('Password incorrect')
+    if (!match) throw new Error('Password incorrect.')
 
     if (user && match) {
-      const payload: IAdminPayload = { email: user.email, sub: user.id }
+      const payload: IAdminPayload = { username: user.username, sub: user.id }
       const token = await this.jwtService.signAsync(payload)
 
       const res: IAutAdminResponse = {
@@ -46,9 +46,18 @@ export class AdminService {
   }
 
   async findById(id: number) {
-    return this.customerRepository.findOne({
+    return this.adminRepository.findOne({
       where: {
         id
+      }
+    })
+  }
+
+  async findByAuth(id: number, username: string) {
+    return this.adminRepository.findOne({
+      where: {
+        id: id,
+        username: username
       }
     })
   }

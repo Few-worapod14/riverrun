@@ -2,10 +2,10 @@ import { IsDateString, IsInt } from 'class-validator'
 
 export class BookingCreateDto {
   @IsDateString()
-  startDate: Date
+  startBookingDate: Date
 
   @IsDateString()
-  endDate: Date
+  endBookingDate: Date
 
   @IsInt()
   roomId: number
@@ -17,5 +17,5 @@ export class BookingCreateDto {
   children: number
 
   @IsInt()
-  price: number
+  discount: number
 }

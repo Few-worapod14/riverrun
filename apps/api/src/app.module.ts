@@ -14,6 +14,7 @@ import { RoomModule } from './room/room.module'
     ConfigModule.forRoot({
       isGlobal: true
     }),
+
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -22,6 +23,7 @@ import { RoomModule } from './room/room.module'
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       entities: [__dirname + '/**/entities/*.entity{.ts,.js}'],
+      logging: process.env.APP_DEV === 'develop' ? true : false,
       synchronize: true
     }),
     ServeStaticModule.forRoot({

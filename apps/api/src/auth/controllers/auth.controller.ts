@@ -34,7 +34,7 @@ export class AuthController {
     if (!validate) {
       throw new HttpException(
         {
-          message: 'Email or password not match.',
+          message: 'Username or password not match.',
           success: false
         },
         HttpStatus.UNAUTHORIZED

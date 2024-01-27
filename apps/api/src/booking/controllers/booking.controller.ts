@@ -1,86 +1,35 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpStatus,
-  NotFoundException,
-  Param,
-  ParseIntPipe,
-  Post,
-  Query,
-  Req,
-  Res,
-  UseGuards
-} from '@nestjs/common'
-import { BookingCreateDto, IResponseData, IResponsePaginate } from '@riverrun/interface'
+import { BadRequestException, Controller, Get, HttpStatus, Query, Req, Res } from '@nestjs/common'
+import * as dayjs from 'dayjs'
 import { Response } from 'express'
 import { IRequestWithUser } from 'src/auth/requet.interface'
-import { AuthGuard } from '../../auth/guards/auth.guard'
-import { RoomService } from '../../room/services/room.service'
-import { Booking } from '../entities/booking.entity'
-import { BookingService } from '../services/booking.service'
+import { RoomBookedService } from '../services/room-booked.service'
 
-@UseGuards(AuthGuard)
-@Controller('bookings')
+@Controller('bookings/search')
 export class BookingController {
-  constructor(
-    private bookingService: BookingService,
-    private roomService: RoomService
-  ) {}
-
-  @Post('/')
-  async create(@Req() req: IRequestWithUser, @Res() res: Response, @Body() body: BookingCreateDto) {
-    const userId = req.user.sub
-    const room = await this.roomService.findByID(body.roomId)
-    if (!room) {
-      throw new NotFoundException('id not found')
-    }
-    const query = await this.bookingService.create(userId, body)
-    const response: IResponseData<string> = {
-      message: 'Booking room successfully',
-      success: true
-    }
-    res.status(HttpStatus.OK).json(response)
-  }
+  constructor(private roomBookedService: RoomBookedService) {}
 
   @Get('/')
   async findAll(
     @Req() req: IRequestWithUser,
     @Res() res: Response,
-    @Query('page') page: number,
-    @Query('limit') limit: number
+    @Query('startBookingDate') startBookingDate: Date,
+    @Query('endBookingDate') endBookingDate: Date
   ) {
-    const userId = req.user.sub
-    const currentPage = page || 1
-    const perPage = limit || 10
-    const query = await this.bookingService.findAllByUser(currentPage, perPage, userId)
-    const total = await this.bookingService.count()
-    const response: IResponsePaginate<Booking[]> = {
+    const now = dayjs()
+    if (dayjs(startBookingDate).isBefore(now)) {
+      throw new BadRequestException('Date not available.')
+    }
+
+    const query = await this.roomBookedService.findAvailable(startBookingDate, endBookingDate)
+
+    const total = await this.roomBookedService.count(startBookingDate, endBookingDate)
+    const response = {
       success: true,
       total: total,
-      currentPage: currentPage,
-      perPage: perPage,
+      currentPage: 1,
+      perPage: 1000,
       data: query
     }
-    res.status(HttpStatus.OK).json(response)
-  }
-
-  @Get(':id')
-  async findByID(
-    @Req() req: IRequestWithUser,
-    @Res() res: Response,
-    @Param('id', ParseIntPipe) id: number
-  ) {
-    const userId = req.user.sub
-    const query = await this.bookingService.findByIDUser(id, userId)
-    if (!query) {
-      throw new NotFoundException('id not found')
-    }
-    const response: IResponseData<Booking> = {
-      data: query,
-      success: true
-    }
-
     res.status(HttpStatus.OK).json(response)
   }
 }

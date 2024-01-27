@@ -5,10 +5,11 @@ import {
   NotFoundException,
   Param,
   ParseIntPipe,
+  Query,
   Req,
   Res
 } from '@nestjs/common'
-import { IResponseData } from '@riverrun/interface'
+import { IResponseData, IResponsePaginate } from '@riverrun/interface'
 import { Response } from 'express'
 import { Room } from '../entities/room.entity'
 import { RoomService } from '../services/room.service'
@@ -16,6 +17,27 @@ import { RoomService } from '../services/room.service'
 @Controller('rooms')
 export class RoomController {
   constructor(private readonly roomService: RoomService) {}
+
+  @Get()
+  async findAll(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Query('page') page: number,
+    @Query('limit') limit: number
+  ) {
+    const currentPage = page || 1
+    const perPage = limit || 10
+    const query = await this.roomService.findAll(currentPage, perPage)
+    const total = await this.roomService.count()
+    const response: IResponsePaginate<Room[]> = {
+      success: true,
+      total: total,
+      currentPage: currentPage,
+      perPage: perPage,
+      data: query
+    }
+    res.status(HttpStatus.OK).json(response)
+  }
 
   @Get(':id')
   async findByID(@Req() req: Request, @Res() res: Response, @Param('id', ParseIntPipe) id: number) {
