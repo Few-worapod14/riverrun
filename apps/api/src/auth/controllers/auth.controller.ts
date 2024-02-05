@@ -25,7 +25,10 @@ export class AuthController {
       )
     }
 
-    res.status(HttpStatus.OK).json(validate)
+    res.status(HttpStatus.OK).json({
+      data: validate,
+      success: true
+    })
   }
 
   @Post('admins')
@@ -41,6 +44,9 @@ export class AuthController {
       )
     }
 
-    res.status(HttpStatus.OK).json(validate)
+    res.status(HttpStatus.OK).json({
+      data: validate,
+      success: true
+    })
   }
 }

@@ -2,19 +2,23 @@ import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
 export type AdminDTO = {
-  id: string
-  username: string
-  mobile: string
-  firstName: string
-  lastName: string
+  user: {
+    id: string
+    email: string
+    firstName: string
+    lastName: string
+    role: string
+  }
   accessToken: string
 }
 
 export type UserDTO = {
-  id: string
-  email: string
-  firstName: string
-  lastName: string
+  user: {
+    id: string
+    email: string
+    firstName: string
+    lastName: string
+  }
   accessToken: string
 }
 
@@ -22,13 +26,13 @@ interface StoreState {
   admin: AdminDTO | null
   user: UserDTO | null
   setUser: (user: UserDTO | null) => void
+  setAdmin: (user: AdminDTO | null) => void
 }
 
-export interface AuthDTO {
-  accessToken: string
-  refreshToken: string
-  user: UserDTO
-}
+// export interface AuthDTO {
+//   accessToken: string
+//   user: UserDTO | AdminDTO
+// }
 
 export interface AuthRequestDTO {
   username: string

@@ -1,9 +1,4 @@
-import { IsBoolean, IsString } from 'class-validator'
+import { PartialType } from '@nestjs/mapped-types'
+import { RoomCategoryCreateDto } from './create'
 
-export class RoomCategoryUpdateDto {
-  @IsString()
-  name: string
-
-  @IsBoolean()
-  isActive: boolean
-}
+export class RoomCategoryUpdateDto extends PartialType(RoomCategoryCreateDto) {}

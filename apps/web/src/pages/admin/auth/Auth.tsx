@@ -1,19 +1,19 @@
 import { Button, Center, Flex, Input, PasswordInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { ResponseData } from '@riverrun/interface'
+import { IResponseData } from '@riverrun/interface'
 import { useNavigate } from 'react-router-dom'
 import * as AuthService from '../../../services/auth'
-import { AuthDTO, useStore } from '../../../store/store'
+import { AdminDTO, useStore } from '../../../store/store'
 
-export default function LoginPage() {
+export default function AdminLoginPage() {
   const navigate = useNavigate()
-  const { setUser } = useStore()
+  const { setAdmin } = useStore()
 
   const api = AuthService
 
   const form = useForm({
     initialValues: {
-      username: '',
+      email: '',
       password: ''
     }
   })
@@ -21,13 +21,14 @@ export default function LoginPage() {
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
 
-    const user = await api.login(form.values.username, form.values.password)
+    const admin: IResponseData<AdminDTO> = await api.adminLogin(
+      form.values.email,
+      form.values.password
+    )
 
-    if (user.success) {
-      const res = user as ResponseData<AuthDTO>
-      setUser(res.data!.user)
-      setToken(res.data!.accessToken)
-      navigate('/')
+    if (admin.success) {
+      setAdmin(admin.data!)
+      navigate('/admin')
     }
   }
 
@@ -36,8 +37,8 @@ export default function LoginPage() {
       <form onSubmit={handleSubmit}>
         <Flex direction="column" justify="center" w={450}>
           <div className="mb-4">
-            <Input.Wrapper label="Username" required>
-              <Input placeholder="Username" mt="md" {...form.getInputProps('username')} />
+            <Input.Wrapper label="Email" required>
+              <Input placeholder="Email" mt="md" {...form.getInputProps('email')} />
             </Input.Wrapper>
           </div>
 
