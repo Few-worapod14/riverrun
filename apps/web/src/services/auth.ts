@@ -15,10 +15,10 @@ export const adminLogin = async (
   email: string,
   password: string
 ): Promise<IResponseData<AdminDTO>> => {
-  const api = await ApiAdmin().post('/auth/admins', {
+  const api: IResponseData<AdminDTO> = await ApiAdmin().post('/auth/admins', {
     email,
     password
   })
 
-  return api.data
+  return api
 }

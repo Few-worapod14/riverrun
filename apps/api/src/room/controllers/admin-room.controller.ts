@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpException,
   HttpStatus,
   NotFoundException,
   Param,
@@ -34,21 +33,13 @@ export class RoomAdminController {
     @UploadedFiles() files: Array<Express.Multer.File>,
     @Body() body: RoomCreateDto
   ) {
-    try {
-      const query = await this.roomService.create(body)
-      const room = await this.roomService.findByID(query.id)
-      const response: IResponseData<Room> = {
-        data: room,
-        success: true
-      }
-      res.status(HttpStatus.OK).json(response)
-    } catch (error) {
-      const msg: IResponseData<string> = {
-        message: error?.message,
-        success: false
-      }
-      throw new HttpException(msg, HttpStatus.FORBIDDEN)
+    const query = await this.roomService.create(body)
+    const room = await this.roomService.findByID(query.id)
+    const response: IResponseData<Room> = {
+      data: room,
+      success: true
     }
+    res.status(HttpStatus.OK).json(response)
   }
 
   @Get()
@@ -93,12 +84,12 @@ export class RoomAdminController {
     @UploadedFiles() files: Array<Express.Multer.File>,
     @Body() body: RoomUpdateDto
   ) {
-    const query = await this.roomService.findByID(id)
-    if (!query) {
+    const check = await this.roomService.findByID(id)
+    if (!check) {
       throw new NotFoundException('id not found')
     }
     await this.roomService.update(id, body)
-    await this.roomService.findByID(id)
+    const query = await this.roomService.findByID(id)
     const response: IResponseData<Room> = {
       data: query,
       success: true

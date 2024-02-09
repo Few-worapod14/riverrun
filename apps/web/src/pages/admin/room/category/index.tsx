@@ -8,12 +8,11 @@ import {
   Pagination,
   Table
 } from '@mantine/core'
-import { useForm } from '@mantine/form'
+import { isNotEmpty, useForm } from '@mantine/form'
 import {
   IErrorMessage,
   IResponseData,
   IResponsePaginate,
-  RoomCategoryCreateDto,
   RoomCategoryDto
 } from '@riverrun/interface'
 import { useEffect, useState } from 'react'
@@ -41,10 +40,15 @@ export default function AdminRoomCategoryPage() {
   const [categories, setAllCategory] = useState<RoomCategoryDto[]>([])
   const [category, setCategory] = useState<RoomCategoryDto | null>(null)
 
+  const init = {
+    name: '',
+    isActive: true
+  }
+
   const form = useForm({
-    initialValues: {
-      name: null,
-      isActive: true
+    initialValues: init,
+    validate: {
+      name: isNotEmpty('กรุณากรอกประเภทห้องพัก')
     }
   })
 
@@ -79,38 +83,49 @@ export default function AdminRoomCategoryPage() {
 
   const handleCreate = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
+    form.validate()
+    if (form.isValid()) {
+      const res: IResponseData<RoomCategoryDto> | IErrorMessage = await apiAdminRoomCategory.create(
+        form.values
+      )
 
-    const res: IResponseData<RoomCategoryCreateDto[]> | IErrorMessage =
-      await apiAdminRoomCategory.create(category)
-
-    if (res.success) {
-      setAction(null)
-      setCategory(null)
-      setOpenModal(false)
+      if (res.success) {
+        setAction(null)
+        setCategory(null)
+        setOpenModal(false)
+        handleFetchCategory(currentPage)
+      }
     }
-    handleFetchCategory(currentPage)
   }
 
   const handleUpdate = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
-    const res: IResponseData<RoomCategoryDto> | IErrorMessage = await apiAdminRoomCategory.update(
-      category?.id,
-      form
-    )
 
-    if (res.success) {
-      setAction(null)
-      setCategory(null)
-      setOpenModal(false)
+    form.validate()
+    if (form.isValid()) {
+      const res: IResponseData<RoomCategoryDto> | IErrorMessage = await apiAdminRoomCategory.update(
+        category!.id,
+        form.values
+      )
+
+      if (res.success) {
+        setAction(null)
+        setCategory(null)
+        setOpenModal(false)
+        handleFetchCategory(currentPage)
+      }
     }
   }
 
   const handleDelete = async () => {
-    const res: IResponseData<string> | IErrorMessage = await apiAdminRoomCategory.remove(id)
+    const res: IResponseData<string> | IErrorMessage = await apiAdminRoomCategory.remove(
+      category!.id
+    )
     if (res.success) {
       setAction(null)
       setCategory(null)
       setOpenConfirm(false)
+      handleFetchCategory(currentPage)
     }
   }
 
@@ -123,7 +138,7 @@ export default function AdminRoomCategoryPage() {
     <Table.Tr key={index}>
       <Table.Th>{category.id}</Table.Th>
       <Table.Th>{category.name}</Table.Th>
-      <Table.Th>{category.isActive}</Table.Th>
+      <Table.Th>{category.isActive ? 'เปิดใช้งาน' : 'ปิดใช้งาน'}</Table.Th>
       <Table.Th>
         <Group>
           <Button
@@ -165,22 +180,26 @@ export default function AdminRoomCategoryPage() {
     </Table.Tr>
   ))
 
-  console.log('---', categories)
-
   return (
     <AdminLayout>
       {loading && !isError ? (
         <LoadingOverlay visible overlayProps={{ radius: 'sm', blur: 2 }} />
       ) : (
         <>
-          <Button
-            onClick={() => {
-              setOpenModal(true)
-              setAction('create')
-            }}
-          >
-            เพิ่มประเภทห้อง
-          </Button>
+          <Flex gap="md" direction="row" wrap="wrap" className="mb-5">
+            <Button onClick={() => navigate('/admin/room')}>กลับ</Button>
+
+            <Button
+              color="green"
+              onClick={() => {
+                setOpenModal(true)
+                setAction('create')
+              }}
+            >
+              เพิ่มประเภทห้อง
+            </Button>
+          </Flex>
+
           <Table withTableBorder withColumnBorders className="mb-5">
             <Table.Thead>
               <Table.Tr>
@@ -222,7 +241,7 @@ export default function AdminRoomCategoryPage() {
 
               <Flex gap="md" justify="center" direction="row" wrap="wrap">
                 <Button
-                  color="yellow"
+                  color="grey"
                   onClick={() => {
                     setAction(null)
                     setOpenModal(false)
@@ -241,7 +260,7 @@ export default function AdminRoomCategoryPage() {
             message="ยืนยันการลบ"
             isOpen={isOpenConfirm}
             close={() => setOpenConfirm(false)}
-            confirm={() => handleDelete}
+            confirm={handleDelete}
           />
         </>
       )}

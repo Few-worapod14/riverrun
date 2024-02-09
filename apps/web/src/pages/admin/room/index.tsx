@@ -1,4 +1,5 @@
-import { Button, Group, LoadingOverlay, Pagination, Table } from '@mantine/core'
+import { ConfirmModalBox } from '@/components/Modal/ConfirmModal'
+import { Button, Flex, Group, LoadingOverlay, Pagination, Table } from '@mantine/core'
 import { IErrorMessage, IResponsePaginate, RoomDto } from '@riverrun/interface'
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -16,7 +17,9 @@ export default function AdminRoomPage() {
   const [perPage, setPerPage] = useState<number>(50)
   const [total, setTotal] = useState(0)
 
-  const [rooms, setRoom] = useState<RoomDto[]>([])
+  const [rooms, setRooms] = useState<RoomDto[]>([])
+  const [room, selectRoom] = useState<RoomDto | null>(null)
+  const [confirmDelete, setConfirmDelete] = useState(false)
 
   useEffect(() => {
     handleFetchAllUser(currentPage)
@@ -25,7 +28,7 @@ export default function AdminRoomPage() {
   const handleFetchAllUser = async (currentPage: number) => {
     const res: IResponsePaginate<RoomDto[]> | IErrorMessage = await apiAdminRoom.getAll(currentPage)
     if ('success' in res) {
-      setRoom(res.data)
+      setRooms(res.data)
       setTotal(Math.ceil(res.total / res.perPage))
       setPerPage(res.perPage)
       setCurrentPage(currentPage)
@@ -45,12 +48,21 @@ export default function AdminRoomPage() {
     handleFetchAllUser(value)
   }
 
+  const handleConfirmDelete = async () => {
+    const res = await apiAdminRoom.remove(room!.id)
+    if (res.success) {
+      selectRoom(null)
+      setConfirmDelete(false)
+      handleFetchAllUser(currentPage)
+    }
+  }
+
   const rows = rooms.map((room: RoomDto, index) => (
     <Table.Tr key={index}>
       <Table.Th>{room.id}</Table.Th>
-      <Table.Th>{room.roomNumber}</Table.Th>
-      <Table.Th>{room.price}</Table.Th>
-      <Table.Th>{room.isActive}</Table.Th>
+      <Table.Th>{room.name}</Table.Th>
+      <Table.Th>{room.pricePerNight}</Table.Th>
+      <Table.Th>{room.isActive ? 'เปิดใช้งาน' : 'ปิดใช้งาน'}</Table.Th>
       <Table.Th>
         <Group>
           <Button onClick={() => navigate(`/admin/room/view/${room.id}`)}>ดู</Button>
@@ -61,8 +73,8 @@ export default function AdminRoomPage() {
 
           <Button
             onClick={() => {
-              // setId(element.id)
-              // setConfirm(true)
+              selectRoom(room)
+              setConfirmDelete(true)
             }}
             color="red"
           >
@@ -79,8 +91,13 @@ export default function AdminRoomPage() {
         <LoadingOverlay visible overlayProps={{ radius: 'sm', blur: 2 }} />
       ) : (
         <>
-          <Button onClick={() => navigate('/admin/room/category')}>จัดการประเภทห้อง</Button>
-          <Button onClick={() => navigate('/admin/room/create')}>เพิ่มห้อง</Button>
+          <Flex gap="md" direction="row" wrap="wrap" className="mb-5">
+            <Button onClick={() => navigate('/admin/room/category')}>จัดการประเภทห้อง</Button>
+            <Button color="green" onClick={() => navigate('/admin/room/create')}>
+              เพิ่มห้อง
+            </Button>
+          </Flex>
+
           <Table withTableBorder withColumnBorders className="mb-5">
             <Table.Thead>
               <Table.Tr>
@@ -95,6 +112,17 @@ export default function AdminRoomPage() {
           </Table>
 
           <Pagination total={total} defaultValue={currentPage} onChange={handleChangePage} />
+
+          <ConfirmModalBox
+            title={'ลบห้อง'}
+            message={`ยืนยันนการลบห้อง: ${room?.name}`}
+            isOpen={confirmDelete}
+            close={() => {
+              selectRoom(null)
+              setConfirmDelete(false)
+            }}
+            confirm={handleConfirmDelete}
+          />
         </>
       )}
     </AdminLayout>

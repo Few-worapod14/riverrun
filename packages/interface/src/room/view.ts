@@ -1,13 +1,17 @@
+import { RoomCategoryDto } from './category'
+
 export class RoomDto {
   id: number
 
-  roomNumber: string
+  category: RoomCategoryDto
 
-  price: number
+  name: string
 
-  detail?: string
+  pricePerNight: number
 
-  isActive: boolean
+  detail?: string | undefined
+
+  isActive: boolean | string
 
   createdAt: Date
 

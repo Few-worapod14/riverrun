@@ -1,6 +1,6 @@
 import { Button, Center, Flex, Grid, Input, PasswordInput } from '@mantine/core'
 import { isEmail, isNotEmpty, useForm } from '@mantine/form'
-import { UserCreateDto } from '@riverrun/interface'
+import { CustomerCreateDto } from '@riverrun/interface'
 import { useNavigate } from 'react-router-dom'
 import { RootLayout } from '../../components/Layout/Layout'
 import * as UserService from '../../services/user.ts'
@@ -10,7 +10,7 @@ import './Signup.scss'
 export default function SignUpPage() {
   const navigate = useNavigate()
 
-  const init: UserCreateDto = {
+  const init: CustomerCreateDto = {
     email: '',
     password: '',
     mobile: '',

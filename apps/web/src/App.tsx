@@ -7,6 +7,7 @@ import AdminLoginPage from './pages/admin/auth/Auth'
 import AdminRoomPage from './pages/admin/room'
 import AdminRoomCategoryPage from './pages/admin/room/category'
 import AdminRoomCreatePage from './pages/admin/room/create'
+import AdminRoomViewPage from './pages/admin/room/view'
 import HomePage from './pages/home'
 import SignUpPage from './pages/user/SignUp'
 
@@ -41,7 +42,23 @@ function App() {
             path="/admin/room/create"
             element={
               <AuthorizedAdminRoute>
-                <AdminRoomCreatePage />
+                <AdminRoomCreatePage mode={'create'} />
+              </AuthorizedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/room/view/:id"
+            element={
+              <AuthorizedAdminRoute>
+                <AdminRoomViewPage />
+              </AuthorizedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/room/edit/:id"
+            element={
+              <AuthorizedAdminRoute>
+                <AdminRoomCreatePage mode={'edit'} />
               </AuthorizedAdminRoute>
             }
           />

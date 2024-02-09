@@ -14,7 +14,7 @@ export const ConfirmModalBox: React.FC<Props> = ({ confirm, title, message, isOp
       <p>{message}</p>
 
       <Flex gap="md" justify="center" direction="row" wrap="wrap">
-        <Button color="greex`" onClick={close}>
+        <Button color="gray" onClick={close}>
           ยกเลิก
         </Button>
 
