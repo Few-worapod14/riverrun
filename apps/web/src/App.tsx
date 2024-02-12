@@ -4,6 +4,9 @@ import AccommodationPage from './pages/accommodation'
 import CottageHousePage from './pages/accommodation/cottage'
 import DashboardPage from './pages/admin'
 import AdminLoginPage from './pages/admin/auth/Auth'
+import { default as AdminBookingIndexPage } from './pages/admin/booking'
+import AdminBookingEditPage from './pages/admin/booking/edit'
+import AdminBookingViewPage from './pages/admin/booking/view'
 import AdminRoomPage from './pages/admin/room'
 import AdminRoomCategoryPage from './pages/admin/room/category'
 import AdminRoomCreatePage from './pages/admin/room/create'
@@ -30,6 +33,34 @@ function App() {
               </AuthorizedAdminRoute>
             }
           />
+
+          {/* Booking management */}
+          <Route
+            path="/admin/booking"
+            element={
+              <AuthorizedAdminRoute>
+                <AdminBookingIndexPage />
+              </AuthorizedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/booking/edit/:id"
+            element={
+              <AuthorizedAdminRoute>
+                <AdminBookingEditPage />
+              </AuthorizedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/booking/view/:id"
+            element={
+              <AuthorizedAdminRoute>
+                <AdminBookingViewPage />
+              </AuthorizedAdminRoute>
+            }
+          />
+
+          {/* Room management */}
           <Route
             path="/admin/room"
             element={

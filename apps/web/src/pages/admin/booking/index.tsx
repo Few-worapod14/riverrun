@@ -1,11 +1,12 @@
-import { Button, Group, LoadingOverlay, Pagination, Table } from '@mantine/core'
-import { IErrorMessage, IResponsePaginate, RoomDto } from '@riverrun/interface'
+import { convertBookingStatus } from '@/utils/booking'
+import { Button, Group, LoadingOverlay, Pagination, Paper, Table } from '@mantine/core'
+import { BookingDto, IErrorMessage, IResponsePaginate } from '@riverrun/interface'
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import AdminLayout from '../../../components/Layout/AdminLayout'
-import * as apiAdminRoom from '../../../services/admin-room'
+import * as apiAdminBooking from '../../../services/admin-booking'
 
-export default function AdminRoomPage() {
+export default function AdminBookingIndexPage() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
 
@@ -16,16 +17,18 @@ export default function AdminRoomPage() {
   const [perPage, setPerPage] = useState<number>(50)
   const [total, setTotal] = useState(0)
 
-  const [rooms, setRoom] = useState<RoomDto[]>([])
+  const [bookings, setBooking] = useState<BookingDto[]>([])
 
   useEffect(() => {
-    handleFetchAllUser(currentPage)
-  }, [searchParams])
+    handleFetchBooking(currentPage)
+  }, [])
 
-  const handleFetchAllUser = async (currentPage: number) => {
-    const res: IResponsePaginate<RoomDto[]> | IErrorMessage = await apiAdminRoom.getAll(currentPage)
+  const handleFetchBooking = async (currentPage: number) => {
+    const res: IResponsePaginate<BookingDto[]> | IErrorMessage = await apiAdminBooking.getAll(
+      currentPage
+    )
     if ('success' in res) {
-      setRoom(res.data)
+      setBooking(res.data)
       setTotal(Math.ceil(res.total / res.perPage))
       setPerPage(res.perPage)
       setCurrentPage(currentPage)
@@ -42,31 +45,22 @@ export default function AdminRoomPage() {
     const searchParams = new URLSearchParams(location.search)
     searchParams.set('page', value.toString())
     navigate(`?${searchParams.toString()}`)
-    handleFetchAllUser(value)
+    handleFetchBooking(value)
   }
 
-  const rows = rooms.map((room: RoomDto, index) => (
+  const rows = bookings.map((booking: BookingDto, index) => (
     <Table.Tr key={index}>
-      <Table.Th>{room.id}</Table.Th>
-      <Table.Th>{room.name}</Table.Th>
-      <Table.Th>{room.price}</Table.Th>
-      <Table.Th>{room.isActive}</Table.Th>
+      <Table.Th>{booking?.room?.name}</Table.Th>
+      <Table.Th>{`${booking?.customer?.firstName} - ${booking?.customer?.lastName}`}</Table.Th>
+      <Table.Th>{booking.checkInDate?.toDateString()}</Table.Th>
+      <Table.Th>{booking.checkOutDate?.toDateString()}</Table.Th>
+      <Table.Th>{convertBookingStatus(booking.status)}</Table.Th>
       <Table.Th>
         <Group>
-          <Button onClick={() => navigate(`/admin/room/view/${room.id}`)}>ดู</Button>
+          <Button onClick={() => navigate(`/admin/booking/view/${booking.id}`)}>ดู</Button>
 
-          <Button onClick={() => navigate(`/admin/room/edit/${room.id}`)} color="yellow">
+          <Button onClick={() => navigate(`/admin/booking/edit/${booking.id}`)} color="yellow">
             แก้ไข
-          </Button>
-
-          <Button
-            onClick={() => {
-              // setId(element.id)
-              // setConfirm(true)
-            }}
-            color="red"
-          >
-            ลบ
           </Button>
         </Group>
       </Table.Th>
@@ -78,14 +72,14 @@ export default function AdminRoomPage() {
       {loading && !isError ? (
         <LoadingOverlay visible overlayProps={{ radius: 'sm', blur: 2 }} />
       ) : (
-        <>
-          <Button onClick={() => navigate('/admin/room/create')}>เพิ่มห้อง</Button>
+        <Paper shadow="xs" p="xl">
           <Table withTableBorder withColumnBorders className="mb-5">
             <Table.Thead>
               <Table.Tr>
-                <Table.Th>ID</Table.Th>
                 <Table.Th>ชื่อห้อง</Table.Th>
-                <Table.Th>ราคา</Table.Th>
+                <Table.Th>ชื่อลูกค้า</Table.Th>
+                <Table.Th>เช็คอิน</Table.Th>
+                <Table.Th>เช็คเอาต์</Table.Th>
                 <Table.Th>สถานะ</Table.Th>
                 <Table.Th></Table.Th>
               </Table.Tr>
@@ -94,7 +88,7 @@ export default function AdminRoomPage() {
           </Table>
 
           <Pagination total={total} defaultValue={currentPage} onChange={handleChangePage} />
-        </>
+        </Paper>
       )}
     </AdminLayout>
   )

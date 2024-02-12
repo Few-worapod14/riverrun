@@ -6,5 +6,6 @@ export enum USER_ROLE {
 export enum BOOKING_STATUS {
   BOOKING = 'BOOKING',
   PAID = 'PAID',
-  DONE = 'DONE'
+  DONE = 'DONE',
+  CANCEL = 'CANCEL'
 }

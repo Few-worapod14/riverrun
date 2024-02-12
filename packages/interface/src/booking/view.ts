@@ -26,6 +26,8 @@ export class BookingDto {
 
   totalAmount: number
 
+  note?: string
+
   status: string
 
   createdAt: Date
