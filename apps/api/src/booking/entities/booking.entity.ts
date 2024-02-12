@@ -52,6 +52,9 @@ export class Booking {
   @Column()
   totalAmount: number
 
+  @Column({ nullable: true })
+  note?: string
+
   @Column()
   status: string
 

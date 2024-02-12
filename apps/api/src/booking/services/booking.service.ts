@@ -73,7 +73,11 @@ export class BookingService {
     const skip: number = page == 1 ? 0 : limit * (page - 1)
     return this.bookingService.find({
       skip: skip,
-      take: limit
+      take: limit,
+      relations: {
+        room: true,
+        customer: true
+      }
     })
   }
 
@@ -81,6 +85,10 @@ export class BookingService {
     return this.bookingService.findOne({
       where: {
         id
+      },
+      relations: {
+        room: true,
+        customer: true
       }
     })
   }
@@ -117,6 +125,10 @@ export class BookingService {
         customer: {
           id: userId
         }
+      },
+      relations: {
+        room: true,
+        customer: true
       }
     })
   }
@@ -127,6 +139,10 @@ export class BookingService {
         customer: {
           id: userId
         }
+      },
+      relations: {
+        room: true,
+        customer: true
       }
     })
   }
