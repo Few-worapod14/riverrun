@@ -1,5 +1,5 @@
 import * as apiRoom from '@/services/admin-room.ts'
-import { Button, Flex } from '@mantine/core'
+import { Button, Flex, Grid, LoadingOverlay, Paper } from '@mantine/core'
 import { RoomDto } from '@riverrun/interface'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -11,6 +11,7 @@ export default function AdminRoomViewPage() {
   const { id } = useParams()
   const navigate = useNavigate()
 
+  const [loading, setLoading] = useState<boolean>(true)
   const [room, setRoom] = useState<RoomDto | null>(null)
 
   useEffect(() => {
@@ -20,34 +21,59 @@ export default function AdminRoomViewPage() {
   const handleGetRoom = async () => {
     const res = await apiRoom.getById(Number(id))
     if (res.success) {
+      setLoading(false)
       setRoom(res.data!)
     }
   }
 
   return (
     <AdminLayout>
-      <h3>เพิ่มห้อง</h3>
+      {loading ? (
+        <LoadingOverlay visible overlayProps={{ radius: 'sm', blur: 2 }} />
+      ) : (
+        <>
+          <h3>เพิ่มห้อง</h3>
 
-      <div className="mb-5">ประเภทห้อง: {room?.category.name}</div>
+          <Paper shadow="xs" p="xl">
+            <Grid className="mb-5">
+              <Grid.Col span={3}>ประเภทห้อง :</Grid.Col>
 
-      <div className="mb-5">ชื่อห้อง: {room?.name}</div>
+              <Grid.Col span={9}>{room?.category.name}</Grid.Col>
+            </Grid>
 
-      <div className="mb-5">ราคา: {room?.pricePerNight} ฿</div>
+            <Grid className="mb-5">
+              <Grid.Col span={3}>ชื่อห้อง :</Grid.Col>
+              <Grid.Col span={9}>{room?.name}</Grid.Col>
+            </Grid>
 
-      <div className="mb-5">รายละเอียดห้อง: {room?.detail}</div>
+            <Grid className="mb-5">
+              <Grid.Col span={3}>ราคา :</Grid.Col>
+              <Grid.Col span={9}>{room?.pricePerNight} ฿</Grid.Col>
+            </Grid>
 
-      <div className="mb-5">สถานะ: {room?.isActive ? 'เปิดใช้งาน' : 'ปิดใช้งาน'}</div>
+            <Grid className="mb-5">
+              <Grid.Col span={3}>รายละเอียดห้อง :</Grid.Col>
 
-      <Flex gap="md" direction="row" wrap="wrap" className="mb-5">
-        <Button
-          onClick={() => {
-            // handleGetRoom()
-            navigate('/admin/room')
-          }}
-        >
-          กลับ
-        </Button>
-      </Flex>
+              <Grid.Col span={9}>{room?.detail}</Grid.Col>
+            </Grid>
+
+            <Grid className="mb-5">
+              <Grid.Col span={3}>สถานะ :</Grid.Col>
+              <Grid.Col span={9}>{room?.isActive ? 'เปิดใช้งาน' : 'ปิดใช้งาน'}</Grid.Col>
+            </Grid>
+
+            <Flex gap="md" direction="row" wrap="wrap" className="mb-5">
+              <Button
+                onClick={() => {
+                  navigate('/admin/room')
+                }}
+              >
+                กลับ
+              </Button>
+            </Flex>
+          </Paper>
+        </>
+      )}
     </AdminLayout>
   )
 }

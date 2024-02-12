@@ -1,5 +1,5 @@
 import { ConfirmModalBox } from '@/components/Modal/ConfirmModal'
-import { Button, Flex, Group, LoadingOverlay, Pagination, Table } from '@mantine/core'
+import { Button, Flex, Group, LoadingOverlay, Pagination, Paper, Table } from '@mantine/core'
 import { IErrorMessage, IResponsePaginate, RoomDto } from '@riverrun/interface'
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -23,7 +23,7 @@ export default function AdminRoomPage() {
 
   useEffect(() => {
     handleFetchAllUser(currentPage)
-  }, [searchParams])
+  }, [])
 
   const handleFetchAllUser = async (currentPage: number) => {
     const res: IResponsePaginate<RoomDto[]> | IErrorMessage = await apiAdminRoom.getAll(currentPage)
@@ -90,7 +90,7 @@ export default function AdminRoomPage() {
       {loading && !isError ? (
         <LoadingOverlay visible overlayProps={{ radius: 'sm', blur: 2 }} />
       ) : (
-        <>
+        <Paper shadow="xs" p="xl">
           <Flex gap="md" direction="row" wrap="wrap" className="mb-5">
             <Button onClick={() => navigate('/admin/room/category')}>จัดการประเภทห้อง</Button>
             <Button color="green" onClick={() => navigate('/admin/room/create')}>
@@ -123,7 +123,7 @@ export default function AdminRoomPage() {
             }}
             confirm={handleConfirmDelete}
           />
-        </>
+        </Paper>
       )}
     </AdminLayout>
   )

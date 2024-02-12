@@ -6,6 +6,7 @@ import {
   Input,
   LoadingOverlay,
   Pagination,
+  Paper,
   Table
 } from '@mantine/core'
 import { isNotEmpty, useForm } from '@mantine/form'
@@ -54,7 +55,7 @@ export default function AdminRoomCategoryPage() {
 
   useEffect(() => {
     handleFetchCategory(currentPage)
-  }, [searchParams])
+  }, [])
 
   const handleFetchCategory = async (currentPage: number) => {
     const res: IResponsePaginate<RoomCategoryDto[]> | IErrorMessage =
@@ -185,7 +186,7 @@ export default function AdminRoomCategoryPage() {
       {loading && !isError ? (
         <LoadingOverlay visible overlayProps={{ radius: 'sm', blur: 2 }} />
       ) : (
-        <>
+        <Paper shadow="xs" p="xl">
           <Flex gap="md" direction="row" wrap="wrap" className="mb-5">
             <Button onClick={() => navigate('/admin/room')}>กลับ</Button>
 
@@ -262,7 +263,7 @@ export default function AdminRoomCategoryPage() {
             close={() => setOpenConfirm(false)}
             confirm={handleDelete}
           />
-        </>
+        </Paper>
       )}
     </AdminLayout>
   )
