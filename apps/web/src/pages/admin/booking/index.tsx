@@ -14,7 +14,6 @@ export default function AdminBookingIndexPage() {
   const [isError, setError] = useState(false)
   const [msg, setMsg] = useState<IErrorMessage>()
   const [currentPage, setCurrentPage] = useState<number>(Number(searchParams.get('page')) || 1)
-  const [perPage, setPerPage] = useState<number>(50)
   const [total, setTotal] = useState(0)
 
   const [bookings, setBooking] = useState<BookingDto[]>([])
@@ -30,7 +29,6 @@ export default function AdminBookingIndexPage() {
     if ('success' in res) {
       setBooking(res.data)
       setTotal(Math.ceil(res.total / res.perPage))
-      setPerPage(res.perPage)
       setCurrentPage(currentPage)
       setLoading(false)
     } else {

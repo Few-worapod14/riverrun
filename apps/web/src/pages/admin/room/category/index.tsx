@@ -31,7 +31,6 @@ export default function AdminRoomCategoryPage() {
   const [isError, setError] = useState(false)
   const [msg, setMsg] = useState<IErrorMessage>()
   const [currentPage, setCurrentPage] = useState<number>(Number(searchParams.get('page')) || 1)
-  const [perPage, setPerPage] = useState<number>(50)
   const [total, setTotal] = useState(0)
 
   const [action, setAction] = useState<string | null>(null)

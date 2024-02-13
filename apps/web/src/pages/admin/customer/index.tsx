@@ -13,7 +13,6 @@ export default function AdminCustomerIndexPage() {
   const [isError, setError] = useState(false)
   const [msg, setMsg] = useState<IErrorMessage>()
   const [currentPage, setCurrentPage] = useState<number>(Number(searchParams.get('page')) || 1)
-  const [perPage, setPerPage] = useState<number>(50)
   const [total, setTotal] = useState(0)
 
   const [customers, setCustomer] = useState<CustomerDto[]>([])
@@ -30,7 +29,6 @@ export default function AdminCustomerIndexPage() {
     if ('success' in res) {
       setCustomer(res.data)
       setTotal(Math.ceil(res.total / res.perPage))
-      setPerPage(res.perPage)
       setCurrentPage(currentPage)
       setLoading(false)
     } else {
@@ -48,7 +46,25 @@ export default function AdminCustomerIndexPage() {
     handleFetchBooking(value)
   }
 
-  const handleSearch = () => {}
+  const handleSearch = async () => {
+    searchParams.set('keyword', keyword!)
+    navigate(`?${searchParams.toString()}`)
+    const res: IResponsePaginate<CustomerDto[]> | IErrorMessage = await apiAdminCustomer.getAll(
+      currentPage,
+      keyword!
+    )
+    if ('success' in res) {
+      setCustomer(res.data)
+      setTotal(Math.ceil(res.total / res.perPage))
+      setCurrentPage(currentPage)
+      setLoading(false)
+    } else {
+      const errorResponse = res as IErrorMessage
+      setError(true)
+      setMsg(errorResponse)
+      setLoading(false)
+    }
+  }
 
   const rows = customers.map((customer: CustomerDto, index) => (
     <Table.Tr key={index}>
@@ -75,7 +91,10 @@ export default function AdminCustomerIndexPage() {
         <Paper shadow="xs" p="xl">
           <Grid className="mb-5">
             <Grid.Col span={3}>
-              <Input placeholder="ค้นหาชื่อ นามสกุล" onChange={(value) => setKeyword(value!)} />
+              <Input
+                placeholder="ค้นหาชื่อ นามสกุล"
+                onChange={(event) => setKeyword(event.currentTarget.value)}
+              />
             </Grid.Col>
 
             <Grid.Col span={3}>

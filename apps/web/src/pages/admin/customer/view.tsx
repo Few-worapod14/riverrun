@@ -1,5 +1,5 @@
 import AdminLayout from '@/components/Layout/AdminLayout'
-import * as adminCUstomer from '@/services/admin-customer'
+import * as adminCustomer from '@/services/admin-customer'
 import { Button, Flex, Grid, LoadingOverlay, Paper } from '@mantine/core'
 import { CustomerDto } from '@riverrun/interface'
 import { useEffect, useState } from 'react'
@@ -17,10 +17,10 @@ export default function AdminCustomerViewPage() {
   }, [])
 
   const handleGetById = async () => {
-    const res = await adminCUstomer.getById(Number(id))
+    const res = await adminCustomer.getById(Number(id))
     if (res.success) {
       setLoading(false)
-      setCustomer(res.data)
+      setCustomer(res.data!)
     }
   }
 

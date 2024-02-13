@@ -38,7 +38,7 @@ export default function AdminBookingEditPage() {
       const data = form.values
       const res = await adminBooking.update(Number(id), {
         ...data,
-        isActive: data.isActive === 'true' ? true : false
+        isActive: data?.isActive === 'true' ? true : false
       })
       if (res.success) {
         navigate('/admin/booking')
