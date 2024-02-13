@@ -7,6 +7,9 @@ import AdminLoginPage from './pages/admin/auth/Auth'
 import { default as AdminBookingIndexPage } from './pages/admin/booking'
 import AdminBookingEditPage from './pages/admin/booking/edit'
 import AdminBookingViewPage from './pages/admin/booking/view'
+import AdminCustomerIndexPage from './pages/admin/customer'
+import AdminCustomerEditPage from './pages/admin/customer/edit'
+import AdminCustomerViewPage from './pages/admin/customer/view'
 import AdminRoomPage from './pages/admin/room'
 import AdminRoomCategoryPage from './pages/admin/room/category'
 import AdminRoomCreatePage from './pages/admin/room/create'
@@ -98,6 +101,32 @@ function App() {
             element={
               <AuthorizedAdminRoute>
                 <AdminRoomCategoryPage />
+              </AuthorizedAdminRoute>
+            }
+          />
+
+          {/* Customer management */}
+          <Route
+            path="/admin/customer"
+            element={
+              <AuthorizedAdminRoute>
+                <AdminCustomerIndexPage />
+              </AuthorizedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/customer/edit/:id"
+            element={
+              <AuthorizedAdminRoute>
+                <AdminCustomerEditPage />
+              </AuthorizedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/customer/view/:id"
+            element={
+              <AuthorizedAdminRoute>
+                <AdminCustomerViewPage />
               </AuthorizedAdminRoute>
             }
           />
