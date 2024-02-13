@@ -50,7 +50,7 @@ export class RoomAdminController {
     @Query('limit') limit: number
   ) {
     const currentPage = page || 1
-    const perPage = limit || 10
+    const perPage = limit || 20
     const query = await this.roomService.findAll(currentPage, perPage)
     const total = await this.roomService.count()
     const response: IResponsePaginate<Room[]> = {

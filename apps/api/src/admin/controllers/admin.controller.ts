@@ -49,7 +49,7 @@ export class AdminController {
     @Query('limit') limit: number
   ) {
     const currentPage = page || 1
-    const perPage = limit || 10
+    const perPage = limit || 20
     const query = await this.adminService.findAll(currentPage, perPage)
     const total = await this.adminService.count()
     const response: IResponsePaginate<Admin[]> = {

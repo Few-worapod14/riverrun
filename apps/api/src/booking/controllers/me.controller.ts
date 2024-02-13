@@ -66,7 +66,7 @@ export class MeController {
   ) {
     const userId = req.user.sub
     const currentPage = page || 1
-    const perPage = limit || 10
+    const perPage = limit || 20
     const query = await this.bookingService.findAllByUser(currentPage, perPage, userId)
     const total = await this.bookingService.count()
     const response: IResponsePaginate<Booking[]> = {

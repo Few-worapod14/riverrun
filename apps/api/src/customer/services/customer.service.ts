@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { CustomerCreateDto, CustomerUpdateDto } from '@riverrun/interface'
 import { hashSync } from 'bcrypt'
 import * as dayjs from 'dayjs'
-import { Not, Repository, UpdateResult } from 'typeorm'
+import { Like, Not, Or, Repository, UpdateResult } from 'typeorm'
 import { Customer } from '../entities/customer.entity'
 
 @Injectable()
@@ -23,11 +23,24 @@ export class CustomerService {
     return this.customerService.save(insert)
   }
 
-  findAll(page: number, limit: number): Promise<Customer[]> {
+  findAll(page: number, limit: number, keyword?: string): Promise<Customer[]> {
     const skip: number = page == 1 ? 0 : limit * (page - 1)
+    if (!keyword) {
+      return this.customerService.find({
+        skip: skip,
+        take: limit
+      })
+    }
+
     return this.customerService.find({
       skip: skip,
-      take: limit
+      take: limit,
+      where: [
+        { firstName: Or(Like(`%${keyword}%`)) },
+        { lastName: Or(Like(`%${keyword}%`)) },
+        { email: Or(Like(`%${keyword}%`)) },
+        { mobile: Or(Like(`%${keyword}%`)) }
+      ]
     })
   }
 
@@ -72,7 +85,17 @@ export class CustomerService {
     })
   }
 
-  count(): Promise<number> {
-    return this.customerService.count()
+  count(keyword?: string): Promise<number> {
+    if (!keyword) {
+      return this.customerService.count()
+    }
+    return this.customerService.count({
+      where: [
+        { firstName: Or(Like(`%${keyword}%`)) },
+        { lastName: Or(Like(`%${keyword}%`)) },
+        { email: Or(Like(`%${keyword}%`)) },
+        { mobile: Or(Like(`%${keyword}%`)) }
+      ]
+    })
   }
 }

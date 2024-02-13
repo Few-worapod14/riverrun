@@ -57,7 +57,7 @@ export class RoomCategoryAdminController {
     @Query('limit') limit: number
   ) {
     const currentPage = page || 1
-    const perPage = limit || 10
+    const perPage = limit || 20
     const query = await this.categoryService.findAll(currentPage, perPage)
     const total = await this.categoryService.count()
     const response: IResponsePaginate<RoomCategory[]> = {
