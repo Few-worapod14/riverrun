@@ -30,6 +30,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <NavLink label="จัดการจองห้อง" onClick={() => navigate('/admin/booking')} />
               <NavLink label="จัดการห้องพัก" onClick={() => navigate('/admin/room')} />
               <NavLink label="จัดการผู้ใช้" onClick={() => navigate('/admin/customer')} />
+              <NavLink label="จัดการผู้ติดต่อ" onClick={() => navigate('/admin/contact')} />
               <NavLink
                 label="ออกจากระบบ"
                 onClick={() => {

@@ -14,7 +14,7 @@ import {
   Textarea
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { ImageDto, RoomCategoryDto, RoomDto, RoomImageDto } from '@riverrun/interface'
+import { RoomCategoryDto, RoomDto, RoomImageDto } from '@riverrun/interface'
 import { useEffect, useState } from 'react'
 import ImageUploading, { ImageListType } from 'react-images-uploading'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -72,12 +72,12 @@ export default function AdminRoomCreatePage({ mode }: Props) {
   const handleGetRoom = async () => {
     const res = await apiRoom.getById(Number(id))
     if (res.success) {
-      setRoom(res.data!)
+      setRoom(res.data)
 
       const init = {
-        categoryId: res.data!.category!.id,
-        name: res.data!.name,
-        pricePerNight: res.data!.pricePerNight,
+        categoryId: res.data.category.id,
+        name: res.data.name,
+        pricePerNight: res.data.pricePerNight,
         detail: res.data.detail,
         isActive: 'true'
       }
@@ -141,14 +141,14 @@ export default function AdminRoomCreatePage({ mode }: Props) {
     }
   }
 
-  const handleConfirmDeleteImg = (image: ImageDto) => {
+  const handleConfirmDeleteImg = (image: RoomImageDto) => {
     setConfirmDelete(true)
     setRemoveData(image)
   }
 
   return (
     <AdminLayout>
-      <h3>เพิ่มห้อง</h3>
+      <h3>ข้อมูลห้อง</h3>
 
       <Paper shadow="xs" p="xl">
         <form onSubmit={mode == 'create' ? handleCreate : handleUpdate}>

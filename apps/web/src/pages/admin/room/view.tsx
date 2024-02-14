@@ -1,4 +1,4 @@
-import * as apiRoom from '@/services/admin-room.ts'
+import * as apiRoom from '@/services/admin-room'
 import { Button, Flex, Grid, Image, LoadingOverlay, Paper } from '@mantine/core'
 import { RoomDto } from '@riverrun/interface'
 import { useEffect, useState } from 'react'

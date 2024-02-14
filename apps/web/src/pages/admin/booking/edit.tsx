@@ -48,7 +48,7 @@ export default function AdminBookingEditPage() {
 
   return (
     <AdminLayout>
-      <h3>การจองห้อง</h3>
+      <h3>ข้อมูลการจองห้อง</h3>
 
       <Paper shadow="xs" p="xl">
         <form onSubmit={handleUpdate}>

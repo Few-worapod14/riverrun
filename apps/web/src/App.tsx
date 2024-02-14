@@ -7,6 +7,9 @@ import AdminLoginPage from './pages/admin/auth/Auth'
 import { default as AdminBookingIndexPage } from './pages/admin/booking'
 import AdminBookingEditPage from './pages/admin/booking/edit'
 import AdminBookingViewPage from './pages/admin/booking/view'
+import AdminContactPage from './pages/admin/contact'
+import AdminContactEditPage from './pages/admin/contact/edit'
+import AdminContactViewPage from './pages/admin/contact/view'
 import AdminCustomerIndexPage from './pages/admin/customer'
 import AdminCustomerEditPage from './pages/admin/customer/edit'
 import AdminCustomerViewPage from './pages/admin/customer/view'
@@ -127,6 +130,32 @@ function App() {
             element={
               <AuthorizedAdminRoute>
                 <AdminCustomerViewPage />
+              </AuthorizedAdminRoute>
+            }
+          />
+
+          {/* Contact management */}
+          <Route
+            path="/admin/contact"
+            element={
+              <AuthorizedAdminRoute>
+                <AdminContactPage />
+              </AuthorizedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/contact/edit/:id"
+            element={
+              <AuthorizedAdminRoute>
+                <AdminContactEditPage />
+              </AuthorizedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/contact/view/:id"
+            element={
+              <AuthorizedAdminRoute>
+                <AdminContactViewPage />
               </AuthorizedAdminRoute>
             }
           />

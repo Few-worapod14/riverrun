@@ -1,27 +1,8 @@
-import { IsBoolean, IsEmail, IsOptional, IsString } from 'class-validator'
+import { PartialType } from '@nestjs/mapped-types'
+import { IsBoolean } from 'class-validator'
+import { ContactCreateDto } from './create'
 
-export class ContactUpdateDto {
-  @IsString()
-  @IsOptional()
-  name?: string
-
-  @IsEmail()
-  @IsOptional()
-  email?: string
-
-  @IsString()
-  @IsOptional()
-  tel?: string
-
-  @IsString()
-  @IsOptional()
-  title?: string
-
-  @IsString()
-  @IsOptional()
-  message?: string
-
+export class ContactUpdateDto extends PartialType(ContactCreateDto) {
   @IsBoolean()
-  @IsOptional()
-  resolve?: boolean
+  resolve: boolean
 }
