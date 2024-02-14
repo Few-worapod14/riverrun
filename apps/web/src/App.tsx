@@ -17,6 +17,9 @@ import AdminRoomPage from './pages/admin/room'
 import AdminRoomCategoryPage from './pages/admin/room/category'
 import AdminRoomCreatePage from './pages/admin/room/create'
 import AdminRoomViewPage from './pages/admin/room/view'
+import BookingPage from './pages/booking'
+import SearchRoomPage from './pages/booking/search'
+import { ContactPage } from './pages/contact'
 import HomePage from './pages/home'
 import SignUpPage from './pages/user/SignUp'
 
@@ -26,10 +29,14 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/search" element={<SearchRoomPage />} />
+          <Route path="/booking" element={<BookingPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/accommodation" element={<AccommodationPage />} />
           <Route path="/accommodation/the-cottage-house" element={<CottageHousePage />} />
+          <Route path="/contact" element={<ContactPage />} />
 
+          {/* Admin management */}
           <Route path="/admin/login" element={<AdminLoginPage />} />
           <Route
             path="/admin"

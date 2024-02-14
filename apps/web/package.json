@@ -23,6 +23,7 @@
     "@mantine/nprogress": "7.5.1",
     "@mantine/spotlight": "7.5.1",
     "@mantine/tiptap": "7.5.1",
+    "@marsidev/react-turnstile": "^0.5.1",
     "@tabler/icons-react": "^2.45.0",
     "@tiptap/extension-link": "^2.1.13",
     "@tiptap/react": "^2.1.13",
