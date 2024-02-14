@@ -1,5 +1,5 @@
 import * as apiRoom from '@/services/admin-room.ts'
-import { Button, Flex, Grid, LoadingOverlay, Paper } from '@mantine/core'
+import { Button, Flex, Grid, Image, LoadingOverlay, Paper } from '@mantine/core'
 import { RoomDto } from '@riverrun/interface'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -61,6 +61,18 @@ export default function AdminRoomViewPage() {
               <Grid.Col span={3}>สถานะ :</Grid.Col>
               <Grid.Col span={9}>{room?.isActive ? 'เปิดใช้งาน' : 'ปิดใช้งาน'}</Grid.Col>
             </Grid>
+
+            {room?.images.length != 0 ? (
+              <Grid className="mb-5">
+                {room?.images.map((x) => {
+                  return (
+                    <Grid.Col span={3}>
+                      <Image src={x.fullPath} />
+                    </Grid.Col>
+                  )
+                })}
+              </Grid>
+            ) : null}
 
             <Flex gap="md" direction="row" wrap="wrap" className="mb-5">
               <Button

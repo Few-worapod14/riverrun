@@ -1,4 +1,5 @@
 import { RoomCategoryDto } from './category'
+import { RoomImageDto } from './image'
 
 export class RoomDto {
   id: number
@@ -16,4 +17,6 @@ export class RoomDto {
   createdAt: Date
 
   updatedAt: Date
+
+  images: RoomImageDto[]
 }

@@ -1,3 +1,4 @@
+import { useStore } from '@/store/store'
 import { AppShell, Burger, Center, Grid, NavLink } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useNavigate } from 'react-router-dom'
@@ -5,6 +6,7 @@ import './AdminLayout.scss'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate()
+  const { setAdmin } = useStore()
   const [opened, { toggle }] = useDisclosure()
 
   return (
@@ -24,11 +26,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Center>
                 <img height={100} src="../../../public/logo.png" />
               </Center>
-              <NavLink label="แดชบอร์ด" onClick={() => navigate('/')} />
+              <NavLink label="แดชบอร์ด" onClick={() => navigate('/admin')} />
               <NavLink label="จัดการจองห้อง" onClick={() => navigate('/admin/booking')} />
               <NavLink label="จัดการห้องพัก" onClick={() => navigate('/admin/room')} />
               <NavLink label="จัดการผู้ใช้" onClick={() => navigate('/admin/customer')} />
-              <NavLink label="ออกจากระบบ" onClick={() => navigate('/logout')} />
+              <NavLink
+                label="ออกจากระบบ"
+                onClick={() => {
+                  setAdmin(null)
+                }}
+              />
             </Grid.Col>
           </Grid>
         </AppShell.Section>

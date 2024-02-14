@@ -1,8 +1,11 @@
 import * as apiRoom from '@/services/admin-room.ts'
 import {
   Button,
+  Center,
   Flex,
+  Grid,
   Group,
+  Image,
   Input,
   NumberInput,
   Paper,
@@ -11,12 +14,14 @@ import {
   Textarea
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { RoomCategoryDto, RoomDto } from '@riverrun/interface'
+import { ImageDto, RoomCategoryDto, RoomDto, RoomImageDto } from '@riverrun/interface'
 import { useEffect, useState } from 'react'
+import ImageUploading, { ImageListType } from 'react-images-uploading'
 import { useNavigate, useParams } from 'react-router-dom'
 import AdminLayout from '../../../components/Layout/AdminLayout'
 import * as apiCategory from '../../../services/admin-room-category.ts'
 
+import { ConfirmModalBox } from '@/components/Modal/ConfirmModal.tsx'
 import './create.scss'
 
 type Props = {
@@ -26,9 +31,18 @@ type Props = {
 export default function AdminRoomCreatePage({ mode }: Props) {
   const { id } = useParams()
   const navigate = useNavigate()
+  const maxNumber = 10
 
   const [categories, setCategories] = useState<RoomCategoryDto[]>([])
   const [room, setRoom] = useState<RoomDto | null>(null)
+
+  const [images, setImages] = useState<ImageListType>([])
+  const [isConfirmDelete, setConfirmDelete] = useState(false)
+  const [removeData, setRemoveData] = useState<RoomImageDto | null>(null)
+
+  const onChange = (imageList: ImageListType) => {
+    setImages(imageList)
+  }
 
   useEffect(() => {
     handleFetchCategory()
@@ -51,7 +65,7 @@ export default function AdminRoomCreatePage({ mode }: Props) {
     categoryId: 0,
     name: '',
     pricePerNight: 0,
-    detail: undefined,
+    detail: null,
     isActive: 'true'
   }
 
@@ -64,7 +78,7 @@ export default function AdminRoomCreatePage({ mode }: Props) {
         categoryId: res.data!.category!.id,
         name: res.data!.name,
         pricePerNight: res.data!.pricePerNight,
-        detail: undefined,
+        detail: res.data.detail,
         isActive: 'true'
       }
       form.setValues(init)
@@ -79,11 +93,15 @@ export default function AdminRoomCreatePage({ mode }: Props) {
     e.preventDefault()
 
     if (form.validate()) {
-      const data = form.values
-      const res = await apiRoom.create({
-        ...data,
-        isActive: data.isActive === 'true' ? true : false
-      })
+      const f = form.values
+      const formData = new FormData()
+      formData.append('categoryId', f.categoryId.toString())
+      formData.append('name', f.name)
+      formData.append('pricePerNight', f.pricePerNight.toString())
+      formData.append('detail', f.detail!)
+      formData.append('isActive', f.isActive)
+
+      const res = await apiRoom.create(formData)
       if (res.success) {
         navigate('/admin/room')
       }
@@ -92,12 +110,20 @@ export default function AdminRoomCreatePage({ mode }: Props) {
 
   const handleUpdate = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
+    const formData = new FormData()
     if (form.validate()) {
-      const data = form.values
-      const res = await apiRoom.update(Number(id), {
-        ...data,
-        isActive: data.isActive === 'true' ? true : false
+      const f = form.values
+      formData.append('categoryId', f.categoryId.toString())
+      formData.append('name', f.name)
+      formData.append('pricePerNight', f.pricePerNight.toString())
+      formData.append('detail', f.detail!)
+      formData.append('isActive', f.isActive)
+
+      images.forEach(async (image) => {
+        formData.append(`files`, image.file!, image.file?.name)
       })
+
+      const res = await apiRoom.update(Number(id), formData)
       if (res.success) {
         navigate('/admin/room')
       }
@@ -106,6 +132,18 @@ export default function AdminRoomCreatePage({ mode }: Props) {
 
   const handleSelectChange = (value: number) => {
     form.setFieldValue('categoryId', value)
+  }
+
+  const handleDeleteImage = async () => {
+    const res = await apiRoom.removeImage(Number(removeData?.id))
+    if (res.success) {
+      navigate('/admin/room')
+    }
+  }
+
+  const handleConfirmDeleteImg = (image: ImageDto) => {
+    setConfirmDelete(true)
+    setRemoveData(image)
   }
 
   return (
@@ -144,8 +182,54 @@ export default function AdminRoomCreatePage({ mode }: Props) {
             <Textarea
               label="รายละเอียดห้อง"
               defaultValue={room?.detail}
+              value={room?.detail}
+              minRows={10}
+              maxRows={10}
+              autosize
               {...form.getInputProps('detail')}
             />
+          </div>
+
+          <div className="mb-5">
+            <ImageUploading multiple value={images} onChange={onChange} maxNumber={maxNumber}>
+              {({
+                imageList,
+                onImageUpload,
+                onImageRemoveAll,
+                onImageUpdate,
+                onImageRemove,
+                isDragging,
+                dragProps
+              }) => (
+                <div>
+                  <Flex gap="md" direction="row" wrap="wrap" className="mb-5">
+                    <Button
+                      style={isDragging ? { color: 'red' } : undefined}
+                      onClick={onImageUpload}
+                      {...dragProps}
+                    >
+                      อัพโหลดรูป
+                    </Button>
+
+                    <Button color="red" onClick={onImageRemoveAll}>
+                      ลบรูปทั้งหมด
+                    </Button>
+                  </Flex>
+
+                  {imageList.map((image, index) => (
+                    <div key={index} className="mb-5">
+                      <img src={image.dataURL} alt="" width="100" />
+                      <Flex gap="md" direction="row" wrap="wrap" className="mb-5">
+                        <Button onClick={() => onImageUpdate(index)}>เปลี่ยนรูป</Button>
+                        <Button color="red" onClick={() => onImageRemove(index)}>
+                          ลบ
+                        </Button>
+                      </Flex>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </ImageUploading>
           </div>
 
           <div className="mb-5">
@@ -170,6 +254,32 @@ export default function AdminRoomCreatePage({ mode }: Props) {
             </Radio.Group>
           </div>
 
+          {room?.images.length != 0 ? (
+            <>
+              <Grid className="mb-5">
+                {room?.images.map((x) => {
+                  return (
+                    <Grid.Col span={3}>
+                      <Grid className="mb-5">
+                        <Grid.Col span={12}>
+                          <Image src={x.fullPath} />
+                        </Grid.Col>
+                        <Grid.Col span={12}>
+                          <Center>
+                            <Button onClick={() => handleConfirmDeleteImg(x)} color="red">
+                              ลบ
+                            </Button>
+                          </Center>
+                        </Grid.Col>
+                      </Grid>
+                    </Grid.Col>
+                  )
+                })}
+              </Grid>
+              <hr />
+            </>
+          ) : null}
+
           <Flex gap="md" direction="row" wrap="wrap" className="mb-5">
             <Button
               onClick={() => {
@@ -184,6 +294,14 @@ export default function AdminRoomCreatePage({ mode }: Props) {
           </Flex>
         </form>
       </Paper>
+
+      <ConfirmModalBox
+        title={'ยืนยันการลบรูป'}
+        message={'คุณต้องการลบรูปภาพหรือไม่'}
+        isOpen={isConfirmDelete}
+        close={() => setConfirmDelete(false)}
+        confirm={handleDeleteImage}
+      />
     </AdminLayout>
   )
 }

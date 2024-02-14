@@ -30,7 +30,6 @@ export default function AdminRoomPage() {
     if ('success' in res) {
       setRooms(res.data)
       setTotal(Math.ceil(res.total / res.perPage))
-      setPerPage(res.perPage)
       setCurrentPage(currentPage)
       setLoading(false)
     } else {
