@@ -3,12 +3,15 @@ import { MulterModule } from '@nestjs/platform-express'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { diskStorage } from 'multer'
 import { AuthModule } from '../auth/auth.module'
-import { RoomCategoryAdminController } from './controllers/admin-room-category.controller'
-import { RoomAdminController } from './controllers/admin-room.controller'
+import { AdminRoomCategoryController } from './controllers/admin-room-category.controller'
+import { AdminRoomImageController } from './controllers/admin-room-image.controller'
+import { AdminRoomController } from './controllers/admin-room.controller'
 import { RoomController } from './controllers/room.controller'
 import { RoomCategory } from './entities/category-room.entity'
+import { RoomImage } from './entities/room-image.entity'
 import { Room } from './entities/room.entity'
 import { RoomCategoryService } from './services/room-category.service'
+import { RoomImageService } from './services/room-image.service'
 import { RoomService } from './services/room.service'
 
 @Module({
@@ -25,11 +28,16 @@ import { RoomService } from './services/room.service'
         }
       })
     }),
-    TypeOrmModule.forFeature([RoomCategory, Room]),
+    TypeOrmModule.forFeature([RoomCategory, Room, RoomImage]),
     AuthModule
   ],
-  controllers: [RoomCategoryAdminController, RoomAdminController, RoomController],
-  providers: [RoomCategoryService, RoomService],
-  exports: [RoomCategoryService, RoomService]
+  controllers: [
+    AdminRoomCategoryController,
+    AdminRoomController,
+    AdminRoomImageController,
+    RoomController
+  ],
+  providers: [RoomCategoryService, RoomService, RoomImageService],
+  exports: [RoomCategoryService, RoomService, RoomImageService]
 })
 export class RoomModule {}

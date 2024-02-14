@@ -28,7 +28,7 @@ import { RoomCategoryService } from '../services/room-category.service'
 
 @UseGuards(AdminGuard)
 @Controller('admins/rooms/categories')
-export class RoomCategoryAdminController {
+export class AdminRoomCategoryController {
   constructor(private readonly categoryService: RoomCategoryService) {}
 
   @Post()

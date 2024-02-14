@@ -13,8 +13,10 @@ import {
   Req,
   Res,
   UploadedFiles,
-  UseGuards
+  UseGuards,
+  UseInterceptors
 } from '@nestjs/common'
+import { FilesInterceptor } from '@nestjs/platform-express'
 import { IResponseData, IResponsePaginate, RoomCreateDto, RoomUpdateDto } from '@riverrun/interface'
 import { Request, Response } from 'express'
 import { AdminGuard } from '../../auth/guards/admin.guard'
@@ -23,17 +25,18 @@ import { RoomService } from '../services/room.service'
 
 @UseGuards(AdminGuard)
 @Controller('admins/rooms')
-export class RoomAdminController {
+export class AdminRoomController {
   constructor(private readonly roomService: RoomService) {}
 
+  @UseInterceptors(FilesInterceptor('files'))
   @Post()
   async create(
     @Req() req: Request,
     @Res() res: Response,
-    @UploadedFiles() files: Array<Express.Multer.File>,
-    @Body() body: RoomCreateDto
+    @Body() body: RoomCreateDto,
+    @UploadedFiles() files?: Array<Express.Multer.File>
   ) {
-    const query = await this.roomService.create(body)
+    const query = await this.roomService.create(body, files)
     const room = await this.roomService.findByID(query.id)
     const response: IResponseData<Room> = {
       data: room,
@@ -76,19 +79,20 @@ export class RoomAdminController {
     res.status(HttpStatus.OK).json(response)
   }
 
+  @UseInterceptors(FilesInterceptor('files'))
   @Put(':id')
   async update(
     @Req() req: Request,
     @Res() res: Response,
     @Param('id', ParseIntPipe) id: number,
-    @UploadedFiles() files: Array<Express.Multer.File>,
-    @Body() body: RoomUpdateDto
+    @Body() body: RoomUpdateDto,
+    @UploadedFiles() files?: Array<Express.Multer.File>
   ) {
     const check = await this.roomService.findByID(id)
     if (!check) {
       throw new NotFoundException('id not found')
     }
-    await this.roomService.update(id, body)
+    await this.roomService.update(id, body, files)
     const query = await this.roomService.findByID(id)
     const response: IResponseData<Room> = {
       data: query,

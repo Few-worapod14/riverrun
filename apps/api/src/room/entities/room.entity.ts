@@ -9,6 +9,7 @@ import {
 } from 'typeorm'
 import { Booking } from '../../booking/entities/booking.entity'
 import { RoomCategory } from './category-room.entity'
+import { RoomImage } from './room-image.entity'
 
 @Entity({
   name: 'rooms'
@@ -40,4 +41,7 @@ export class Room {
 
   @OneToMany(() => Booking, (booking) => booking.room)
   bookings: Booking[]
+
+  @OneToMany(() => RoomImage, (images) => images.room)
+  images: RoomImage[]
 }

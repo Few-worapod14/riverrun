@@ -14,7 +14,6 @@ import { RoomModule } from './room/room.module'
     ConfigModule.forRoot({
       isGlobal: true
     }),
-
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -27,8 +26,8 @@ import { RoomModule } from './room/room.module'
       synchronize: true
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../', 'assets'),
-      serveRoot: '/assets/',
+      rootPath: join(__dirname, '../', '_uploads'),
+      serveRoot: '/_uploads/',
       exclude: ['/api/(.*)']
     }),
     AdminModule,

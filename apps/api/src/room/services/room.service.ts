@@ -2,16 +2,19 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { RoomCreateDto, RoomUpdateDto } from '@riverrun/interface'
 import { Repository } from 'typeorm'
+import { RoomImage } from '../entities/room-image.entity'
 import { Room } from '../entities/room.entity'
 
 @Injectable()
 export class RoomService {
   constructor(
     @InjectRepository(Room)
-    private roomRepository: Repository<Room>
+    private roomRepository: Repository<Room>,
+    @InjectRepository(RoomImage)
+    private roomImageRepository: Repository<RoomImage>
   ) {}
 
-  create(data: RoomCreateDto) {
+  async create(data: RoomCreateDto, files?: Array<Express.Multer.File>) {
     const save = {
       ...data,
       category: {
@@ -19,7 +22,20 @@ export class RoomService {
       }
     }
     delete save.categoryId
-    return this.roomRepository.save(save)
+    const room = await this.roomRepository.save(save)
+
+    files?.forEach(async (file) => {
+      const fullPath = process.env.FILE_PATH + '/' + file.path
+
+      const image = {
+        fileName: file.filename,
+        path: file.path,
+        fullPath: fullPath
+      }
+      await this.roomImageRepository.save(image)
+    })
+
+    return room
   }
 
   findAll(page: number, limit: number) {
@@ -39,12 +55,13 @@ export class RoomService {
         id
       },
       relations: {
-        category: true
+        category: true,
+        images: true
       }
     })
   }
 
-  update(id: number, data: RoomUpdateDto) {
+  async update(id: number, data: RoomUpdateDto, files?: Array<Express.Multer.File>) {
     const save = {
       ...data,
       category: {
@@ -52,6 +69,21 @@ export class RoomService {
       }
     }
     delete save.categoryId
+
+    const room = await this.roomRepository.findOne({ where: { id: id } })
+
+    files?.forEach(async (file) => {
+      const fullPath = process.env.FILE_PATH + '/' + file.path
+
+      const image = {
+        room: room,
+        fileName: file.filename,
+        path: file.path,
+        fullPath: fullPath
+      }
+      await this.roomImageRepository.save(image)
+    })
+
     return this.roomRepository.update(id, save)
   }
 
