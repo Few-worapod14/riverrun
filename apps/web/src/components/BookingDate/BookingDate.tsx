@@ -36,8 +36,6 @@ export const BookingDate = ({ onSearch, startBooking, endBooking, roomBooking }:
     })
   }
 
-  console.log('x', startDate, dayjs(startDate, 'DD-MM-YYYY'))
-  console.log('y', endDate, dayjs(endDate, 'DD-MM-YYYY')?.toDate())
   return (
     <Paper shadow="xs" p="xl">
       <Grid justify="center" align="flex-end">
