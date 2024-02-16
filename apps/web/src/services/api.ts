@@ -25,7 +25,7 @@ export const ApiClient = () => {
 
   instance.interceptors.response.use(
     (response) => {
-      return response
+      return response.data
     },
     (error: AxiosError) => {
       if (error.response?.status === 401 || error.response?.status === undefined) {
