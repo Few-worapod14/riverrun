@@ -1,3 +1,4 @@
+import * as apiPackage from '@/services/admin-package'
 import * as apiRoom from '@/services/admin-room.ts'
 import {
   Button,
@@ -7,6 +8,7 @@ import {
   Group,
   Image,
   Input,
+  MultiSelect,
   NumberInput,
   Paper,
   Radio,
@@ -14,7 +16,7 @@ import {
   Textarea
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { RoomCategoryDto, RoomDto, RoomImageDto } from '@riverrun/interface'
+import { PackageDto, RoomCategoryDto, RoomDto, RoomImageDto } from '@riverrun/interface'
 import { useEffect, useState } from 'react'
 import ImageUploading, { ImageListType } from 'react-images-uploading'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -34,7 +36,9 @@ export default function AdminRoomCreatePage({ mode }: Props) {
   const maxNumber = 10
 
   const [categories, setCategories] = useState<RoomCategoryDto[]>([])
+  const [options, setOptions] = useState<PackageDto[]>([])
   const [room, setRoom] = useState<RoomDto | null>(null)
+  const [selectPackages, setSelectPackages] = useState<string[]>([])
 
   const [images, setImages] = useState<ImageListType>([])
   const [isConfirmDelete, setConfirmDelete] = useState(false)
@@ -46,6 +50,7 @@ export default function AdminRoomCreatePage({ mode }: Props) {
 
   useEffect(() => {
     handleFetchCategory()
+    handleFetchPackage()
   }, [])
 
   useEffect(() => {
@@ -61,12 +66,20 @@ export default function AdminRoomCreatePage({ mode }: Props) {
     }
   }
 
+  const handleFetchPackage = async () => {
+    const res = await apiPackage.getAll(1, 100)
+    if (res.success) {
+      setOptions(res.data)
+    }
+  }
+
   const initData = {
     categoryId: 0,
     name: '',
     pricePerNight: 0,
-    detail: null,
-    isActive: 'true'
+    detail: '',
+    isActive: 'true',
+    packages: []
   }
 
   const handleGetRoom = async () => {
@@ -79,8 +92,10 @@ export default function AdminRoomCreatePage({ mode }: Props) {
         name: res.data.name,
         pricePerNight: res.data.pricePerNight,
         detail: res.data.detail,
-        isActive: 'true'
+        isActive: 'true',
+        packages: res.data.packages.map((x: PackageDto) => x.name)
       }
+      setSelectPackages(res.data.packages.map((x) => x.id))
       form.setValues(init)
     }
   }
@@ -100,6 +115,7 @@ export default function AdminRoomCreatePage({ mode }: Props) {
       formData.append('pricePerNight', f.pricePerNight.toString())
       formData.append('detail', f.detail!)
       formData.append('isActive', f.isActive)
+      formData.append('packages', f.packages.toString())
 
       const res = await apiRoom.create(formData)
       if (res.success) {
@@ -118,6 +134,7 @@ export default function AdminRoomCreatePage({ mode }: Props) {
       formData.append('pricePerNight', f.pricePerNight.toString())
       formData.append('detail', f.detail!)
       formData.append('isActive', f.isActive)
+      formData.append('packages', f.packages.toString())
 
       images.forEach(async (image) => {
         formData.append(`files`, image.file!, image.file?.name)
@@ -254,12 +271,27 @@ export default function AdminRoomCreatePage({ mode }: Props) {
             </Radio.Group>
           </div>
 
-          {room?.images.length != 0 ? (
+          <Grid className="mb-5">
+            <MultiSelect
+              w={'100%'}
+              label="แพ็คเกจ"
+              data={options?.map((x) => ({ value: x.id?.toString(), label: x.name }))}
+              defaultValue={room?.packages?.map((x) => x.id?.toString())}
+              value={selectPackages?.map((x) => x.toString())}
+              clearable
+              onChange={(value) => {
+                form.setFieldValue('packages', value)
+                setSelectPackages(value)
+              }}
+            />
+          </Grid>
+
+          {room?.images?.length != 0 ? (
             <>
               <Grid className="mb-5">
-                {room?.images.map((x) => {
+                {room?.images?.map((x, i) => {
                   return (
-                    <Grid.Col span={3}>
+                    <Grid.Col key={i} span={3}>
                       <Grid className="mb-5">
                         <Grid.Col span={12}>
                           <Image src={x.fullPath} />

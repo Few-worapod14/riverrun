@@ -19,4 +19,7 @@ export class RoomCreateDto {
   @IsBoolean()
   @Transform(({ value }) => (value === 'true' ? true : false))
   isActive: boolean
+
+  @IsOptional()
+  packages: string
 }

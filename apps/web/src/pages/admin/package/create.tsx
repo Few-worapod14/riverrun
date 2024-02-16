@@ -18,8 +18,16 @@ export default function AdminPackageCreatePage({ mode }: Props) {
 
   const [data, setData] = useState<PackageDto | null>(null)
 
-  const initData = {
-    ...data
+  let initData = {
+    name: '',
+    price: 0,
+    detail: ''
+  }
+
+  if (mode === 'edit') {
+    initData = {
+      ...data
+    }
   }
 
   const form = useForm({
@@ -59,8 +67,6 @@ export default function AdminPackageCreatePage({ mode }: Props) {
       }
     }
   }
-
-  console.log('zzz', data)
 
   return (
     <AdminLayout>

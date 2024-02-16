@@ -1,3 +1,4 @@
+import { PackageDto } from 'src/package'
 import { RoomCategoryDto } from './category'
 import { RoomImageDto } from './image'
 
@@ -19,4 +20,6 @@ export class RoomDto {
   updatedAt: Date
 
   images: RoomImageDto[]
+
+  packages: PackageDto[]
 }

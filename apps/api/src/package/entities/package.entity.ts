@@ -1,5 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { Room } from '../../room/entities/room.entity'
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity({
   name: 'packages'
@@ -16,7 +15,4 @@ export class Package {
 
   @Column()
   detail: string
-
-  @ManyToOne(() => Room, (room) => room.packages)
-  room: Room
 }

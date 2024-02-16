@@ -32,6 +32,7 @@ export class RoomBookedService {
     const query = this.roomService
       .createQueryBuilder('rooms')
       .leftJoinAndSelect('rooms.images', 'images')
+      .leftJoinAndSelect('rooms.packages', 'packages')
     if (rooms.length != 0) {
       query.where(`rooms.id NOT IN (${rooms})`)
     }
@@ -67,6 +68,7 @@ export class RoomBookedService {
     const check = await this.roomBookedService
       .createQueryBuilder('room_booked')
       .leftJoinAndSelect('room_booked.room', 'rooms')
+      .leftJoinAndSelect('rooms.packages', 'packages')
       .where('room_booked.roomId = :id', { id: roomId })
       .where('room_booked.startBookingDate BETWEEN :startBookingDate AND :endBookingDate', {
         startBookingDate: startBookingDate,

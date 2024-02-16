@@ -1,5 +1,3 @@
-import { RoomDto } from 'src/room'
-
 export class PackageDto {
   id: number
 
@@ -8,6 +6,4 @@ export class PackageDto {
   price: number
 
   detail: string
-
-  room: RoomDto
 }

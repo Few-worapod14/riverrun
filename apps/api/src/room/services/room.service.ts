@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { RoomCreateDto, RoomUpdateDto } from '@riverrun/interface'
+import { Package } from 'src/package/entities/package.entity'
 import { Repository } from 'typeorm'
 import { RoomImage } from '../entities/room-image.entity'
 import { Room } from '../entities/room.entity'
@@ -11,15 +12,25 @@ export class RoomService {
     @InjectRepository(Room)
     private roomRepository: Repository<Room>,
     @InjectRepository(RoomImage)
-    private roomImageRepository: Repository<RoomImage>
+    private roomImageRepository: Repository<RoomImage>,
+    @InjectRepository(Package)
+    private packageRepository: Repository<Package>
   ) {}
 
   async create(data: RoomCreateDto, files?: Array<Express.Multer.File>) {
+    const pkg = data.packages.split(',').map(Number)
+    const promises = pkg.map(async (x) => {
+      const data = await this.packageRepository.findOne({ where: { id: x } })
+      return data
+    })
+    const options = await Promise.all(promises)
+
     const save = {
       ...data,
       category: {
         id: data.categoryId
-      }
+      },
+      packages: options
     }
     delete save.categoryId
     const room = await this.roomRepository.save(save)
@@ -44,7 +55,9 @@ export class RoomService {
       skip: skip,
       take: limit,
       relations: {
-        category: true
+        category: true,
+        images: true,
+        packages: true
       }
     })
   }
@@ -56,20 +69,30 @@ export class RoomService {
       },
       relations: {
         category: true,
-        images: true
+        images: true,
+        packages: true
       }
     })
   }
 
   async update(id: number, data: RoomUpdateDto, files?: Array<Express.Multer.File>) {
+    const pkg = data.packages.split(',').map(Number)
+    const promises = pkg.map(async (x) => {
+      const data = await this.packageRepository.findOne({ where: { id: x } })
+      return data
+    })
+    const options = await Promise.all(promises)
+
     const save = {
       ...data,
+      id: id,
       category: {
         id: data.categoryId
-      }
+      },
+      packages: options
     }
     delete save.categoryId
-
+    console.log('====', save)
     const room = await this.roomRepository.findOne({ where: { id: id } })
 
     files?.forEach(async (file) => {
@@ -84,7 +107,7 @@ export class RoomService {
       await this.roomImageRepository.save(image)
     })
 
-    return this.roomRepository.update(id, save)
+    return this.roomRepository.save(save)
   }
 
   remove(id: number) {

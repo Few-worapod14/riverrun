@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { AuthModule } from '../auth/auth.module'
-import { AdminPackageController } from './controllers/admin-package.controller'
+import { AdminPackageController } from './controllers/package.controller'
 import { Package } from './entities/package.entity'
 import { PackageService } from './services/package.service'
 

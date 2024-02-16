@@ -2,6 +2,8 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -46,6 +48,7 @@ export class Room {
   @OneToMany(() => RoomImage, (images) => images.room)
   images: RoomImage[]
 
-  @OneToMany(() => Package, (option) => option.room)
+  @ManyToMany(() => Package)
+  @JoinTable()
   packages: Package[]
 }
