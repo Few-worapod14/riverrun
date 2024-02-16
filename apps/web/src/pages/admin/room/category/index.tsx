@@ -29,7 +29,7 @@ export default function AdminRoomCategoryPage() {
 
   const [loading, setLoading] = useState<boolean>(true)
   const [isError, setError] = useState(false)
-  const [msg, setMsg] = useState<IErrorMessage>()
+
   const [currentPage, setCurrentPage] = useState<number>(Number(searchParams.get('page')) || 1)
   const [total, setTotal] = useState(0)
 
@@ -63,13 +63,10 @@ export default function AdminRoomCategoryPage() {
     if (res.success) {
       setAllCategory(res.data)
       setTotal(Math.ceil(res.total / res.perPage))
-      setPerPage(res.perPage)
       setCurrentPage(currentPage)
       setLoading(false)
     } else {
-      const errorResponse = res as unknown as IErrorMessage
       setError(true)
-      setMsg(errorResponse)
       setLoading(false)
     }
   }

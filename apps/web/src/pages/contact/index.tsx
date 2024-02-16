@@ -2,11 +2,15 @@ import { RootLayout } from '@/components/Layout/Layout'
 import { Button, Grid, Input, Textarea } from '@mantine/core'
 
 export function ContactPage() {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault()
+  }
+
   return (
     <RootLayout>
       <h3>ติดต่อเรา</h3>
 
-      <form>
+      <form onSubmit={handleSubmit}>
         <Grid>
           <Grid.Col></Grid.Col>
           <Grid.Col>

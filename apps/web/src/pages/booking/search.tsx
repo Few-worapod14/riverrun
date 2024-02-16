@@ -1,6 +1,7 @@
 import { BookingDate } from '@/components/BookingDate/BookingDate'
 import { RootLayout } from '@/components/Layout/Layout'
 import * as api from '@/services/booking'
+import { Button, Grid, Image, Paper } from '@mantine/core'
 import { RoomDto } from '@riverrun/interface'
 import queryString from 'query-string'
 import { useEffect, useState } from 'react'
@@ -35,6 +36,7 @@ export default function SearchRoomPage() {
 
   const handleGetRoom = async () => {
     const res = await api.search(startBooking, endBooking, roomBooking)
+
     if (res.success) {
       setRooms(res.data)
     }
@@ -42,18 +44,38 @@ export default function SearchRoomPage() {
 
   return (
     <RootLayout>
-      <BookingDate
-        startBooking={startBooking}
-        endBooking={endBooking}
-        roomBooking={roomBooking}
-        onSearch={handleSearch}
-      />
+      <div className="mb-5">
+        <BookingDate
+          startBooking={startBooking}
+          endBooking={endBooking}
+          roomBooking={roomBooking}
+          onSearch={handleSearch}
+        />
+      </div>
 
-      <>
-        {rooms.map((room) => {
-          return <>{room.name}</>
+      <div>
+        {rooms?.map((room, i) => {
+          return (
+            <Paper className="mb-5" shadow="xs" p="xl" key={i}>
+              <Grid>
+                <Grid.Col span={4}>
+                  <Image src={room?.images?.[0]?.fullPath} />
+                </Grid.Col>
+
+                <Grid.Col span={8}>
+                  <Grid>
+                    <Grid.Col>{room.name}</Grid.Col>
+                    <Grid.Col>{room.pricePerNight} ฿</Grid.Col>
+                    <Grid.Col>
+                      <Button>จองรอง</Button>
+                    </Grid.Col>
+                  </Grid>
+                </Grid.Col>
+              </Grid>
+            </Paper>
+          )
         })}
-      </>
+      </div>
     </RootLayout>
   )
 }

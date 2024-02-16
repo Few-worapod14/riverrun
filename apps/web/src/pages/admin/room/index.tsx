@@ -12,7 +12,7 @@ export default function AdminRoomPage() {
 
   const [loading, setLoading] = useState<boolean>(true)
   const [isError, setError] = useState(false)
-  const [msg, setMsg] = useState<IErrorMessage>()
+
   const [currentPage, setCurrentPage] = useState<number>(Number(searchParams.get('page')) || 1)
 
   const [total, setTotal] = useState(0)
@@ -33,9 +33,7 @@ export default function AdminRoomPage() {
       setCurrentPage(currentPage)
       setLoading(false)
     } else {
-      const errorResponse = res as IErrorMessage
       setError(true)
-      setMsg(errorResponse)
       setLoading(false)
     }
   }
