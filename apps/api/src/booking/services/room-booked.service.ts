@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import * as dayjs from 'dayjs'
 import { Repository } from 'typeorm'
 import { Room } from '../../room/entities/room.entity'
 import { RoomBooked } from '../entities/room-booked.entity'
@@ -14,10 +13,33 @@ export class RoomBookedService {
     private roomBookedService: Repository<RoomBooked>
   ) {}
 
-  async findAvailable(startBookingDate: Date, endBookingDate: Date) {
-    const startDateTime = dayjs(startBookingDate).format('YYYY-MM-DD 14:00:00')
-    const endDateTime = dayjs(endBookingDate).format('YYYY-MM-DD 12:00:00')
+  async findAvailable(startDateTime: string, endDateTime: string, room: number) {
+    const subQuery = await this.roomBookedService
+      .createQueryBuilder('room_booked')
+      .leftJoinAndSelect('room_booked.room', 'rooms')
+      .where('room_booked.startBookingDate BETWEEN :startBookingDate AND :endBookingDate', {
+        startBookingDate: startDateTime,
+        endBookingDate: endDateTime
+      })
+      .orWhere('room_booked.endBookingDate BETWEEN :startBookingDate AND :endBookingDate', {
+        startBookingDate: startDateTime,
+        endBookingDate: endDateTime
+      })
+      .getMany()
 
+    const rooms = subQuery.map((x) => x.room.id)
+
+    const query = this.roomService
+      .createQueryBuilder('rooms')
+      .leftJoinAndSelect('rooms.images', 'images')
+    if (rooms.length != 0) {
+      query.where(`rooms.id NOT IN (${rooms})`)
+    }
+
+    return await query.getMany()
+  }
+
+  async count(startDateTime: string, endDateTime: string, room: number) {
     const subQuery = await this.roomBookedService
       .createQueryBuilder('room_booked')
       .leftJoinAndSelect('room_booked.room', 'rooms')
@@ -38,41 +60,21 @@ export class RoomBookedService {
       query.where(`rooms.id NOT IN (${rooms})`)
     }
 
-    return await query.getMany()
+    return await query.getCount()
   }
 
-  count(startBookingDate: Date, endBookingDate: Date) {
-    const startDateTime = dayjs(startBookingDate).format('YYYY-MM-DD 14:00:00')
-    const endDateTime = dayjs(endBookingDate).format('YYYY-MM-DD 12:00:00')
-
-    return this.roomBookedService
-      .createQueryBuilder('room_booked')
-      .where('room_booked.startBookingDate BETWEEN :startBookingDate AND :endBookingDate', {
-        startBookingDate: startDateTime,
-        endBookingDate: endDateTime
-      })
-      .orWhere('room_booked.endBookingDate BETWEEN :startBookingDate AND :endBookingDate', {
-        startBookingDate: startDateTime,
-        endBookingDate: endDateTime
-      })
-      .getCount()
-  }
-
-  async checkAvailableRoom(roomId: number, startBookingDate: Date, endBookingDate: Date) {
-    const startDateTime = dayjs(startBookingDate).format('YYYY-MM-DD 14:00:00')
-    const endDateTime = dayjs(endBookingDate).format('YYYY-MM-DD 12:00:00')
-
+  async checkAvailableRoom(roomId: number, startBookingDate: string, endBookingDate: string) {
     const check = await this.roomBookedService
       .createQueryBuilder('room_booked')
       .leftJoinAndSelect('room_booked.room', 'rooms')
       .where('room_booked.roomId = :id', { id: roomId })
       .where('room_booked.startBookingDate BETWEEN :startBookingDate AND :endBookingDate', {
-        startBookingDate: startDateTime,
-        endBookingDate: endDateTime
+        startBookingDate: startBookingDate,
+        endBookingDate: endBookingDate
       })
       .orWhere('room_booked.endBookingDate BETWEEN :startBookingDate AND :endBookingDate', {
-        startBookingDate: startDateTime,
-        endBookingDate: endDateTime
+        startBookingDate: startBookingDate,
+        endBookingDate: endBookingDate
       })
       .getOne()
 

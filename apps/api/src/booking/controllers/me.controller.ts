@@ -14,6 +14,7 @@ import {
   UseGuards
 } from '@nestjs/common'
 import { BookingCreateDto, IResponseData, IResponsePaginate } from '@riverrun/interface'
+import dayjs from 'dayjs'
 import { Response } from 'express'
 import { IRequestWithUser } from 'src/auth/requet.interface'
 import { AuthGuard } from '../../auth/guards/auth.guard'
@@ -39,10 +40,19 @@ export class MeController {
       throw new NotFoundException('ID not found')
     }
 
+    body.startBookingDate, body.endBookingDate
+
+    const startBookingDate = dayjs(dayjs(body.startBookingDate, 'DD-MM-YYYY').toDate()).format(
+      'YYYY-MM-DD 14:00:00'
+    )
+    const endBookingDate = dayjs(dayjs(body.endBookingDate, 'DD-MM-YYYY').toDate()).format(
+      'YYYY-MM-DD 12:00:00'
+    )
+
     const checkAvailableRoom = await this.roomBookedService.checkAvailableRoom(
       room.id,
-      body.startBookingDate,
-      body.endBookingDate
+      startBookingDate,
+      endBookingDate
     )
 
     if (checkAvailableRoom) {

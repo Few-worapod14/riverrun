@@ -1,33 +1,44 @@
 import { BadRequestException, Controller, Get, HttpStatus, Query, Req, Res } from '@nestjs/common'
 import * as dayjs from 'dayjs'
+import * as customParseFormat from 'dayjs/plugin/customParseFormat'
 import { Response } from 'express'
 import { IRequestWithUser } from 'src/auth/requet.interface'
 import { RoomBookedService } from '../services/room-booked.service'
 
-@Controller('bookings/search')
+dayjs.extend(customParseFormat)
+
+@Controller('bookings')
 export class BookingController {
   constructor(private roomBookedService: RoomBookedService) {}
 
-  @Get('/')
+  @Get('/search')
   async findAll(
     @Req() req: IRequestWithUser,
     @Res() res: Response,
-    @Query('startBookingDate') startBookingDate: Date,
-    @Query('endBookingDate') endBookingDate: Date
+    @Query('startBooking') startDate: string,
+    @Query('endBooking') endDate: string,
+    @Query('roomBooking') room: number
   ) {
     const now = dayjs()
-    if (dayjs(startBookingDate).isBefore(now)) {
+    if (dayjs(startDate).isBefore(now)) {
       throw new BadRequestException('Date not available.')
     }
 
-    const query = await this.roomBookedService.findAvailable(startBookingDate, endBookingDate)
+    const startBookingDate = dayjs(dayjs(startDate, 'DD-MM-YYYY').toDate()).format(
+      'YYYY-MM-DD 14:00:00'
+    )
+    const endBookingDate = dayjs(dayjs(endDate, 'DD-MM-YYYY').toDate()).format(
+      'YYYY-MM-DD 12:00:00'
+    )
 
-    const total = await this.roomBookedService.count(startBookingDate, endBookingDate)
+    const query = await this.roomBookedService.findAvailable(startBookingDate, endBookingDate, room)
+    const total = await this.roomBookedService.count(startBookingDate, endBookingDate, room)
+
     const response = {
       success: true,
       total: total,
       currentPage: 1,
-      perPage: 1000,
+      perPage: -1,
       data: query
     }
     res.status(HttpStatus.OK).json(response)
