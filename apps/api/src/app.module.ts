@@ -10,6 +10,7 @@ import { ContactModule } from './contact/contact.module'
 import { CustomerModule } from './customer/customer.module'
 import { RoomModule } from './room/room.module'
 import { PackageModule } from './package/package.module';
+import { PaymentModule } from './payment/payment.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -37,7 +38,8 @@ import { PackageModule } from './package/package.module';
     RoomModule,
     BookingModule,
     ContactModule,
-    PackageModule
+    PackageModule,
+    PaymentModule
   ],
   controllers: [],
   providers: []

@@ -92,7 +92,7 @@ export class RoomService {
       packages: options
     }
     delete save.categoryId
-    console.log('====', save)
+
     const room = await this.roomRepository.findOne({ where: { id: id } })
 
     files?.forEach(async (file) => {
