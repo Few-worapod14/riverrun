@@ -10,4 +10,6 @@ export class PaymentDto {
   name: string
 
   isPromtpay: boolean
+
+  promtPayNumber: string
 }

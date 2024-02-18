@@ -16,6 +16,7 @@ import AdminCustomerViewPage from './pages/admin/customer/view'
 import AdminPackageIndexPage from './pages/admin/package'
 import AdminPackageCreatePage from './pages/admin/package/create'
 import AdminPackageViewPage from './pages/admin/package/view'
+import AdminRoomPaymentPage from './pages/admin/payment'
 import AdminRoomPage from './pages/admin/room'
 import AdminRoomCategoryPage from './pages/admin/room/category'
 import AdminRoomCreatePage from './pages/admin/room/create'
@@ -200,6 +201,16 @@ function App() {
             element={
               <AuthorizedAdminRoute>
                 <AdminContactViewPage />
+              </AuthorizedAdminRoute>
+            }
+          />
+
+          {/* Payment management */}
+          <Route
+            path="/admin/payment"
+            element={
+              <AuthorizedAdminRoute>
+                <AdminRoomPaymentPage />
               </AuthorizedAdminRoute>
             }
           />

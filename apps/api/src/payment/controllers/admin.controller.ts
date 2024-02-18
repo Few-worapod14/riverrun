@@ -14,7 +14,12 @@ import {
   Res,
   UseGuards
 } from '@nestjs/common'
-import { IResponseData, IResponsePaginate, RoomCreateDto, RoomUpdateDto } from '@riverrun/interface'
+import {
+  IResponseData,
+  IResponsePaginate,
+  PaymentCreateDto,
+  PaymentUpdateDto
+} from '@riverrun/interface'
 import { Request, Response } from 'express'
 import { AdminGuard } from '../../auth/guards/admin.guard'
 import { Payment } from '../entities/payment.entity'
@@ -26,11 +31,11 @@ export class AdminPaymentController {
   constructor(private readonly paymentService: PaymentService) {}
 
   @Post()
-  async create(@Req() req: Request, @Res() res: Response, @Body() body: RoomCreateDto) {
+  async create(@Req() req: Request, @Res() res: Response, @Body() body: PaymentCreateDto) {
     const query = await this.paymentService.create(body)
-    const room = await this.paymentService.findByID(query.id)
+    const payment = await this.paymentService.findByID(query.id)
     const response: IResponseData<Payment> = {
-      data: room,
+      data: payment,
       success: true
     }
     res.status(HttpStatus.OK).json(response)
@@ -75,7 +80,7 @@ export class AdminPaymentController {
     @Req() req: Request,
     @Res() res: Response,
     @Param('id', ParseIntPipe) id: number,
-    @Body() body: RoomUpdateDto
+    @Body() body: PaymentUpdateDto
   ) {
     const check = await this.paymentService.findByID(id)
     if (!check) {

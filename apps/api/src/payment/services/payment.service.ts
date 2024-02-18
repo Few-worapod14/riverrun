@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { RoomCreateDto, RoomUpdateDto } from '@riverrun/interface'
+import { PaymentCreateDto, PaymentUpdateDto } from '@riverrun/interface'
 import { Repository } from 'typeorm'
 import { Payment } from '../entities/payment.entity'
 
@@ -11,25 +11,8 @@ export class PaymentService {
     private paymentRepository: Repository<Payment>
   ) {}
 
-  async create(data: RoomCreateDto) {
-    const pkg = data.packages.split(',').map(Number)
-    const promises = pkg.map(async (x) => {
-      const data = await this.paymentRepository.findOne({ where: { id: x } })
-      return data
-    })
-    const options = await Promise.all(promises)
-
-    const save = {
-      ...data,
-      category: {
-        id: data.categoryId
-      },
-      packages: options
-    }
-    delete save.categoryId
-    const room = await this.paymentRepository.save(save)
-
-    return room
+  async create(data: PaymentCreateDto) {
+    return await this.paymentRepository.save(data)
   }
 
   findAll(page: number, limit: number) {
@@ -48,7 +31,7 @@ export class PaymentService {
     })
   }
 
-  async update(id: number, data: RoomUpdateDto) {
+  async update(id: number, data: PaymentUpdateDto) {
     return this.paymentRepository.save(data)
   }
 

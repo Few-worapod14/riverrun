@@ -7,7 +7,7 @@ export class Payment {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column({ unique: true })
+  @Column()
   no: string
 
   @Column()
@@ -21,4 +21,7 @@ export class Payment {
 
   @Column()
   isPromtpay: boolean
+
+  @Column({ nullable: true })
+  promtPayNumber: string
 }

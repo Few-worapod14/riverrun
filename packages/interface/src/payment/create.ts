@@ -1,18 +1,22 @@
-import { IsBoolean, IsNumber, IsString } from 'class-validator'
+import { Optional } from '@nestjs/common'
+import { IsBoolean, IsString } from 'class-validator'
 
 export class PaymentCreateDto {
   @IsString()
   no: string
 
-  @IsNumber()
-  bank: number
+  @IsString()
+  bank: string
 
-  @IsNumber()
+  @IsString()
   branch: string
 
-  @IsNumber()
+  @IsString()
   name: string
 
   @IsBoolean()
   isPromtpay: boolean
+
+  @Optional()
+  promtPayNumber: string
 }
