@@ -14,7 +14,7 @@ import { CustomerCreateDto, CustomerUpdateDto, IResponseData } from '@riverrun/i
 import { Response } from 'express'
 
 import { AuthGuard } from '../../auth/guards/auth.guard'
-import { IRequestWithUser } from '../../auth/requet.interface'
+import { IRequestWithUser } from '../../auth/request.interface'
 import { Customer } from '../entities/customer.entity'
 import { CustomerService } from '../services/customer.service'
 

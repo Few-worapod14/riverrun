@@ -52,6 +52,11 @@ export default function AdminRoomViewPage() {
             </Grid>
 
             <Grid className="mb-5">
+              <Grid.Col span={3}>จำนวนห้องทั้งหมด :</Grid.Col>
+              <Grid.Col span={9}>{room?.amount}</Grid.Col>
+            </Grid>
+
+            <Grid className="mb-5">
               <Grid.Col span={3}>รายละเอียดห้อง :</Grid.Col>
 
               <Grid.Col span={9}>{room?.detail}</Grid.Col>

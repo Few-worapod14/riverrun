@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
@@ -22,17 +23,24 @@ export type UserDTO = {
   accessToken: string
 }
 
-interface StoreState {
-  admin: AdminDTO | null
-  user: UserDTO | null
-  setUser: (user: UserDTO | null) => void
-  setAdmin: (user: AdminDTO | null) => void
+export type BookingDTO = {
+  timeBooking: Date
+  startDate: Date
+  endDate: Date
+  roomId: number
 }
 
-// export interface AuthDTO {
-//   accessToken: string
-//   user: UserDTO | AdminDTO
-// }
+interface StoreState {
+  timeBooking: Date | null
+  startDate: Date | null
+  endDate: Date | null
+  setUser: (user: UserDTO | null) => void
+  user: UserDTO | null
+  admin: AdminDTO | null
+  setAdmin: (user: AdminDTO | null) => void
+  roomId: number | null
+  setBooking: (startDate: Date, endDate: Date, roomId: number) => void
+}
 
 export interface AuthRequestDTO {
   username: string
@@ -45,9 +53,23 @@ export const useStore = create<StoreState>()(
   devtools(
     persist(
       (set) => ({
-        admin: null,
+        timeBooking: null,
+        startDate: null,
+        endDate: null,
+        roomId: null,
+        setBooking: (startDate: Date, endDate: Date, roomId: number) => {
+          set(() => {
+            return {
+              timeBooking: dayjs().toDate(),
+              startDate: startDate,
+              endDate: endDate,
+              roomId: roomId
+            }
+          })
+        },
         user: null,
         setUser: (user: UserDTO | null) => set(() => ({ user: user })),
+        admin: null,
         setAdmin: (admin: AdminDTO | null) => set(() => ({ admin: admin }))
       }),
       {

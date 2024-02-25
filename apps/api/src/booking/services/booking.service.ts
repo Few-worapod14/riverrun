@@ -4,8 +4,8 @@ import { BOOKING_STATUS, BookingCreateDto, BookingUpdateDto } from '@riverrun/in
 import * as dayjs from 'dayjs'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
 import { Room } from '../../room/entities/room.entity'
+import { BookingSlot } from '../entities/booking-slot.entity'
 import { Booking } from '../entities/booking.entity'
-import { RoomBooked } from '../entities/room-booked.entity'
 
 @Injectable()
 export class BookingService {
@@ -14,11 +14,11 @@ export class BookingService {
     private bookingService: Repository<Booking>,
     @InjectRepository(Room)
     private roomService: Repository<Room>,
-    @InjectRepository(RoomBooked)
-    private roomBookedService: Repository<RoomBooked>
+    @InjectRepository(BookingSlot)
+    private bookingSlot: Repository<BookingSlot>
   ) {}
 
-  async create(userId: number, data: BookingCreateDto): Promise<Booking> {
+  async create(data: BookingCreateDto, userId?: number): Promise<Booking> {
     const startDate = dayjs(data.startBookingDate)
     const endDate = dayjs(data.endBookingDate)
     const days = endDate.diff(startDate, 'days')
@@ -28,7 +28,8 @@ export class BookingService {
         id: data.roomId
       },
       relations: {
-        bookings: true
+        // slots: true,
+        // customer: true
       }
     })
 
@@ -36,17 +37,18 @@ export class BookingService {
       room: {
         id: room.id
       },
+      roomAmount: data.roomAmount,
       customer: {
         id: userId
       },
       startBookingDate: startDate.format('YYYY-MM-DD 14:00:00'),
       endBookingDate: endDate.format('YYYY-MM-DD 12:00:00')
     }
-    await this.roomBookedService.save(bookingRoom)
+    await this.bookingSlot.save(bookingRoom)
 
     const total: number = days * room.pricePerNight
-    const discount = data.discount
-    const totalAmount: number = total - discount
+    // const discount = data.discount
+    // const totalAmount: number = total - discount
 
     const save = {
       startBookingDate: startDate.format('YYYY-MM-DD 14:00:00'),
@@ -57,12 +59,16 @@ export class BookingService {
       room: {
         id: data.roomId
       },
+      roomAmount: data.roomAmount,
       adult: data.adult,
       children: data.children,
+      name: data.name,
+      email: data.email,
+      mobile: data.mobile,
       days: days,
       total: total,
-      discount: discount,
-      totalAmount: totalAmount,
+      // discount: discount,
+      // totalAmount: totalAmount,
       status: BOOKING_STATUS.BOOKING
     }
 
@@ -75,7 +81,7 @@ export class BookingService {
       skip: skip,
       take: limit,
       relations: {
-        room: true,
+        slots: true,
         customer: true
       }
     })
@@ -87,7 +93,7 @@ export class BookingService {
         id
       },
       relations: {
-        room: true,
+        slots: true,
         customer: true
       }
     })
@@ -127,7 +133,7 @@ export class BookingService {
         }
       },
       relations: {
-        room: true,
+        slots: true,
         customer: true
       }
     })
@@ -141,7 +147,7 @@ export class BookingService {
         }
       },
       relations: {
-        room: true,
+        slots: true,
         customer: true
       }
     })

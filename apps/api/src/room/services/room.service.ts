@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { RoomCreateDto, RoomUpdateDto } from '@riverrun/interface'
-import { Package } from 'src/package/entities/package.entity'
+
 import { Repository } from 'typeorm'
 import { RoomImage } from '../entities/room-image.entity'
 import { Room } from '../entities/room.entity'
@@ -12,25 +12,15 @@ export class RoomService {
     @InjectRepository(Room)
     private roomRepository: Repository<Room>,
     @InjectRepository(RoomImage)
-    private roomImageRepository: Repository<RoomImage>,
-    @InjectRepository(Package)
-    private packageRepository: Repository<Package>
+    private roomImageRepository: Repository<RoomImage>
   ) {}
 
   async create(data: RoomCreateDto, files?: Array<Express.Multer.File>) {
-    const pkg = data.packages.split(',').map(Number)
-    const promises = pkg.map(async (x) => {
-      const data = await this.packageRepository.findOne({ where: { id: x } })
-      return data
-    })
-    const options = await Promise.all(promises)
-
     const save = {
       ...data,
       category: {
         id: data.categoryId
-      },
-      packages: options
+      }
     }
     delete save.categoryId
     const room = await this.roomRepository.save(save)
@@ -56,8 +46,7 @@ export class RoomService {
       take: limit,
       relations: {
         category: true,
-        images: true,
-        packages: true
+        images: true
       }
     })
   }
@@ -69,27 +58,18 @@ export class RoomService {
       },
       relations: {
         category: true,
-        images: true,
-        packages: true
+        images: true
       }
     })
   }
 
   async update(id: number, data: RoomUpdateDto, files?: Array<Express.Multer.File>) {
-    const pkg = data.packages.split(',').map(Number)
-    const promises = pkg.map(async (x) => {
-      const data = await this.packageRepository.findOne({ where: { id: x } })
-      return data
-    })
-    const options = await Promise.all(promises)
-
     const save = {
       ...data,
       id: id,
       category: {
         id: data.categoryId
-      },
-      packages: options
+      }
     }
     delete save.categoryId
 

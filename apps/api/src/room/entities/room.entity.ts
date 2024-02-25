@@ -2,15 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm'
-import { Booking } from '../../booking/entities/booking.entity'
-import { Package } from '../../package/entities/package.entity'
 import { RoomCategory } from './category-room.entity'
 import { RoomImage } from './room-image.entity'
 
@@ -31,6 +27,9 @@ export class Room {
   pricePerNight: number
 
   @Column()
+  amount: number
+
+  @Column()
   detail: string
 
   @Column()
@@ -42,13 +41,6 @@ export class Room {
   @UpdateDateColumn()
   updatedAt: Date
 
-  @OneToMany(() => Booking, (booking) => booking.room)
-  bookings: Booking[]
-
   @OneToMany(() => RoomImage, (images) => images.room)
   images: RoomImage[]
-
-  @ManyToMany(() => Package)
-  @JoinTable()
-  packages: Package[]
 }

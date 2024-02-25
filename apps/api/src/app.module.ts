@@ -8,9 +8,8 @@ import { AuthModule } from './auth/auth.module'
 import { BookingModule } from './booking/booking.module'
 import { ContactModule } from './contact/contact.module'
 import { CustomerModule } from './customer/customer.module'
+import { PaymentModule } from './payment/payment.module'
 import { RoomModule } from './room/room.module'
-import { PackageModule } from './package/package.module';
-import { PaymentModule } from './payment/payment.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -38,7 +37,7 @@ import { PaymentModule } from './payment/payment.module';
     RoomModule,
     BookingModule,
     ContactModule,
-    PackageModule,
+
     PaymentModule
   ],
   controllers: [],

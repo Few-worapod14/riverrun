@@ -1,3 +1,4 @@
+import { Room } from 'src/room/entities/room.entity'
 import {
   Column,
   CreateDateColumn,
@@ -6,21 +7,23 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm'
-import { Customer } from '../../customer/entities/customer.entity'
-import { Room } from '../../room/entities/room.entity'
+import { Booking } from './booking.entity'
 
 @Entity({
-  name: 'room_booked'
+  name: 'booking_slots'
 })
-export class RoomBooked {
+export class BookingSlot {
   @PrimaryGeneratedColumn()
   id: number
+
+  @ManyToOne(() => Booking, (booking) => booking.id)
+  booking: Booking
 
   @ManyToOne(() => Room, (room) => room.id)
   room: Room
 
-  @ManyToOne(() => Customer, (customer) => customer.id)
-  customer: Customer
+  @Column()
+  roomAmount: number
 
   @Column()
   startBookingDate: Date

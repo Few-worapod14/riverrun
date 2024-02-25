@@ -3,11 +3,12 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm'
 import { Customer } from '../../customer/entities/customer.entity'
-import { Room } from '../../room/entities/room.entity'
+import { BookingSlot } from './booking-slot.entity'
 
 @Entity({
   name: 'bookings'
@@ -28,11 +29,20 @@ export class Booking {
   @Column({ nullable: true })
   checkOutDate?: Date
 
-  @ManyToOne(() => Room, (room) => room.id)
-  room: Room
-
   @ManyToOne(() => Customer, (customer) => customer.id)
-  customer: Customer
+  customer?: Customer
+
+  @Column({ nullable: true })
+  name?: string
+
+  @Column({ nullable: true })
+  email?: string
+
+  @Column({ nullable: true })
+  mobile?: string
+
+  @Column()
+  roomAmount: number
 
   @Column()
   adult: number
@@ -44,13 +54,7 @@ export class Booking {
   days: number
 
   @Column()
-  discount: number
-
-  @Column()
   total: number
-
-  @Column()
-  totalAmount: number
 
   @Column({ nullable: true })
   note?: string
@@ -63,4 +67,7 @@ export class Booking {
 
   @UpdateDateColumn()
   updatedAt: Date
+
+  @OneToMany(() => BookingSlot, (room) => room)
+  slots: BookingSlot[]
 }

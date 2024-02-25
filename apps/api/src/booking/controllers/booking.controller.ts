@@ -1,15 +1,34 @@
-import { BadRequestException, Controller, Get, HttpStatus, Query, Req, Res } from '@nestjs/common'
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  NotFoundException,
+  Post,
+  Query,
+  Req,
+  Res
+} from '@nestjs/common'
+import { BookingCreateDto, IResponseData } from '@riverrun/interface'
 import * as dayjs from 'dayjs'
 import * as customParseFormat from 'dayjs/plugin/customParseFormat'
 import { Response } from 'express'
-import { IRequestWithUser } from 'src/auth/requet.interface'
-import { RoomBookedService } from '../services/room-booked.service'
+import { IRequestWithUser } from '../../auth/request.interface'
+import { RoomService } from '../../room/services/room.service'
+import { Booking } from '../entities/booking.entity'
+import { BookingSlotService } from '../services/booing-slot.service'
+import { BookingService } from '../services/booking.service'
 
 dayjs.extend(customParseFormat)
 
 @Controller('bookings')
 export class BookingController {
-  constructor(private roomBookedService: RoomBookedService) {}
+  constructor(
+    private bookingSlotService: BookingSlotService,
+    private roomService: RoomService,
+    private bookingService: BookingService
+  ) {}
 
   @Get('/search')
   async findAll(
@@ -17,7 +36,7 @@ export class BookingController {
     @Res() res: Response,
     @Query('startBooking') startDate: string,
     @Query('endBooking') endDate: string,
-    @Query('roomBooking') room: number
+    @Query('roomBooking') amount: number
   ) {
     const now = dayjs()
     if (dayjs(startDate).isBefore(now)) {
@@ -31,8 +50,12 @@ export class BookingController {
       'YYYY-MM-DD 12:00:00'
     )
 
-    const query = await this.roomBookedService.findAvailable(startBookingDate, endBookingDate, room)
-    const total = await this.roomBookedService.count(startBookingDate, endBookingDate, room)
+    const query = await this.bookingSlotService.findAvailable(
+      startBookingDate,
+      endBookingDate,
+      amount
+    )
+    const total = await this.bookingSlotService.count(startBookingDate, endBookingDate)
 
     const response = {
       success: true,
@@ -40,6 +63,36 @@ export class BookingController {
       currentPage: 1,
       perPage: -1,
       data: query
+    }
+    res.status(HttpStatus.OK).json(response)
+  }
+
+  @Post('/')
+  async create(@Req() req: IRequestWithUser, @Res() res: Response, @Body() body: BookingCreateDto) {
+    const userId = req?.user?.sub || null
+    const room = await this.roomService.findByID(body.roomId)
+    if (!room) {
+      throw new NotFoundException('ID not found')
+    }
+
+    const startBookingDate = dayjs(body.startBookingDate).format('YYYY-MM-DD 14:00:00')
+    const endBookingDate = dayjs(body.endBookingDate).format('YYYY-MM-DD 12:00:00')
+
+    const checkAvailableRoom = await this.bookingSlotService.checkAvailableRoom(
+      room.id,
+      startBookingDate,
+      endBookingDate,
+      body.roomAmount
+    )
+
+    if (checkAvailableRoom) {
+      throw new BadRequestException('Room not available')
+    }
+
+    const query = await this.bookingService.create(body, userId)
+    const response: IResponseData<Booking> = {
+      data: query,
+      success: true
     }
     res.status(HttpStatus.OK).json(response)
   }

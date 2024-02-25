@@ -15,7 +15,7 @@ import {
 import { BookingUpdateDto, IResponseData, IResponsePaginate } from '@riverrun/interface'
 import { Response } from 'express'
 import { AdminGuard } from '../../auth/guards/admin.guard'
-import { IRequestWithUser } from '../../auth/requet.interface'
+import { IRequestWithUser } from '../../auth/request.interface'
 import { Booking } from '../entities/booking.entity'
 import { BookingService } from '../services/booking.service'
 

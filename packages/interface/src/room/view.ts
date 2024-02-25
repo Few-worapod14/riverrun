@@ -1,4 +1,3 @@
-import { PackageDto } from 'src/package'
 import { RoomCategoryDto } from './category'
 import { RoomImageDto } from './image'
 
@@ -11,6 +10,8 @@ export class RoomDto {
 
   pricePerNight: number
 
+  amount: number
+
   detail?: string | undefined
 
   isActive: boolean | string
@@ -20,6 +21,4 @@ export class RoomDto {
   updatedAt: Date
 
   images: RoomImageDto[]
-
-  packages: PackageDto[]
 }

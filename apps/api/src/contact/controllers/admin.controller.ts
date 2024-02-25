@@ -16,7 +16,7 @@ import {
 import { ContactUpdateDto, IResponseData, IResponsePaginate } from '@riverrun/interface'
 import { Response } from 'express'
 import { AdminGuard } from '../../auth/guards/admin.guard'
-import { IRequestWithUser } from '../../auth/requet.interface'
+import { IRequestWithUser } from '../../auth/request.interface'
 import { Contact } from '../entities/contact.entity'
 import { ContactService } from '../services/contact.service'
 

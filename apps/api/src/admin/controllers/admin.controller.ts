@@ -22,7 +22,7 @@ import {
 } from '@riverrun/interface'
 import { Request, Response } from 'express'
 import { AdminGuard } from '../../auth/guards/admin.guard'
-import { IRequestWithAdmin } from '../../auth/requet.interface'
+import { IRequestWithAdmin } from '../../auth/request.interface'
 import { Admin } from '../entities/admin.entity'
 import { AdminService } from '../services/admin.service'
 

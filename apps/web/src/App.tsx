@@ -13,9 +13,6 @@ import AdminContactViewPage from './pages/admin/contact/view'
 import AdminCustomerIndexPage from './pages/admin/customer'
 import AdminCustomerEditPage from './pages/admin/customer/edit'
 import AdminCustomerViewPage from './pages/admin/customer/view'
-import AdminPackageIndexPage from './pages/admin/package'
-import AdminPackageCreatePage from './pages/admin/package/create'
-import AdminPackageViewPage from './pages/admin/package/view'
 import AdminRoomPaymentPage from './pages/admin/payment'
 import AdminRoomPage from './pages/admin/room'
 import AdminRoomCategoryPage from './pages/admin/room/category'
@@ -141,40 +138,6 @@ function App() {
             element={
               <AuthorizedAdminRoute>
                 <AdminCustomerViewPage />
-              </AuthorizedAdminRoute>
-            }
-          />
-
-          {/* Package management */}
-          <Route
-            path="/admin/package"
-            element={
-              <AuthorizedAdminRoute>
-                <AdminPackageIndexPage />
-              </AuthorizedAdminRoute>
-            }
-          />
-          <Route
-            path="/admin/package/create"
-            element={
-              <AuthorizedAdminRoute>
-                <AdminPackageCreatePage mode={'create'} />
-              </AuthorizedAdminRoute>
-            }
-          />
-          <Route
-            path="/admin/package/view/:id"
-            element={
-              <AuthorizedAdminRoute>
-                <AdminPackageViewPage />
-              </AuthorizedAdminRoute>
-            }
-          />
-          <Route
-            path="/admin/package/edit/:id"
-            element={
-              <AuthorizedAdminRoute>
-                <AdminPackageCreatePage mode={'edit'} />
               </AuthorizedAdminRoute>
             }
           />

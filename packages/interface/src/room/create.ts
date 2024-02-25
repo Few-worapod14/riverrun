@@ -13,13 +13,14 @@ export class RoomCreateDto {
   @Transform(({ value }) => Number(value))
   pricePerNight: number
 
+  @IsNumber()
+  @Transform(({ value }) => Number(value))
+  amount: number
+
   @IsOptional()
   detail?: string
 
   @IsBoolean()
   @Transform(({ value }) => (value === 'true' ? true : false))
   isActive: boolean
-
-  @IsOptional()
-  packages: string
 }

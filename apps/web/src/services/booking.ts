@@ -1,4 +1,10 @@
-import { IResponsePaginate, RoomDto } from '@riverrun/interface'
+import {
+  BookingCreateDto,
+  BookingDto,
+  IResponseData,
+  IResponsePaginate,
+  RoomDto
+} from '@riverrun/interface'
 import queryString from 'query-string'
 import { ApiClient } from './api'
 
@@ -18,6 +24,12 @@ export const search = async (
   })
 
   const api: IResponsePaginate<RoomDto[]> = await ApiClient().get(`/bookings/search?${query}`)
+
+  return api
+}
+
+export const booking = async (data: BookingCreateDto) => {
+  const api: IResponseData<BookingDto> = await ApiClient().post(`/bookings`, data)
 
   return api
 }

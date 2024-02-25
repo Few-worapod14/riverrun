@@ -6,15 +6,15 @@ import { Room } from '../room/entities/room.entity'
 import { BookingAdminController } from './controllers/admin.controller'
 import { BookingController } from './controllers/booking.controller'
 import { MeController } from './controllers/me.controller'
+import { BookingSlot } from './entities/booking-slot.entity'
 import { Booking } from './entities/booking.entity'
-import { RoomBooked } from './entities/room-booked.entity'
+import { BookingSlotService } from './services/booing-slot.service'
 import { BookingService } from './services/booking.service'
-import { RoomBookedService } from './services/room-booked.service'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Booking, Room, RoomBooked]), AuthModule, RoomModule],
+  imports: [TypeOrmModule.forFeature([Booking, Room, BookingSlot]), AuthModule, RoomModule],
   controllers: [BookingAdminController, BookingController, MeController],
-  providers: [BookingService, RoomBookedService],
-  exports: [BookingService, RoomBookedService]
+  providers: [BookingService, BookingSlotService],
+  exports: [BookingService, BookingSlotService]
 })
 export class BookingModule {}

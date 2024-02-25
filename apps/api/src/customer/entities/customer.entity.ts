@@ -21,7 +21,7 @@ export class Customer {
   @Column({ unique: true })
   mobile: string
 
-  @Column()
+  @Column({ nullable: true })
   password?: string
 
   @Column()
