@@ -9,6 +9,9 @@ export class RoomCreateDto {
   @IsString()
   name: string
 
+  @IsString()
+  slug: string
+
   @IsNumber()
   @Transform(({ value }) => Number(value))
   pricePerNight: number

@@ -8,6 +8,8 @@ export class RoomDto {
 
   name: string
 
+  slug: string
+
   pricePerNight: number
 
   amount: number
