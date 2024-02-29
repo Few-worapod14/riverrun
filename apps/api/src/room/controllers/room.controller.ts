@@ -4,7 +4,6 @@ import {
   HttpStatus,
   NotFoundException,
   Param,
-  ParseIntPipe,
   Query,
   Req,
   Res
@@ -39,9 +38,9 @@ export class RoomController {
     res.status(HttpStatus.OK).json(response)
   }
 
-  @Get(':id')
-  async findByID(@Req() req: Request, @Res() res: Response, @Param('id', ParseIntPipe) id: number) {
-    const query = await this.roomService.findByID(id)
+  @Get(':slug')
+  async findByID(@Req() req: Request, @Res() res: Response, @Param('slug') slug: string) {
+    const query = await this.roomService.findBySlug(slug)
     if (!query) {
       throw new NotFoundException('id not found')
     }
