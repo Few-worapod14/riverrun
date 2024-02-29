@@ -2,6 +2,7 @@ import { useStore } from '@/store/store'
 import { AppShell, Burger, Center, Grid, NavLink } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useNavigate } from 'react-router-dom'
+import logo from '../../assets/logo.png'
 import './AdminLayout.scss'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -24,7 +25,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Grid className="nav">
             <Grid.Col>
               <Center>
-                <img height={100} src="../../../public/logo.png" />
+                <img height={100} src={logo} />
               </Center>
               <NavLink label="แดชบอร์ด" onClick={() => navigate('/admin')} />
               <NavLink label="จัดการจองห้อง" onClick={() => navigate('/admin/booking')} />

@@ -1,16 +1,7 @@
-// import { Button, Container, Group, Image, Menu, rem ,Grid } from '@mantine/core'
-// import {
-//   IconPhone,
-//   IconMail,
-//   IconBrandInstagram,
-//   IconBrandFacebook,
-//   IconBrandAirbnb,
-//   IconBrandBooking,
-//   IconBrandLine,
-// } from '@tabler/icons-react';
 import { Image } from '@mantine/core'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import logo from '../../assets/logo.png'
 import './Header.scss'
 
 export const Header = () => {
@@ -24,7 +15,7 @@ export const Header = () => {
         <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
           <div className="flex lg:flex-1">
             <a href="/" className="-m-1.5 p-1.5">
-              <Image w="56px" src="logo.png" />
+              <Image w="56px" src={logo} />
             </a>
           </div>
           <div className="flex lg:hidden">
@@ -52,10 +43,10 @@ export const Header = () => {
           </div>
           <div className="hidden lg:flex lg:gap-x-12 lg:items-center">
             <a href="/" className="text-sm font-semibold leading-6 text-gray-900">
-              Home
+              หน้าแรก
             </a>
-            <a href="/accommodation" className="text-sm font-semibold leading-6 text-gray-900">
-              Accommodations
+            <a href="/room" className="text-sm font-semibold leading-6 text-gray-900">
+              ห้องพัก
             </a>
             <a
               href="#"
@@ -64,9 +55,12 @@ export const Header = () => {
             >
               ติดต่อเรา
             </a>
-            <a href="#" className="text-sm font-semibold text-white bg-emerald-300 p-4 rounded-xl">
-              BOOK NOW
-            </a>
+            <Link
+              to={'/search'}
+              className="text-sm font-semibold text-white bg-yellow-700 p-4 rounded-xl"
+            >
+              จองห้อง
+            </Link>
           </div>
         </nav>
 
@@ -76,7 +70,7 @@ export const Header = () => {
             <div className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
               <div className="flex items-center justify-between">
                 <a href="/" className="-m-1.5 p-1.5">
-                  <Image w="56px" src="logo.png" />
+                  <Image w="56px" src={logo} />
                 </a>
                 <button
                   type="button"
@@ -119,12 +113,12 @@ export const Header = () => {
                     </a>
                   </div>
                   <div className="py-6">
-                    <a
-                      href="#"
+                    <Link
+                      to={'/search'}
                       className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                     >
-                      BOOK NOW
-                    </a>
+                      จองห้อง
+                    </Link>
                   </div>
                 </div>
               </div>

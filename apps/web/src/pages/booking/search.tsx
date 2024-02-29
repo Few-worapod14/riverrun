@@ -17,8 +17,11 @@ export default function SearchRoomPage() {
   const [searchParams] = useSearchParams()
   const { setBooking } = useStore()
 
-  const [startBooking] = useState(searchParams.get('startDate'))
-  const [endBooking] = useState(searchParams.get('endDate'))
+  const today = dayjs().add(1, 'days').format('DD-MM-YYYY')
+  const nextDay = dayjs().add(2, 'days').format('DD-MM-YYYY')
+
+  const [startBooking] = useState(searchParams.get('startDate') || today)
+  const [endBooking] = useState(searchParams.get('endDate') || nextDay)
   const [roomAmount] = useState(Number(searchParams.get('room')))
 
   const [rooms, setRooms] = useState<RoomDto[]>([])

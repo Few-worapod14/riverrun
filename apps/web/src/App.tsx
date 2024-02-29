@@ -1,7 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { AuthorizedAdminRoute } from './hooks/AuthProvider'
-import AccommodationPage from './pages/accommodation'
-import CottageHousePage from './pages/accommodation/cottage'
 import DashboardPage from './pages/admin'
 import AdminLoginPage from './pages/admin/auth/Auth'
 import { default as AdminBookingIndexPage } from './pages/admin/booking'
@@ -22,6 +20,8 @@ import BookingPage from './pages/booking'
 import SearchRoomPage from './pages/booking/search'
 import { ContactPage } from './pages/contact'
 import HomePage from './pages/home'
+import RoomIndexPage from './pages/room'
+import RoomViewPage from './pages/room/view'
 import SignUpPage from './pages/user/SignUp'
 
 function App() {
@@ -33,8 +33,8 @@ function App() {
           <Route path="/search" element={<SearchRoomPage />} />
           <Route path="/booking" element={<BookingPage />} />
           <Route path="/signup" element={<SignUpPage />} />
-          <Route path="/accommodation" element={<AccommodationPage />} />
-          <Route path="/accommodation/the-cottage-house" element={<CottageHousePage />} />
+          <Route path="/room" element={<RoomIndexPage />} />
+          <Route path="/room/:slug" element={<RoomViewPage />} />
           <Route path="/contact" element={<ContactPage />} />
 
           {/* Admin management */}
