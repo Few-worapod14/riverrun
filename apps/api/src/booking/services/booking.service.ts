@@ -33,19 +33,6 @@ export class BookingService {
       }
     })
 
-    const bookingRoom = {
-      room: {
-        id: room.id
-      },
-      roomAmount: data.roomAmount,
-      customer: {
-        id: userId
-      },
-      startBookingDate: startDate.format('YYYY-MM-DD 14:00:00'),
-      endBookingDate: endDate.format('YYYY-MM-DD 12:00:00')
-    }
-    await this.bookingSlot.save(bookingRoom)
-
     const total: number = days * room.pricePerNight
     // const discount = data.discount
     // const totalAmount: number = total - discount
@@ -72,7 +59,25 @@ export class BookingService {
       status: BOOKING_STATUS.BOOKING
     }
 
-    return await this.bookingService.save(save)
+    const result = await this.bookingService.save(save)
+
+    const bookingRoom = {
+      room: {
+        id: room.id
+      },
+      roomAmount: data.roomAmount,
+      booking: {
+        id: result.id
+      },
+      customer: {
+        id: userId
+      },
+      startBookingDate: startDate.format('YYYY-MM-DD 14:00:00'),
+      endBookingDate: endDate.format('YYYY-MM-DD 12:00:00')
+    }
+    await this.bookingSlot.save(bookingRoom)
+
+    return result
   }
 
   findAll(page: number, limit: number): Promise<Booking[]> {

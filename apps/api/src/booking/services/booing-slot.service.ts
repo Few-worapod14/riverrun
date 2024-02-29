@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { RoomDto } from '@riverrun/interface'
 import { Repository } from 'typeorm'
 import { Room } from '../../room/entities/room.entity'
 import { BookingSlot } from '../entities/booking-slot.entity'
@@ -14,9 +15,10 @@ export class BookingSlotService {
   ) {}
 
   async findAvailable(startDateTime: string, endDateTime: string, amount: number) {
-    const subQuery = await this.bookingSlot
+    const bookingSlots = await this.bookingSlot
       .createQueryBuilder('booking_slots')
       .leftJoinAndSelect('booking_slots.room', 'rooms')
+      .leftJoinAndSelect('booking_slots.booking', 'bookings')
       .where('booking_slots.startBookingDate BETWEEN :startBookingDate AND :endBookingDate', {
         startBookingDate: startDateTime,
         endBookingDate: endDateTime
@@ -27,23 +29,30 @@ export class BookingSlotService {
       })
       .getMany()
 
-    const query = await this.roomService
+    const rooms = await this.roomService
       .createQueryBuilder('rooms')
       .leftJoinAndSelect('rooms.images', 'images')
       .getMany()
 
-    let filterRooms = []
-    query.forEach((x) => {
-      subQuery.forEach((y) => {
-        if (y.room.id === x.id) {
-          console.log(x.amount, y.roomAmount, amount, x.amount - y.roomAmount > amount)
-          if (x.amount - y.roomAmount > amount) {
-            filterRooms.push(x)
+    const allRooms: RoomDto[] = rooms
+
+    // หาห้องที่จอง แล้วลบจำนวน
+    if (bookingSlots.length > 0) {
+      rooms.forEach((x, i) => {
+        bookingSlots.forEach((y) => {
+          if (y.room.id === x.id && x.amount) {
+            const update = {
+              ...x,
+              amount: allRooms[i].amount - y.roomAmount
+            }
+
+            allRooms[i] = update
           }
-        }
+        })
       })
-    })
-    return filterRooms
+    }
+
+    return allRooms.filter((x) => x.amount >= amount)
   }
 
   async count(startDateTime: string, endDateTime: string) {
@@ -88,18 +97,14 @@ export class BookingSlotService {
         startBookingDate: startBookingDate,
         endBookingDate: endBookingDate
       })
-      .getCount()
-
-    if (check == 0) {
-      return
-    }
+      .getOne()
 
     const room = await this.roomService
       .createQueryBuilder('rooms')
       .where(`rooms.id != ${roomId}`)
       .getOne()
 
-    if (room.amount - check > amount) {
+    if (room.amount - check?.roomAmount < amount) {
       return true
     }
   }

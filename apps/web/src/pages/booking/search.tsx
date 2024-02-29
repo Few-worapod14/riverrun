@@ -32,16 +32,16 @@ export default function SearchRoomPage() {
     const query = queryString.stringify(params, {
       skipNull: true
     })
-    handleGetRoom()
+    handleGetRoom(startDate, endDate, room)
     return navigate(`/search?${query}`)
   }
 
   useEffect(() => {
-    handleGetRoom()
+    handleGetRoom(startBooking, endBooking, roomAmount)
   }, [])
 
-  const handleGetRoom = async () => {
-    const res = await api.search(startBooking, endBooking, roomAmount)
+  const handleGetRoom = async (startDate, endDate, room) => {
+    const res = await api.search(startDate, endDate, room)
 
     if (res.success) {
       setRooms(res.data)
