@@ -29,8 +29,8 @@ export class Booking {
   @Column({ nullable: true })
   checkOutDate?: Date
 
-  @ManyToOne(() => Customer, (customer) => customer.id)
-  customer?: Customer
+  @ManyToOne(() => Customer, (customer) => customer.id, { nullable: true })
+  customer: Customer | null
 
   @Column({ nullable: true })
   name?: string

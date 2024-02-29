@@ -28,7 +28,6 @@ export class BookingService {
         id: data.roomId
       },
       relations: {
-        // slots: true,
         // customer: true
       }
     })
@@ -86,7 +85,6 @@ export class BookingService {
       skip: skip,
       take: limit,
       relations: {
-        slots: true,
         customer: true
       }
     })
@@ -98,7 +96,6 @@ export class BookingService {
         id
       },
       relations: {
-        slots: true,
         customer: true
       }
     })
@@ -138,7 +135,6 @@ export class BookingService {
         }
       },
       relations: {
-        slots: true,
         customer: true
       }
     })
@@ -152,7 +148,6 @@ export class BookingService {
         }
       },
       relations: {
-        slots: true,
         customer: true
       }
     })
