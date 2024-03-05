@@ -49,7 +49,11 @@ export default function AdminBookingIndexPage() {
   const rows = bookings.map((booking: BookingDto, index) => (
     <Table.Tr key={index}>
       <Table.Th>{booking?.room?.name}</Table.Th>
-      <Table.Th>{`${booking?.customer?.firstName} - ${booking?.customer?.lastName}`}</Table.Th>
+      <Table.Th>
+        {booking?.customer
+          ? `${booking?.customer?.firstName} - ${booking?.customer?.lastName}`
+          : booking.name}
+      </Table.Th>
       <Table.Th>{booking.checkInDate?.toDateString()}</Table.Th>
       <Table.Th>{booking.checkOutDate?.toDateString()}</Table.Th>
       <Table.Th>{convertBookingStatus(booking.status)}</Table.Th>

@@ -84,11 +84,27 @@ export default function AdminBookingViewPage() {
             <Grid className="mb-5">
               <Grid.Col span={3}>ลูกค้า :</Grid.Col>
               <Grid.Col span={9}>
-                {`${booking?.customer?.firstName} - ${booking?.customer?.lastName}`}
+                {!booking?.customer
+                  ? `${booking.name}`
+                  : `${booking?.customer?.firstName} - ${booking?.customer?.lastName}`}
               </Grid.Col>
             </Grid>
 
-            <Grid className="mb-5">
+            {booking?.mobile ? (
+              <Grid className="mb-5">
+                <Grid.Col span={3}>เบอร์โทรศัพท์ :</Grid.Col>
+                <Grid.Col span={9}>{booking?.mobile}</Grid.Col>
+              </Grid>
+            ) : null}
+
+            {booking?.email ? (
+              <Grid className="mb-5">
+                <Grid.Col span={3}>อีิเมล์ :</Grid.Col>
+                <Grid.Col span={9}>{booking?.email}</Grid.Col>
+              </Grid>
+            ) : null}
+
+            {/* <Grid className="mb-5">
               <Grid.Col span={3}>ผู้ใหญ่ :</Grid.Col>
               <Grid.Col span={9}>{booking?.adult}</Grid.Col>
             </Grid>
@@ -104,10 +120,10 @@ export default function AdminBookingViewPage() {
             <Grid className="mb-5">
               <Grid.Col span={3}>รวม :</Grid.Col>
               <Grid.Col span={9}>{booking?.total}</Grid.Col>
-            </Grid>
+            </Grid> */}
 
             <Grid className="mb-5">
-              <Grid.Col span={3}>ยอดรวมสุทธิ :</Grid.Col>
+              <Grid.Col span={3}>ราคาห้อง :</Grid.Col>
               <Grid.Col span={9}>{booking?.totalAmount}</Grid.Col>
             </Grid>
 

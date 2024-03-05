@@ -10,3 +10,10 @@ export const convertBookingStatus = (status: string) => {
       return 'ยกเลิก'
   }
 }
+
+export enum BOOKING_STATUS {
+  BOOKING = 'BOOKING',
+  PAID = 'PAID',
+  DONE = 'DONE',
+  CANCEL = 'CANCEL'
+}
