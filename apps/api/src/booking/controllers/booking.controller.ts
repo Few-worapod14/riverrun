@@ -39,7 +39,7 @@ export class BookingController {
     @Query('roomBooking') amount: number
   ) {
     const now = dayjs()
-    if (dayjs(startDate).isBefore(now)) {
+    if (dayjs(startDate, 'DD-MM-YYYY').isBefore(now)) {
       throw new BadRequestException('Date not available.')
     }
 

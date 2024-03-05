@@ -3,12 +3,10 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm'
 import { Customer } from '../../customer/entities/customer.entity'
-import { BookingSlot } from './booking-slot.entity'
 
 @Entity({
   name: 'bookings'
@@ -67,7 +65,4 @@ export class Booking {
 
   @UpdateDateColumn()
   updatedAt: Date
-
-  @OneToMany(() => BookingSlot, (room) => room)
-  slots: BookingSlot[]
 }
