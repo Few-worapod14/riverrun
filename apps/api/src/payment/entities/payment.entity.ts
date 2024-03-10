@@ -19,9 +19,9 @@ export class Payment {
   @Column()
   name: string
 
-  @Column()
-  isPromtpay: boolean
+  @Column({ nullable: true })
+  path: string
 
   @Column({ nullable: true })
-  promtPayNumber: string
+  fullPath: string
 }

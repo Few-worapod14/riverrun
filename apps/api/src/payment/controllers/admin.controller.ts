@@ -12,8 +12,11 @@ import {
   Query,
   Req,
   Res,
-  UseGuards
+  UploadedFile,
+  UseGuards,
+  UseInterceptors
 } from '@nestjs/common'
+import { FileInterceptor } from '@nestjs/platform-express'
 import {
   IResponseData,
   IResponsePaginate,
@@ -30,9 +33,15 @@ import { PaymentService } from '../services/payment.service'
 export class AdminPaymentController {
   constructor(private readonly paymentService: PaymentService) {}
 
+  @UseInterceptors(FileInterceptor('file'))
   @Post()
-  async create(@Req() req: Request, @Res() res: Response, @Body() body: PaymentCreateDto) {
-    const query = await this.paymentService.create(body)
+  async create(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body() body: PaymentCreateDto,
+    @UploadedFile() file?: Express.Multer.File
+  ) {
+    const query = await this.paymentService.create(body, file)
     const payment = await this.paymentService.findByID(query.id)
     const response: IResponseData<Payment> = {
       data: payment,
@@ -76,17 +85,19 @@ export class AdminPaymentController {
   }
 
   @Put(':id')
+  @UseInterceptors(FileInterceptor('file'))
   async update(
     @Req() req: Request,
     @Res() res: Response,
     @Param('id', ParseIntPipe) id: number,
-    @Body() body: PaymentUpdateDto
+    @Body() body: PaymentUpdateDto,
+    @UploadedFile() file?: Express.Multer.File
   ) {
     const check = await this.paymentService.findByID(id)
     if (!check) {
       throw new NotFoundException('id not found')
     }
-    await this.paymentService.update(id, body)
+    await this.paymentService.update(id, body, file)
     const query = await this.paymentService.findByID(id)
     const response: IResponseData<Payment> = {
       data: query,
@@ -104,6 +115,24 @@ export class AdminPaymentController {
     await this.paymentService.remove(id)
     const response: IResponseData<string> = {
       message: 'Delete successfully',
+      success: true
+    }
+    res.status(HttpStatus.OK).json(response)
+  }
+
+  @Delete(':id/image')
+  async removeImage(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Param('id', ParseIntPipe) id: number
+  ) {
+    const query = await this.paymentService.findByID(id)
+    if (!query) {
+      throw new NotFoundException('id not found')
+    }
+    await this.paymentService.removeImg(id)
+    const response: IResponseData<string> = {
+      message: 'Delete image successfully',
       success: true
     }
     res.status(HttpStatus.OK).json(response)

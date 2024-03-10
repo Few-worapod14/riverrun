@@ -9,7 +9,7 @@ export class PaymentDto {
 
   name: string
 
-  isPromtpay: boolean
+  path?: string | null
 
-  promtPayNumber: string
+  fullPath?: string | null
 }
