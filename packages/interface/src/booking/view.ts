@@ -1,3 +1,4 @@
+import { BookingSlotViewDto } from 'src/booking-slot'
 import { CustomerDto } from '../customer'
 import { RoomDto } from '../room'
 
@@ -8,17 +9,27 @@ export class BookingDto {
 
   endBookingDate: Date
 
-  checkInDate?: Date
+  checkInDate?: Date | null
 
-  checkOutDate?: Date
+  checkOutDate?: Date | null
 
   room: RoomDto
 
   customer: CustomerDto
 
+  name?: string | null
+
+  email?: string | null
+
+  mobile?: string | null
+
+  roomAmount: number
+
   adult: number
 
   children: number
+
+  days: number
 
   discount: number
 
@@ -29,6 +40,8 @@ export class BookingDto {
   note?: string
 
   status: string
+
+  slot: BookingSlotViewDto
 
   createdAt: Date
 

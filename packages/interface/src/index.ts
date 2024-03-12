@@ -1,6 +1,7 @@
 export * from './admin'
 export * from './auth'
 export * from './booking'
+export * from './booking-slot'
 export * from './constant'
 export * from './contact'
 export * from './customer'
