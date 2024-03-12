@@ -1,9 +1,10 @@
 import * as api from '@/services/admin-payment'
 import {
   Button,
-  Checkbox,
   Flex,
+  Grid,
   Group,
+  Image,
   Input,
   LoadingOverlay,
   Pagination,
@@ -13,6 +14,7 @@ import {
 import { isNotEmpty, useForm } from '@mantine/form'
 import { IErrorMessage, IResponseData, IResponsePaginate, PaymentDto } from '@riverrun/interface'
 import { useEffect, useState } from 'react'
+import ImageUploading, { ImageListType } from 'react-images-uploading'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import AdminLayout from '../../../components/Layout/AdminLayout'
 import { ConfirmModalBox } from '../../../components/Modal/ConfirmModal'
@@ -32,6 +34,8 @@ export default function AdminRoomPaymentPage() {
   const [isOpenModal, setOpenModal] = useState<boolean>(false)
   const [isOpenConfirm, setOpenConfirm] = useState<boolean>(false)
 
+  const [showDiv, setShowDiv] = useState(true)
+  const [images, setImages] = useState<ImageListType>([])
   const [payments, setPayments] = useState<PaymentDto[]>([])
   const [payment, setPayment] = useState<PaymentDto | null>(null)
 
@@ -39,15 +43,16 @@ export default function AdminRoomPaymentPage() {
     no: '',
     name: '',
     bank: '',
-    branch: '',
-    isPromtpay: false,
-    promtPayNumber: ''
+    branch: ''
   }
 
   const form = useForm({
     initialValues: init,
     validate: {
-      name: isNotEmpty('กรุณากรอกประเภทห้องพัก')
+      name: isNotEmpty('กรุณากรอกชื่อบัญชี'),
+      bank: isNotEmpty('กรุณากรอกธนาคาร'),
+      no: isNotEmpty('กรุณากรอกเลขบัญชี'),
+      branch: isNotEmpty('กรุณากรอกสาขา')
     }
   })
 
@@ -80,7 +85,16 @@ export default function AdminRoomPaymentPage() {
     e.preventDefault()
     form.validate()
     if (form.isValid()) {
-      const res: IResponseData<PaymentDto> | IErrorMessage = await api.create(form.values)
+      const f = form.values
+      const formData = new FormData()
+      formData.append('no', f.no)
+      formData.append('name', f.name)
+      formData.append('bank', f.bank)
+      formData.append('branch', f.branch)
+      if (images?.[0]?.file) {
+        formData.append(`file`, images?.[0]?.file, images?.[0]?.name)
+      }
+      const res: IResponseData<PaymentDto> | IErrorMessage = await api.create(formData)
 
       if (res.success) {
         setAction(null)
@@ -96,10 +110,17 @@ export default function AdminRoomPaymentPage() {
 
     form.validate()
     if (form.isValid()) {
-      const res: IResponseData<PaymentDto> | IErrorMessage = await api.update(
-        payment!.id,
-        form.values
-      )
+      const f = form.values
+      const formData = new FormData()
+      formData.append('no', f.no)
+      formData.append('name', f.name)
+      formData.append('bank', f.bank)
+      formData.append('branch', f.branch)
+      if (images?.[0]?.file) {
+        formData.append(`file`, images?.[0]?.file, images?.[0]?.name)
+      }
+
+      const res: IResponseData<PaymentDto> | IErrorMessage = await api.update(payment!.id, formData)
 
       if (res.success) {
         setAction(null)
@@ -125,6 +146,15 @@ export default function AdminRoomPaymentPage() {
     setAction(null)
   }
 
+  const handleRemoveImg = async (id: number) => {
+    const res: IResponseData<PaymentDto> | IErrorMessage = await api.removeImg(id)
+
+    if (res.success) {
+      setShowDiv(false)
+      handleFetchAll(currentPage)
+    }
+  }
+
   const rows = payments.map((payment: PaymentDto, index) => (
     <Table.Tr key={index}>
       <Table.Th>{payment.id}</Table.Th>
@@ -132,17 +162,16 @@ export default function AdminRoomPaymentPage() {
       <Table.Th>{payment.bank}</Table.Th>
       <Table.Th>{payment.branch}</Table.Th>
       <Table.Th>{payment.no}</Table.Th>
-      <Table.Th>{payment.isPromtpay ? 'ใช่' : 'ไม่ใช่'}</Table.Th>
       <Table.Th>
         <Group>
           <Button
             onClick={() => {
-              setAction('view')
               const data = payments.find((x) => x.id == payment.id)
-              console.log('xxx', data)
               form.setValues(data)
               setPayment(data!)
               setOpenModal(true)
+              setAction('view')
+              setShowDiv(true)
             }}
           >
             ดู
@@ -150,11 +179,13 @@ export default function AdminRoomPaymentPage() {
 
           <Button
             onClick={() => {
+              setImages([])
               setAction('update')
               const data = payments.find((x) => x.id == payment.id)
               form.setValues(data)
               setPayment(data!)
               setOpenModal(true)
+              setShowDiv(true)
             }}
             color="yellow"
           >
@@ -189,6 +220,7 @@ export default function AdminRoomPaymentPage() {
             <Button
               color="green"
               onClick={() => {
+                setImages([])
                 setPayment(init)
                 form.setValues(init)
                 setOpenModal(true)
@@ -207,7 +239,6 @@ export default function AdminRoomPaymentPage() {
                 <Table.Th>ธนาคาร</Table.Th>
                 <Table.Th>สาขา</Table.Th>
                 <Table.Th>เลขบัญชี</Table.Th>
-                <Table.Th>พร้อมเพย์</Table.Th>
                 <Table.Th></Table.Th>
               </Table.Tr>
             </Table.Thead>
@@ -260,35 +291,65 @@ export default function AdminRoomPaymentPage() {
                 />
               </Input.Wrapper>
 
-              <div className="mb-4">
-                <Checkbox
-                  disabled={action == 'view' ? true : false}
-                  label="พร้อมเพย์"
-                  defaultChecked={payment?.isPromtpay ? true : false}
-                  checked={payment?.isPromtpay ? true : false}
-                  onClick={(event) => {
-                    const check = event.currentTarget.checked
-                    if (!check) {
-                      form.setValues({ promtPayNumber: '' })
-                      setPayment({ ...payment, isPromtpay: check, promtPayNumber: '' })
-                    } else {
-                      setPayment({ ...payment, isPromtpay: check })
-                    }
-                  }}
-                  {...form.getInputProps('isPromtpay')}
-                />
-              </div>
+              {action !== 'view' ? (
+                <div className="mb-5">
+                  <ImageUploading
+                    value={images}
+                    onChange={(images: ImageListType) => setImages(images)}
+                  >
+                    {({
+                      imageList,
+                      onImageUpload,
+                      onImageRemoveAll,
+                      onImageUpdate,
+                      onImageRemove,
+                      isDragging,
+                      dragProps
+                    }) => (
+                      <div>
+                        <Flex gap="md" direction="row" wrap="wrap" className="mb-5">
+                          <Button
+                            style={isDragging ? { color: 'red' } : undefined}
+                            onClick={onImageUpload}
+                            {...dragProps}
+                          >
+                            อัพโหลดรูป
+                          </Button>
 
-              {payment?.isPromtpay ? (
-                <Input.Wrapper label="เลขพร้อมเพย์" required className="mb-4">
-                  <Input
-                    disabled={action == 'view' ? true : false}
-                    placeholder="เลขพร้อมเพย์"
-                    mt="md"
-                    defaultValue={payment?.promtPayNumber}
-                    {...form.getInputProps('promtPayNumber')}
-                  />
-                </Input.Wrapper>
+                          <Button color="red" onClick={onImageRemoveAll}>
+                            ลบรูปทั้งหมด
+                          </Button>
+                        </Flex>
+
+                        {imageList.map((image, index) => (
+                          <div key={index} className="mb-5">
+                            <img src={image.dataURL} alt="" width="100" />
+                            <Flex gap="md" direction="row" wrap="wrap" className="mb-5">
+                              <Button onClick={() => onImageUpdate(index)}>เปลี่ยนรูป</Button>
+                              <Button color="red" onClick={() => onImageRemove(index)}>
+                                ลบ
+                              </Button>
+                            </Flex>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </ImageUploading>
+                </div>
+              ) : null}
+
+              {payment?.path && showDiv ? (
+                <>
+                  <hr />
+                  <Grid>
+                    <Grid.Col span={3}>
+                      <Image src={payment.fullPath} />
+                      <Button color="red" onClick={() => handleRemoveImg(payment.id)}>
+                        ลบรูป
+                      </Button>
+                    </Grid.Col>
+                  </Grid>
+                </>
               ) : null}
 
               <Flex gap="md" justify="center" direction="row" wrap="wrap">

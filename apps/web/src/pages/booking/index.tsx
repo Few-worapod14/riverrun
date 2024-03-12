@@ -4,6 +4,7 @@ import * as apiPayment from '@/services/payment'
 import * as apiRoom from '@/services/room'
 import { useStore } from '@/store/store'
 import { Button, Grid, Image, Input, Paper } from '@mantine/core'
+import { isEmail, isNotEmpty, useForm } from '@mantine/form'
 import { BookingCreateDto, PaymentDto, RoomDto } from '@riverrun/interface'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
@@ -34,6 +35,21 @@ export default function BookingPage() {
     handleFetchPayment()
   }, [])
 
+  const init = {
+    name: '',
+    email: '',
+    mobile: ''
+  }
+
+  const form = useForm({
+    initialValues: init,
+    validate: {
+      name: isNotEmpty('กรุณากรอกชื่อ'),
+      email: isEmail('กรุณากรอกอีเมล์'),
+      mobile: isNotEmpty('กรุณากรอกเบอร์โทรศัพท์')
+    }
+  })
+
   const handleCheckBooking = () => {
     const currentTime = dayjs()
     const time5Min = dayjs(timeBooking).add(5, 'minute')
@@ -44,7 +60,6 @@ export default function BookingPage() {
   }
 
   const handleFetchRoom = async () => {
-    console.log('-----', roomId)
     const res = await apiRoom.getFilterRoom(roomId)
 
     if (res.success) {
@@ -53,7 +68,7 @@ export default function BookingPage() {
   }
 
   const handleFetchPayment = async () => {
-    const res = await apiPayment.getAll(1, 20)
+    const res = await apiPayment.getAll(1, 100)
 
     if (res.success) {
       setPayments(res.data)
@@ -69,6 +84,9 @@ export default function BookingPage() {
             <Grid.Col span={6}>สาขา : {payment.branch}</Grid.Col>
             <Grid.Col span={6}>ชื่อบัญชี : {payment.name}</Grid.Col>
             <Grid.Col span={6}>เลขบัญชี : {payment.no}</Grid.Col>
+            <Grid.Col span={6}>
+              <Image radius="md" src={payment.fullPath} />
+            </Grid.Col>
           </Grid>
           <hr />
         </>
@@ -77,16 +95,19 @@ export default function BookingPage() {
   }
 
   const handleSetData = (type, value) => {
-    const update = data
+    const update = { ...data }
     update[type] = value
     setData(update)
   }
 
   const handleSubmit = async () => {
-    const res = await apiBooking.booking(data)
+    form.validate()
+    if (form.isValid()) {
+      const res = await apiBooking.booking(data)
 
-    if (res.success) {
-      setSuccess(true)
+      if (res.success) {
+        setSuccess(true)
+      }
     }
   }
 
@@ -101,35 +122,53 @@ export default function BookingPage() {
         <Grid>
           <Grid.Col span={8}>
             <Paper shadow="xs" p="xl">
-              <Grid>
-                <Grid.Col span={12}>
-                  <Input
-                    placeholder="ชื่อ"
-                    onChange={(e) => handleSetData('name', e.currentTarget.value)}
-                  />
-                </Grid.Col>
-              </Grid>
-              <Grid>
-                <Grid.Col span={6}>
-                  <Input
-                    placeholder="Email"
-                    onChange={(e) => handleSetData('email', e.currentTarget.value)}
-                  />
-                </Grid.Col>
+              <form onSubmit={handleSubmit}>
+                <Grid>
+                  <Grid.Col span={12}>
+                    <Input
+                      type="text"
+                      placeholder="ชื่อ"
+                      onChange={(e) => {
+                        form.setFieldValue('name', e.target.value)
+                        handleSetData('name', e.target.value)
+                      }}
+                      value={data.name}
+                      error={form.errors.name}
+                    />
+                  </Grid.Col>
+                </Grid>
+                <Grid>
+                  <Grid.Col span={6}>
+                    <Input
+                      placeholder="Email"
+                      onChange={(e) => {
+                        form.setFieldValue('email', e.target.value)
+                        handleSetData('email', e.target.value)
+                      }}
+                      value={data.email}
+                      error={form.errors.email}
+                    />
+                  </Grid.Col>
 
-                <Grid.Col span={6}>
-                  <Input
-                    placeholder="เบอร์โทร"
-                    onChange={(e) => handleSetData('mobile', e.currentTarget.value)}
-                  />
-                </Grid.Col>
-              </Grid>
+                  <Grid.Col span={6}>
+                    <Input
+                      placeholder="เบอร์โทร"
+                      onChange={(e) => {
+                        form.setFieldValue('mobile', e.target.value)
+                        handleSetData('mobile', e.target.value)
+                      }}
+                      value={data.mobile}
+                      error={form.errors.mobile}
+                    />
+                  </Grid.Col>
+                </Grid>
 
-              <Grid>
-                <Grid.Col span={12}>
-                  <Button onClick={handleSubmit}>จอง</Button>
-                </Grid.Col>
-              </Grid>
+                <Grid>
+                  <Grid.Col span={12}>
+                    <Button onClick={handleSubmit}>จอง</Button>
+                  </Grid.Col>
+                </Grid>
+              </form>
             </Paper>
           </Grid.Col>
 

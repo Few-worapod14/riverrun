@@ -1,7 +1,9 @@
+import { NavLink } from 'react-router-dom'
+
 export const Footer = () => {
   return (
-    <>
-      <footer className="bg-neutral-100 text-center text-neutral-600 dark:bg-neutral-600 dark:text-neutral-200 lg:text-left">
+    <footer className="">
+      <div className="bg-neutral-100 text-center text-neutral-600 dark:bg-neutral-600 dark:text-neutral-200 lg:text-left">
         <div className="flex items-center justify-center border-b-2 border-neutral-200 p-6 dark:border-neutral-500 lg:justify-between">
           <div className="mr-12 hidden lg:block">
             <span>Get connected with us on social networks:</span>
@@ -9,6 +11,7 @@ export const Footer = () => {
           <div className="flex justify-center">
             <a
               href="https://www.facebook.com/TheRiverRunsChiangKlang"
+              target="_blank"
               className="mr-6 text-neutral-600 dark:text-neutral-200"
             >
               <svg
@@ -23,6 +26,7 @@ export const Footer = () => {
 
             <a
               href="https://www.instagram.com/theriverrunschiangklang/"
+              target="_blank"
               className="mr-6 text-neutral-600 dark:text-neutral-200"
             >
               <svg
@@ -55,24 +59,24 @@ export const Footer = () => {
             </div>
             <div className="">
               <p className="mb-4">
-                <a href="/" className="text-neutral-600 dark:text-neutral-200">
+                <NavLink to="/" className="text-neutral-600 dark:text-neutral-200">
                   Home
-                </a>
+                </NavLink>
               </p>
               <p className="mb-4">
-                <a href="#!" className="text-neutral-600 dark:text-neutral-200">
+                <NavLink to="/contact" className="text-neutral-600 dark:text-neutral-200">
                   About us
-                </a>
+                </NavLink>
               </p>
               <p className="mb-4">
-                <a href="#!" className="text-neutral-600 dark:text-neutral-200">
+                <NavLink to="#!" className="text-neutral-600 dark:text-neutral-200">
                   Terms and Conditions
-                </a>
+                </NavLink>
               </p>
               <p>
-                <a href="#!" className="text-neutral-600 dark:text-neutral-200">
+                <NavLink to="/search" className="text-neutral-600 dark:text-neutral-200">
                   Booking
-                </a>
+                </NavLink>
               </p>
             </div>
 
@@ -112,9 +116,9 @@ export const Footer = () => {
                   className="mr-3 h-5 w-5"
                 >
                   <path
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M1.5 4.5a3 3 0 013-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 01-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 006.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 011.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 01-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   />
                 </svg>
                 098 750 5614
@@ -124,12 +128,12 @@ export const Footer = () => {
         </div>
 
         <div className="bg-neutral-200 p-6 text-center dark:bg-neutral-700">
-          <span>© 2024 Copyright:</span>
-          <a className="font-semibold text-neutral-600 dark:text-neutral-400" href="/">
+          <span>© 2024 Copyright : </span>
+          <NavLink className="font-semibold text-neutral-600 dark:text-neutral-400" to="/">
             The River Runs Chiang Klang
-          </a>
+          </NavLink>
         </div>
-      </footer>
-    </>
+      </div>
+    </footer>
   )
 }

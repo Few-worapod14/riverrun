@@ -1,10 +1,14 @@
 import { convertBookingStatus } from '@/utils/booking'
 import { Button, Group, LoadingOverlay, Pagination, Paper, Table } from '@mantine/core'
 import { BookingDto, IErrorMessage, IResponsePaginate } from '@riverrun/interface'
+import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import AdminLayout from '../../../components/Layout/AdminLayout'
 import * as apiAdminBooking from '../../../services/admin-booking'
+
+dayjs.extend(customParseFormat)
 
 export default function AdminBookingIndexPage() {
   const navigate = useNavigate()
@@ -48,14 +52,16 @@ export default function AdminBookingIndexPage() {
 
   const rows = bookings.map((booking: BookingDto, index) => (
     <Table.Tr key={index}>
-      <Table.Th>{booking?.room?.name}</Table.Th>
+      <Table.Th>{booking?.slot?.room?.name}</Table.Th>
       <Table.Th>
         {booking?.customer
           ? `${booking?.customer?.firstName} - ${booking?.customer?.lastName}`
           : booking.name}
       </Table.Th>
-      <Table.Th>{booking.checkInDate?.toDateString()}</Table.Th>
-      <Table.Th>{booking.checkOutDate?.toDateString()}</Table.Th>
+      <Table.Th>
+        {dayjs(booking?.startBookingDate).format('DD-MM-YYYY')} -
+        {dayjs(booking?.endBookingDate).format('DD-MM-YYYY')}
+      </Table.Th>
       <Table.Th>{convertBookingStatus(booking.status)}</Table.Th>
       <Table.Th>
         <Group>
@@ -80,8 +86,7 @@ export default function AdminBookingIndexPage() {
               <Table.Tr>
                 <Table.Th>ชื่อห้อง</Table.Th>
                 <Table.Th>ชื่อลูกค้า</Table.Th>
-                <Table.Th>เช็คอิน</Table.Th>
-                <Table.Th>เช็คเอาต์</Table.Th>
+                <Table.Th>วันเข้าพัก</Table.Th>
                 <Table.Th>สถานะ</Table.Th>
                 <Table.Th></Table.Th>
               </Table.Tr>

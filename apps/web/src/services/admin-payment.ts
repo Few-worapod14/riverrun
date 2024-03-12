@@ -1,10 +1,4 @@
-import {
-  IResponseData,
-  IResponsePaginate,
-  PaymentDto,
-  RoomCategoryCreateDto,
-  RoomCategoryUpdateDto
-} from '@riverrun/interface'
+import { IResponseData, IResponsePaginate, PaymentDto } from '@riverrun/interface'
 import queryString from 'query-string'
 import { ApiAdmin } from './api'
 
@@ -26,8 +20,12 @@ export const getAll = async (
   return api
 }
 
-export const create = async (data: RoomCategoryCreateDto): Promise<IResponseData<PaymentDto>> => {
-  const api: IResponseData<PaymentDto> = await ApiAdmin().post(`/admins/payments`, data)
+export const create = async (data: FormData): Promise<IResponseData<PaymentDto>> => {
+  const api: IResponseData<PaymentDto> = await ApiAdmin().post(`/admins/payments`, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
 
   return api
 }
@@ -38,17 +36,24 @@ export const getById = async (id: number): Promise<IResponseData<PaymentDto>> =>
   return api
 }
 
-export const update = async (
-  id: number,
-  data: RoomCategoryUpdateDto
-): Promise<IResponseData<PaymentDto>> => {
-  const api: IResponseData<PaymentDto> = await ApiAdmin().put(`/admins/payments/${id}`, data)
+export const update = async (id: number, data: FormData): Promise<IResponseData<PaymentDto>> => {
+  const api: IResponseData<PaymentDto> = await ApiAdmin().put(`/admins/payments/${id}`, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
 
   return api
 }
 
 export const remove = async (id: number): Promise<IResponseData<string>> => {
   const api: IResponseData<string> = await ApiAdmin().delete(`/admins/payments/${id}`)
+
+  return api
+}
+
+export const removeImg = async (id: number): Promise<IResponseData<string>> => {
+  const api: IResponseData<string> = await ApiAdmin().delete(`/admins/payments/${id}/image`)
 
   return api
 }

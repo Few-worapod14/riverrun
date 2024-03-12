@@ -140,7 +140,8 @@ export default function AdminRoomCreatePage({ mode }: Props) {
   const handleDeleteImage = async () => {
     const res = await apiRoom.removeImage(Number(removeData?.id))
     if (res.success) {
-      navigate('/admin/room')
+      handleGetRoom()
+      setConfirmDelete(false)
     }
   }
 

@@ -2,7 +2,7 @@ import { Button, Grid, NumberInput, Paper } from '@mantine/core'
 import { DatePickerInput } from '@mantine/dates'
 import dayjs from 'dayjs'
 import th from 'dayjs/locale/th'
-import * as customParseFormat from 'dayjs/plugin/customParseFormat'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
 import { useState } from 'react'
 
 dayjs.locale(th)
