@@ -3,7 +3,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm'
@@ -16,7 +18,8 @@ export class BookingSlot {
   @PrimaryGeneratedColumn()
   id: number
 
-  @ManyToOne(() => Booking, (booking) => booking.id)
+  @OneToOne(() => Booking, (booking) => booking.id)
+  @JoinColumn()
   booking: Booking
 
   @ManyToOne(() => Room, (room) => room.id)

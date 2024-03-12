@@ -81,11 +81,15 @@ export class BookingService {
 
   findAll(page: number, limit: number): Promise<Booking[]> {
     const skip: number = page == 1 ? 0 : limit * (page - 1)
+
     return this.bookingService.find({
       skip: skip,
       take: limit,
       relations: {
-        customer: true
+        customer: true,
+        slot: {
+          room: true
+        }
       }
     })
   }
@@ -96,7 +100,10 @@ export class BookingService {
         id
       },
       relations: {
-        customer: true
+        customer: true,
+        slot: {
+          room: true
+        }
       }
     })
   }

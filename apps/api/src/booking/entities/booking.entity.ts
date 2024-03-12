@@ -3,10 +3,12 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm'
 import { Customer } from '../../customer/entities/customer.entity'
+import { BookingSlot } from './booking-slot.entity'
 
 @Entity({
   name: 'bookings'
@@ -59,6 +61,9 @@ export class Booking {
 
   @Column()
   status: string
+
+  @OneToOne(() => BookingSlot, (bookingSlot) => bookingSlot.booking)
+  slot: BookingSlot
 
   @CreateDateColumn()
   createdAt: Date
