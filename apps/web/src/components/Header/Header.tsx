@@ -49,7 +49,7 @@ export const Header = () => {
               ห้องพัก
             </Link>
             <Link
-              to="contact"
+              to="/contact"
               onClick={() => navigate('/contact')}
               className="text-sm font-semibold leading-6 text-gray-900"
             >
