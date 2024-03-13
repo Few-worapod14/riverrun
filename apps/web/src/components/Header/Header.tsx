@@ -42,19 +42,19 @@ export const Header = () => {
             </button>
           </div>
           <div className="hidden lg:flex lg:gap-x-12 lg:items-center">
-            <a href="/" className="text-sm font-semibold leading-6 text-gray-900">
+            <Link to="/" className="text-sm font-semibold leading-6 text-gray-900">
               หน้าแรก
-            </a>
-            <a href="/room" className="text-sm font-semibold leading-6 text-gray-900">
+            </Link>
+            <Link to="/room" className="text-sm font-semibold leading-6 text-gray-900">
               ห้องพัก
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              to="contact"
               onClick={() => navigate('/contact')}
               className="text-sm font-semibold leading-6 text-gray-900"
             >
               ติดต่อเรา
-            </a>
+            </Link>
             <Link
               to={'/search'}
               className="text-sm font-semibold text-white bg-yellow-700 p-4 rounded-xl"
@@ -77,7 +77,7 @@ export const Header = () => {
                   onClick={() => setOpenMenu(false)}
                   className="-m-2.5 rounded-md p-2.5 text-gray-700"
                 >
-                  <span className="sr-only">Close menu</span>
+                  <span className="sr-only">ปิด</span>
                   <svg
                     className="h-6 w-6"
                     fill="none"
@@ -93,26 +93,24 @@ export const Header = () => {
               <div className="mt-6 flow-root">
                 <div className="-my-6 divide-y divide-gray-500/10">
                   <div className="space-y-2 py-6">
-                    <a
-                      href="/"
+                    <Link
+                      to="/"
                       className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                     >
-                      Home
-                    </a>
-                    <a
-                      href="/accommodation"
+                      หน้าแรก
+                    </Link>
+                    <Link
+                      to="/room"
                       className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                     >
-                      Accommodations
-                    </a>
-                    <a
-                      href="#"
+                      ห้องพัก
+                    </Link>
+                    <Link
+                      to="/contact"
                       className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                     >
-                      Contact
-                    </a>
-                  </div>
-                  <div className="py-6">
+                      ติดต่อเรา
+                    </Link>
                     <Link
                       to={'/search'}
                       className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"

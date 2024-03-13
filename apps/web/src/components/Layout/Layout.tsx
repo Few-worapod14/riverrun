@@ -7,7 +7,7 @@ import './Layout.scss'
 
 export const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div>
+    <>
       <Header />
       <div className="main">
         <Container>
@@ -15,6 +15,6 @@ export const RootLayout = ({ children }: { children: React.ReactNode }) => {
         </Container>
       </div>
       <Footer />
-    </div>
+    </>
   )
 }

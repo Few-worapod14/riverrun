@@ -1,31 +1,25 @@
 import { Carousel } from '@mantine/carousel'
-import { Card, Grid, Image } from '@mantine/core'
+import { Card, Grid, rem } from '@mantine/core'
 import './Carousel.scss'
 
-const data = [
-  {
-    image: 'images/home/1.jpg'
-  },
-  {
-    image: 'images/home/2.jpg'
-  },
-  {
-    image: 'images/home/3.jpg'
-  },
-  {
-    image: 'images/home/4.jpg'
-  },
-  {
-    image: 'images/home/5.jpg'
-  }
-]
+type image = {
+  image: string
+}
 
-export const CarouselBox = () => {
-  const slides = data.map((item, index) => (
+type Props = {
+  data: image[]
+  height: number
+}
+
+export const CarouselBox = ({ data, height }: Props) => {
+  const slides = data?.map((item, index) => (
     <Carousel.Slide key={index}>
       <Card>
         <Card.Section>
-          <Image fit="fill" src={item.image} />
+          <img
+            src={item.image}
+            style={{ height: rem(height), width: '100%', objectFit: 'cover' }}
+          />
         </Card.Section>
       </Card>
     </Carousel.Slide>
@@ -35,11 +29,12 @@ export const CarouselBox = () => {
     <Grid className="mb-4">
       <Grid.Col>
         <Carousel
+          height={height}
+          slideGap="xl"
+          controlsOffset="xs"
+          controlSize={25}
           loop
-          height={300}
-          // slideSize={{ base: '100%', sm: '50%' }}
-          // slideGap={{ base: 'xl', sm: 2 }}
-          // align="start"
+          draggable={false}
         >
           {slides}
         </Carousel>
