@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common'
+import { JwtModule } from '@nestjs/jwt'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { RoomModule } from 'src/room/room.module'
 import { AuthModule } from '../auth/auth.module'
@@ -12,7 +13,12 @@ import { BookingSlotService } from './services/booing-slot.service'
 import { BookingService } from './services/booking.service'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Booking, Room, BookingSlot]), AuthModule, RoomModule],
+  imports: [
+    JwtModule,
+    TypeOrmModule.forFeature([Booking, Room, BookingSlot]),
+    AuthModule,
+    RoomModule
+  ],
   controllers: [BookingAdminController, BookingController, MeController],
   providers: [BookingService, BookingSlotService],
   exports: [BookingService, BookingSlotService]

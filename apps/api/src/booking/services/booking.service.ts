@@ -55,6 +55,7 @@ export class BookingService {
       total: total,
       // discount: discount,
       // totalAmount: totalAmount,
+      note: data.note,
       status: BOOKING_STATUS.BOOKING
     }
 

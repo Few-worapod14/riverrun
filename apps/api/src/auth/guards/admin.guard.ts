@@ -3,7 +3,6 @@ import { Reflector } from '@nestjs/core'
 import { JwtService } from '@nestjs/jwt'
 import { IAdminPayload } from '@riverrun/interface'
 import { Request } from 'express'
-import { jwtConstants } from '../constants'
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator'
 import { AdminService } from '../services/admin.service'
 
@@ -32,7 +31,7 @@ export class AdminGuard implements CanActivate {
     }
     try {
       const payload: IAdminPayload = await this.jwtService.verifyAsync(token, {
-        secret: jwtConstants.secret
+        secret: process.env.JWT_SECRET
       })
 
       const find = await this.adminService.findByAuth(payload.sub, payload.username)

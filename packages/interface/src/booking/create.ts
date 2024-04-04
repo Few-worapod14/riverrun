@@ -2,10 +2,10 @@ import { IsDateString, IsEmail, IsNumber, IsOptional, IsString } from 'class-val
 
 export class BookingCreateDto {
   @IsDateString()
-  startBookingDate: Date
+  startBookingDate: string
 
   @IsDateString()
-  endBookingDate: Date
+  endBookingDate: string
 
   @IsNumber()
   roomId: number
@@ -29,4 +29,8 @@ export class BookingCreateDto {
   @IsOptional()
   @IsString()
   mobile?: string
+
+  @IsOptional()
+  @IsString()
+  note?: string
 }

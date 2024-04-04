@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common'
+import { JwtModule } from '@nestjs/jwt'
 import { MulterModule } from '@nestjs/platform-express'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { diskStorage } from 'multer'
@@ -10,6 +11,7 @@ import { PaymentService } from './services/payment.service'
 
 @Module({
   imports: [
+    JwtModule,
     MulterModule.register({
       dest: './_uploads',
       storage: diskStorage({

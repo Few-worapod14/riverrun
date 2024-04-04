@@ -9,3 +9,7 @@ export enum BOOKING_STATUS {
   DONE = 'DONE',
   CANCEL = 'CANCEL'
 }
+
+export enum ERROR_MSG_TYPE {
+  SYSTEM = 'system'
+}

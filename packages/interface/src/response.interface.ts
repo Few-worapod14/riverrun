@@ -13,20 +13,23 @@ export interface IResponseData<T> {
 }
 
 export interface IErrorMessage {
-  message: string[]
+  property?: string
+  message: string
 }
 
-export interface ErrorDto {
+export interface IErrorDto {
   success: boolean
-  errors: IErrorMessage[]
+  message?: IErrorMessage[]
 }
 
-export class ErrorResponse {
-  success: boolean
-  errors: IErrorMessage[]
+// export class ErrorResponse {
+//   success: boolean
+//   message: string
+//   errors: IErrorMessage[]
 
-  constructor(success = false, errors: IErrorMessage[]) {
-    this.success = success
-    this.errors = errors
-  }
-}
+//   constructor(success = false, message: string, errors: IErrorMessage[]) {
+//     this.success = success
+//     this.message = message
+//     this.errors = errors
+//   }
+// }

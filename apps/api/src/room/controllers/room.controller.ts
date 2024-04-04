@@ -38,9 +38,35 @@ export class RoomController {
     res.status(HttpStatus.OK).json(response)
   }
 
-  @Get(':slug')
-  async findByID(@Req() req: Request, @Res() res: Response, @Param('slug') slug: string) {
+  @Get(':id')
+  async findByID(@Req() req: Request, @Res() res: Response, @Param('id') id: number) {
+    const query = await this.roomService.findByID(id)
+    if (!query) {
+      throw new NotFoundException('id not found')
+    }
+    const response: IResponseData<Room> = {
+      data: query,
+      success: true
+    }
+    res.status(HttpStatus.OK).json(response)
+  }
+
+  @Get('/view/:slug')
+  async findBySlug(@Req() req: Request, @Res() res: Response, @Param('slug') slug: string) {
     const query = await this.roomService.findBySlug(slug)
+    if (!query) {
+      throw new NotFoundException('id not found')
+    }
+    const response: IResponseData<Room> = {
+      data: query,
+      success: true
+    }
+    res.status(HttpStatus.OK).json(response)
+  }
+
+  @Get('/home')
+  async getRoomForHomePage(@Res() res: Response) {
+    const query = await this.roomService.getRoomHomePage()
     if (!query) {
       throw new NotFoundException('id not found')
     }

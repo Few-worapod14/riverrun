@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Get,
@@ -10,7 +9,7 @@ import {
   Req,
   Res
 } from '@nestjs/common'
-import { BookingCreateDto, IResponseData } from '@riverrun/interface'
+import { BookingCreateDto, ERROR_MSG_TYPE, IErrorDto, IResponseData } from '@riverrun/interface'
 import * as dayjs from 'dayjs'
 import * as customParseFormat from 'dayjs/plugin/customParseFormat'
 import { Response } from 'express'
@@ -40,7 +39,17 @@ export class BookingController {
   ) {
     const now = dayjs()
     if (dayjs(startDate, 'DD-MM-YYYY').isBefore(now)) {
-      throw new BadRequestException('Date not available.')
+      const errors: IErrorDto = {
+        message: [
+          {
+            property: ERROR_MSG_TYPE.SYSTEM,
+            message: 'วันจองไม่ถูกต้อง'
+          }
+        ],
+        success: false
+      }
+
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errors)
     }
 
     const startBookingDate = dayjs(dayjs(startDate, 'DD-MM-YYYY').toDate()).format(
@@ -79,14 +88,24 @@ export class BookingController {
     const endBookingDate = dayjs(body.endBookingDate).format('YYYY-MM-DD 12:00:00')
 
     const checkAvailableRoom = await this.bookingSlotService.checkAvailableRoom(
-      room.id,
+      body.roomId,
       startBookingDate,
       endBookingDate,
       body.roomAmount
     )
 
     if (checkAvailableRoom) {
-      throw new BadRequestException('Room not available')
+      const errors: IErrorDto = {
+        message: [
+          {
+            property: ERROR_MSG_TYPE.SYSTEM,
+            message: 'ห้องพักไม่ว่าง'
+          }
+        ],
+        success: false
+      }
+
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errors)
     }
 
     const query = await this.bookingService.create(body, userId)

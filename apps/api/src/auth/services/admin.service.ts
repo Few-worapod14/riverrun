@@ -29,7 +29,8 @@ export class AdminService {
 
     if (user && match) {
       const payload: IAdminPayload = { username: user.username, sub: user.id }
-      const token = await this.jwtService.signAsync(payload)
+
+      const token = await this.jwtService.sign(payload)
 
       const res: IAutAdminResponse = {
         user: {

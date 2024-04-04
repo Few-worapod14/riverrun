@@ -8,12 +8,13 @@ import { AuthModule } from './auth/auth.module'
 import { BookingModule } from './booking/booking.module'
 import { ContactModule } from './contact/contact.module'
 import { CustomerModule } from './customer/customer.module'
+import { HealthModule } from './health/health.module'
 import { PaymentModule } from './payment/payment.module'
 import { RoomModule } from './room/room.module'
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true
+      envFilePath: '.env'
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -27,17 +28,17 @@ import { RoomModule } from './room/room.module'
       synchronize: true
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../', '_uploads'),
-      serveRoot: '/_uploads/',
+      rootPath: join(__dirname, '../', process.env.FILE_UPLOAD),
+      serveRoot: `/${process.env.FILE_UPLOAD}/`,
       exclude: ['/api/(.*)']
     }),
+    HealthModule,
     AdminModule,
     CustomerModule,
     AuthModule,
     RoomModule,
     BookingModule,
     ContactModule,
-
     PaymentModule
   ],
   controllers: [],

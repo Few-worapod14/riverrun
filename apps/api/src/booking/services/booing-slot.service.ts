@@ -88,23 +88,30 @@ export class BookingSlotService {
     const check = await this.bookingSlot
       .createQueryBuilder('booking_slots')
       .leftJoinAndSelect('booking_slots.room', 'rooms')
-      .where('booking_slots.roomId = :id', { id: roomId })
-      .where('booking_slots.startBookingDate BETWEEN :startBookingDate AND :endBookingDate', {
+      .where(`booking_slots.roomId = ${roomId}`)
+      .andWhere('booking_slots.startBookingDate BETWEEN :startBookingDate AND :endBookingDate', {
         startBookingDate: startBookingDate,
         endBookingDate: endBookingDate
       })
-      .orWhere('booking_slots.endBookingDate BETWEEN :startBookingDate AND :endBookingDate', {
+      .andWhere('booking_slots.endBookingDate BETWEEN :startBookingDate AND :endBookingDate', {
         startBookingDate: startBookingDate,
         endBookingDate: endBookingDate
       })
-      .getOne()
+      .getMany()
+
+      console.log("---",check)
+
+    let total = 0
+    check.map(x => {
+      total = x.roomAmount+ total
+    })
 
     const room = await this.roomService
       .createQueryBuilder('rooms')
-      .where(`rooms.id != ${roomId}`)
+      .where(`rooms.id = ${roomId}`)
       .getOne()
 
-    if (room.amount - check?.roomAmount < amount) {
+    if (room.amount - total < amount) {
       return true
     }
   }

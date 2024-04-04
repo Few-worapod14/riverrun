@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { diskStorage } from 'multer'
 import { AuthModule } from '../auth/auth.module'
 
+import { JwtModule } from '@nestjs/jwt'
 import { AdminRoomCategoryController } from './controllers/admin-room-category.controller'
 import { AdminRoomImageController } from './controllers/admin-room-image.controller'
 import { AdminRoomController } from './controllers/admin-room.controller'
@@ -17,6 +18,7 @@ import { RoomService } from './services/room.service'
 
 @Module({
   imports: [
+    JwtModule,
     MulterModule.register({
       dest: './_uploads',
       storage: diskStorage({

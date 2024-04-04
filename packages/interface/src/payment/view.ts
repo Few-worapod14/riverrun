@@ -1,5 +1,5 @@
 export class PaymentDto {
-  id: number
+  id?: number
 
   no: string
 

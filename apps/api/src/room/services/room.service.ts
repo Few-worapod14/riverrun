@@ -109,4 +109,8 @@ export class RoomService {
   count(): Promise<number> {
     return this.roomRepository.count()
   }
+
+  getRoomHomePage() {
+    return this.roomRepository.query(`SELECT * FROM your_entity_table ORDER BY RANDOM() LIMIT 10`)
+  }
 }

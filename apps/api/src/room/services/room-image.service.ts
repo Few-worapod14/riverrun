@@ -21,7 +21,7 @@ export class RoomImageService {
     const image = await this.findById(id)
     if (fs.existsSync(image?.path)) {
       fs.unlinkSync(image?.path)
-      this.roomImageRepository.delete(id)
     }
+    await this.roomImageRepository.delete(id)
   }
 }
