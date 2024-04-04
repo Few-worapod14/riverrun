@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import AdminLayout from '../../components/Layout/AdminLayout'
 
 export default function DashboardPage() {
-  const [countCustomer, setCountCustomer] = useState(0)
-  const [countBooking, setCountBooking] = useState(0)
+  const [countCustomer] = useState(0)
+  const [countBooking] = useState(0)
 
   useEffect(() => {
     handleGetAllCustomer()

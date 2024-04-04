@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { RootLayout } from '../../components/Layout/Layout'
 
 export default function RoomIndexPage() {
-  const [rooms, setRooms] = useState([])
+  const [rooms, setRooms] = useState<RoomDto[]>([])
 
   useEffect(() => {
     handleFetchRooms()

@@ -12,7 +12,13 @@ import {
   Table
 } from '@mantine/core'
 import { isNotEmpty, useForm } from '@mantine/form'
-import { IErrorMessage, IResponseData, IResponsePaginate, PaymentDto } from '@riverrun/interface'
+import {
+  IErrorDto,
+  IErrorMessage,
+  IResponseData,
+  IResponsePaginate,
+  PaymentDto
+} from '@riverrun/interface'
 import { useEffect, useState } from 'react'
 import ImageUploading, { ImageListType } from 'react-images-uploading'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -132,7 +138,7 @@ export default function AdminRoomPaymentPage() {
   }
 
   const handleDelete = async () => {
-    const res: IResponseData<string> | IErrorMessage = await api.remove(payment!.id)
+    const res: IResponseData<string> | IErrorDto = await api.remove(payment!.id)
     if (res.success) {
       setAction(null)
       setPayment(null)
@@ -147,7 +153,7 @@ export default function AdminRoomPaymentPage() {
   }
 
   const handleRemoveImg = async (id: number) => {
-    const res: IResponseData<PaymentDto> | IErrorMessage = await api.removeImg(id)
+    const res: IResponseData<string> | IErrorDto = await api.removeImg(id)
 
     if (res.success) {
       setShowDiv(false)

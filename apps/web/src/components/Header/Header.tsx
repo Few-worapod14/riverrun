@@ -1,7 +1,7 @@
+import logo from '@/assets/logo.png'
 import { Image } from '@mantine/core'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import logo from '../../assets/logo.png'
 import './Header.scss'
 
 export const Header = () => {

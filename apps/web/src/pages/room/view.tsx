@@ -11,7 +11,6 @@ export default function RoomViewPage() {
 
   const [loading, setLoading] = useState<boolean>(true)
   const [room, setRoom] = useState<RoomDto | null>(null)
-  const [images, setImages] = useState([])
 
   useEffect(() => {
     handleFetchRooms()
@@ -22,12 +21,6 @@ export default function RoomViewPage() {
 
     if (res.success) {
       setRoom(res.data)
-      const images = room?.images?.map((x) => {
-        return {
-          image: x.fullPath
-        }
-      })
-      setImages(images)
       setLoading(false)
     }
   }
@@ -38,13 +31,17 @@ export default function RoomViewPage() {
     <RootLayout>
       <Paper shadow="xs" p="xl">
         <Grid>
-          <Grid.Col span={12}>{room.name}</Grid.Col>
+          <Grid.Col span={12}>
+            <h2>{room.name}</h2>
+          </Grid.Col>
         </Grid>
         <Grid>
           <Grid.Col span={12}>
             <CarouselBox data={room.images.map((x) => ({ image: x.fullPath }))} height={400} />
           </Grid.Col>
         </Grid>
+        <Grid>฿ {room.pricePerNight}</Grid>
+        <Grid>{room.detail}</Grid>
       </Paper>
     </RootLayout>
   )

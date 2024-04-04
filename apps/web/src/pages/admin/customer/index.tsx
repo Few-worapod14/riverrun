@@ -10,8 +10,8 @@ export default function AdminCustomerIndexPage() {
   const [searchParams] = useSearchParams()
 
   const [loading, setLoading] = useState<boolean>(true)
-  const [isError, setError] = useState(false)
-  const [msg, setMsg] = useState<IErrorMessage>()
+  // const [isError, setError] = useState(false)
+  // const [msg, setMsg] = useState<IErrorMessage>()
   const [currentPage, setCurrentPage] = useState<number>(Number(searchParams.get('page')) || 1)
   const [total, setTotal] = useState(0)
 
@@ -26,15 +26,10 @@ export default function AdminCustomerIndexPage() {
     const res: IResponsePaginate<CustomerDto[]> | IErrorMessage = await apiAdminCustomer.getAll(
       currentPage
     )
-    if ('success' in res) {
+    if (res.success) {
       setCustomer(res.data)
       setTotal(Math.ceil(res.total / res.perPage))
       setCurrentPage(currentPage)
-      setLoading(false)
-    } else {
-      const errorResponse = res as IErrorMessage
-      setError(true)
-      setMsg(errorResponse)
       setLoading(false)
     }
   }
@@ -53,15 +48,10 @@ export default function AdminCustomerIndexPage() {
       currentPage,
       keyword!
     )
-    if ('success' in res) {
+    if (res.success) {
       setCustomer(res.data)
       setTotal(Math.ceil(res.total / res.perPage))
       setCurrentPage(currentPage)
-      setLoading(false)
-    } else {
-      const errorResponse = res as IErrorMessage
-      setError(true)
-      setMsg(errorResponse)
       setLoading(false)
     }
   }
@@ -85,7 +75,7 @@ export default function AdminCustomerIndexPage() {
 
   return (
     <AdminLayout>
-      {loading && !isError ? (
+      {loading ? (
         <LoadingOverlay visible overlayProps={{ radius: 'sm', blur: 2 }} />
       ) : (
         <Paper shadow="xs" p="xl">

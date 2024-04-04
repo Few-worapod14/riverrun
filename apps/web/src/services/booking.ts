@@ -1,6 +1,7 @@
 import {
   BookingCreateDto,
   BookingDto,
+  IErrorDto,
   IResponseData,
   IResponsePaginate,
   RoomDto
@@ -29,7 +30,7 @@ export const search = async (
 }
 
 export const booking = async (data: BookingCreateDto) => {
-  const api: IResponseData<BookingDto> = await ApiClient().post(`/bookings`, data)
+  const api: IResponseData<BookingDto> | IErrorDto = await ApiClient().post(`/bookings`, data)
 
   return api
 }

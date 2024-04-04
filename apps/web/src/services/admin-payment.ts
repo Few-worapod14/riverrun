@@ -1,4 +1,4 @@
-import { IResponseData, IResponsePaginate, PaymentDto } from '@riverrun/interface'
+import { IErrorDto, IResponseData, IResponsePaginate, PaymentDto } from '@riverrun/interface'
 import queryString from 'query-string'
 import { ApiAdmin } from './api'
 
@@ -46,14 +46,16 @@ export const update = async (id: number, data: FormData): Promise<IResponseData<
   return api
 }
 
-export const remove = async (id: number): Promise<IResponseData<string>> => {
-  const api: IResponseData<string> = await ApiAdmin().delete(`/admins/payments/${id}`)
+export const remove = async (id: number) => {
+  const api: IResponseData<string> | IErrorDto = await ApiAdmin().delete(`/admins/payments/${id}`)
 
   return api
 }
 
-export const removeImg = async (id: number): Promise<IResponseData<string>> => {
-  const api: IResponseData<string> = await ApiAdmin().delete(`/admins/payments/${id}/image`)
+export const removeImg = async (id: number) => {
+  const api: IResponseData<string> | IErrorDto = await ApiAdmin().delete(
+    `/admins/payments/${id}/image`
+  )
 
   return api
 }

@@ -12,18 +12,19 @@ export const RoomA = ({ data }: Props) => {
       <div className="grid grid-cols-2 gap-2 ">
         <div>
           <p className="text-3xl font-bold">{data.name}</p>
+          <p>฿ {data.pricePerNight}</p>
           <p>{data.detail}</p>
         </div>
         {data.images?.[0]?.fullPath ? (
-          <Image className="h-[350px]" src={data.images?.[0]?.fullPath} />
+          <div>
+            <Image className="h-[350px]" src={data.images?.[0]?.fullPath} />
+          </div>
         ) : null}
       </div>
 
-      <div className="bg-[#CCB494] border-4 border-indigo-600 p-4 absolute top-[50%] left-[35%]">
-        หลังละ​ 5,400บาท มี 1 หลัง ค่าบริการนี้ เข้าพักได้ ​4 คนต่อ 1 ห้อง
+      <div className="float-right">
+        <Link to={`/room/${data.slug}`}>ดูรายละเอียด </Link>
       </div>
-
-      <Link to={`/room/${data.slug}`}>ดูรายละเอียด </Link>
     </div>
   )
 }

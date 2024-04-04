@@ -68,11 +68,11 @@ export const Footer = () => {
                   About us
                 </NavLink>
               </p>
-              <p className="mb-4">
+              {/* <p className="mb-4">
                 <NavLink to="#!" className="text-neutral-600 dark:text-neutral-200">
                   Terms and Conditions
                 </NavLink>
-              </p>
+              </p> */}
               <p>
                 <NavLink to="/search" className="text-neutral-600 dark:text-neutral-200">
                   Booking

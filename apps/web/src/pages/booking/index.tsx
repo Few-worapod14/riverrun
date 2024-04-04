@@ -1,11 +1,19 @@
 import { RootLayout } from '@/components/Layout/Layout'
+import { ModalBox } from '@/components/Modal/Modal'
+import { PaymentView } from '@/components/Payment/PaymentView'
 import * as apiBooking from '@/services/booking'
 import * as apiPayment from '@/services/payment'
 import * as apiRoom from '@/services/room'
 import { useStore } from '@/store/store'
-import { Button, Grid, Image, Input, Paper } from '@mantine/core'
+import { Button, Grid, Image, Input, Paper, Select, Textarea } from '@mantine/core'
 import { isEmail, isNotEmpty, useForm } from '@mantine/form'
-import { BookingCreateDto, PaymentDto, RoomDto } from '@riverrun/interface'
+import {
+  BookingCreateDto,
+  IErrorDto,
+  IErrorMessage,
+  PaymentDto,
+  RoomDto
+} from '@riverrun/interface'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -14,10 +22,13 @@ export default function BookingPage() {
   const { roomId, timeBooking, startDate, endDate } = useStore()
   const navigate = useNavigate()
 
+  const [isError, setError] = useState(false)
+  const [errMsg, setErrMsg] = useState<IErrorMessage[]>([])
+
   const [room, setRoom] = useState<RoomDto>()
   const [data, setData] = useState<BookingCreateDto>({
-    startBookingDate: startDate,
-    endBookingDate: endDate,
+    startBookingDate: dayjs(startDate).format('YYYY-MM-DD'),
+    endBookingDate: dayjs(endDate).format('YYYY-MM-DD'),
     roomId: roomId,
     roomAmount: 1,
     adult: 1,
@@ -38,7 +49,10 @@ export default function BookingPage() {
   const init = {
     name: '',
     email: '',
-    mobile: ''
+    mobile: '',
+    adult: 1,
+    children: 0,
+    note: null
   }
 
   const form = useForm({
@@ -75,25 +89,6 @@ export default function BookingPage() {
     }
   }
 
-  const PaymentView = () => {
-    return payments.map((payment) => {
-      return (
-        <>
-          <Grid>
-            <Grid.Col span={6}>ธนาคาร : {payment.bank}</Grid.Col>
-            <Grid.Col span={6}>สาขา : {payment.branch}</Grid.Col>
-            <Grid.Col span={6}>ชื่อบัญชี : {payment.name}</Grid.Col>
-            <Grid.Col span={6}>เลขบัญชี : {payment.no}</Grid.Col>
-            <Grid.Col span={6}>
-              <Image radius="md" src={payment.fullPath} />
-            </Grid.Col>
-          </Grid>
-          <hr />
-        </>
-      )
-    })
-  }
-
   const handleSetData = (type, value) => {
     const update = { ...data }
     update[type] = value
@@ -107,6 +102,11 @@ export default function BookingPage() {
 
       if (res.success) {
         setSuccess(true)
+      } else {
+        const err = res as IErrorDto
+        setError(true)
+        setSuccess(false)
+        setErrMsg(err.message)
       }
     }
   }
@@ -115,94 +115,148 @@ export default function BookingPage() {
     <RootLayout>
       {isSuccess ? (
         <Paper shadow="xs" p="xl">
-          <h3>โอนเงินจองห้อง</h3>
-          <PaymentView />
+          <h3>รายละเอียดโอนเงินจองห้อง</h3>
+          <PaymentView payments={payments} />
         </Paper>
       ) : (
-        <Grid>
-          <Grid.Col span={8}>
-            <Paper shadow="xs" p="xl">
-              <form onSubmit={handleSubmit}>
-                <Grid>
-                  <Grid.Col span={12}>
-                    <Input
-                      type="text"
-                      placeholder="ชื่อ"
-                      onChange={(e) => {
-                        form.setFieldValue('name', e.target.value)
-                        handleSetData('name', e.target.value)
-                      }}
-                      value={data.name}
-                      error={form.errors.name}
-                    />
-                  </Grid.Col>
-                </Grid>
-                <Grid>
-                  <Grid.Col span={6}>
-                    <Input
-                      placeholder="Email"
-                      onChange={(e) => {
-                        form.setFieldValue('email', e.target.value)
-                        handleSetData('email', e.target.value)
-                      }}
-                      value={data.email}
-                      error={form.errors.email}
-                    />
-                  </Grid.Col>
-
-                  <Grid.Col span={6}>
-                    <Input
-                      placeholder="เบอร์โทร"
-                      onChange={(e) => {
-                        form.setFieldValue('mobile', e.target.value)
-                        handleSetData('mobile', e.target.value)
-                      }}
-                      value={data.mobile}
-                      error={form.errors.mobile}
-                    />
-                  </Grid.Col>
-                </Grid>
-
-                <Grid>
-                  <Grid.Col span={12}>
-                    <Button onClick={handleSubmit}>จอง</Button>
-                  </Grid.Col>
-                </Grid>
-              </form>
-            </Paper>
-          </Grid.Col>
-
-          <Grid.Col span={4}>
-            <Paper shadow="xs" p="xl">
-              <Grid>
-                <Grid.Col span={12}>
-                  วันที่จอง {dayjs(startDate).locale('th').format('DD MMM YYYY')} -{' '}
-                  {dayjs(endDate).locale('th').format('DD MMM YYYY')}
-                </Grid.Col>
-
-                <Grid.Col>
+        <>
+          <Grid>
+            <Grid.Col span={8}>
+              <Paper shadow="xs" p="xl">
+                <form onSubmit={handleSubmit}>
+                  <h3>ข้อมูลผู้เข้าพัก</h3>
                   <Grid>
-                    <Grid.Col span={4}></Grid.Col>
-
-                    <Grid.Col span={8}>
-                      <Grid>
-                        <Grid.Col span={12}>{room?.name}</Grid.Col>
-                      </Grid>
-
-                      {room?.images?.length > 0 ? (
-                        <Grid>
-                          <Grid.Col span={12}>
-                            <Image src={room.images[0].fullPath} />
-                          </Grid.Col>
-                        </Grid>
-                      ) : null}
+                    <Grid.Col span={12}>
+                      <Input.Wrapper label="ชื่อ">
+                        <Input
+                          type="text"
+                          placeholder="ชื่อ"
+                          onChange={(e) => {
+                            form.setFieldValue('name', e.target.value)
+                            handleSetData('name', e.target.value)
+                          }}
+                          value={data.name}
+                          error={form.errors.name}
+                        />
+                      </Input.Wrapper>
                     </Grid.Col>
                   </Grid>
-                </Grid.Col>
-              </Grid>
-            </Paper>
-          </Grid.Col>
-        </Grid>
+
+                  <Grid>
+                    <Grid.Col span={6}>
+                      <Input.Wrapper label="Email">
+                        <Input
+                          placeholder="Email"
+                          onChange={(e) => {
+                            form.setFieldValue('email', e.target.value)
+                            handleSetData('email', e.target.value)
+                          }}
+                          value={data.email}
+                          error={form.errors.email}
+                        />
+                      </Input.Wrapper>
+                    </Grid.Col>
+
+                    <Grid.Col span={6}>
+                      <Input.Wrapper label="เบอร์โทร">
+                        <Input
+                          placeholder="เบอร์โทร"
+                          onChange={(e) => {
+                            form.setFieldValue('mobile', e.target.value)
+                            handleSetData('mobile', e.target.value)
+                          }}
+                          value={data.mobile}
+                          error={form.errors.mobile}
+                        />
+                      </Input.Wrapper>
+                    </Grid.Col>
+                  </Grid>
+
+                  <Grid>
+                    <Grid.Col span={3}>
+                      <Select
+                        label="ผู้ใหญ่"
+                        placeholder="ผู้ใหญ่"
+                        defaultValue="1"
+                        data={['1', '2', '3', '4', '5']}
+                        onChange={(_value, option) => {
+                          form.setFieldValue('adult', Number(option.value))
+                          handleSetData('adult', Number(option.value))
+                        }}
+                      />
+                    </Grid.Col>
+                    <Grid.Col span={3}>
+                      <Select
+                        label="เด็ก"
+                        placeholder="เด็ก"
+                        defaultValue="0"
+                        data={['0', '1', '2', '3', '4', '5']}
+                        onChange={(_value, option) => {
+                          form.setFieldValue('children', Number(option.value))
+                          handleSetData('children', Number(option.value))
+                        }}
+                      />
+                    </Grid.Col>
+                  </Grid>
+
+                  <Grid>
+                    <Grid.Col span={12}>
+                      <Textarea
+                        label="หมาเหตุ"
+                        placeholder="หมาเหตุ"
+                        onChange={(e) => {
+                          form.setFieldValue('note', e.target.value)
+                          handleSetData('note', e.target.value)
+                        }}
+                      />
+                    </Grid.Col>
+                  </Grid>
+
+                  <Grid>
+                    <Grid.Col span={12}>
+                      <Button onClick={handleSubmit}>จอง</Button>
+                    </Grid.Col>
+                  </Grid>
+                </form>
+              </Paper>
+            </Grid.Col>
+
+            <Grid.Col span={4}>
+              <Paper shadow="xs" p="xl">
+                <Grid>
+                  <Grid.Col span={12}>
+                    วันที่จอง {dayjs(startDate).locale('th').format('DD MMM YYYY')} -{' '}
+                    {dayjs(endDate).locale('th').format('DD MMM YYYY')}
+                  </Grid.Col>
+
+                  <Grid.Col>
+                    <Grid>
+                      <Grid.Col span={12}>
+                        <Grid>
+                          <Grid.Col span={12}>{room?.name}</Grid.Col>
+                        </Grid>
+
+                        {room?.images?.length > 0 ? (
+                          <Grid>
+                            <Grid.Col span={12}>
+                              <Image src={room.images[0].fullPath} />
+                            </Grid.Col>
+                          </Grid>
+                        ) : null}
+                      </Grid.Col>
+                    </Grid>
+                  </Grid.Col>
+                </Grid>
+              </Paper>
+            </Grid.Col>
+          </Grid>
+
+          <ModalBox title="Error" isOpen={isError} onClose={() => setError(false)}>
+            {errMsg.map((x) => {
+              return <p>{x.message}</p>
+            })}
+          </ModalBox>
+        </>
       )}
     </RootLayout>
   )

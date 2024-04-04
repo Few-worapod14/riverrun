@@ -1,7 +1,12 @@
-import { ErrorDto } from '@riverrun/interface'
+import { IErrorDto } from '@riverrun/interface'
 import axios, { AxiosError } from 'axios'
 import { localStorageName } from '../store/store'
+
 export const baseApi = import.meta.env.VITE_APP_API
+const baseName = import.meta.env.VITE_BASE_URL
+const loginUrl = `${baseName}/admin/login`
+
+console.log('xxx', loginUrl)
 
 export const ApiClient = () => {
   const instance = axios.create({
@@ -28,11 +33,11 @@ export const ApiClient = () => {
       return response.data
     },
     (error: AxiosError) => {
-      if (error.response?.status === 401 || error.response?.status === undefined) {
-        window.location.href = '/login'
-        return
-      }
-      const res = error.response?.data as ErrorDto
+      // if (error.response?.status === 401 || error.response?.status === undefined) {
+      //   window.location.href = '/login'
+      //   return
+      // }
+      const res = error.response?.data as IErrorDto
       console.log(`error`, res)
       return res
     }
@@ -67,10 +72,10 @@ export const ApiAdmin = () => {
     },
     (error: AxiosError) => {
       if (error.response?.status === 401 || error.response?.status === undefined) {
-        window.location.href = '/admin/login'
+        window.location.href = loginUrl
         return
       }
-      const res = error.response?.data as ErrorDto
+      const res = error.response?.data as IErrorDto
       console.log(`error`, res)
       return res
     }

@@ -48,6 +48,18 @@ export default function AdminRoomCreatePage({ mode }: Props) {
     handleFetchCategory()
   }, [])
 
+  const initData = {
+    categoryId: 0,
+    name: '',
+    pricePerNight: 0,
+    amount: 1,
+    detail: '',
+    isActive: 'true'
+  }
+  const form = useForm({
+    initialValues: initData
+  })
+
   useEffect(() => {
     if (mode == 'edit') {
       handleGetRoom()
@@ -61,15 +73,6 @@ export default function AdminRoomCreatePage({ mode }: Props) {
     }
   }
 
-  const initData = {
-    categoryId: 0,
-    name: '',
-    pricePerNight: 0,
-    amount: 1,
-    detail: '',
-    isActive: 'true'
-  }
-
   const handleGetRoom = async () => {
     const res = await apiRoom.getById(Number(id))
     if (res.success) {
@@ -79,16 +82,13 @@ export default function AdminRoomCreatePage({ mode }: Props) {
         categoryId: res.data.category.id,
         name: res.data.name,
         pricePerNight: res.data.pricePerNight,
+        amount: res.data.amount,
         detail: res.data.detail,
-        isActive: 'true'
+        isActive: res.data.isActive.toString()
       }
       form.setValues(init)
     }
   }
-
-  const form = useForm({
-    initialValues: initData
-  })
 
   const handleCreate = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
@@ -185,8 +185,8 @@ export default function AdminRoomCreatePage({ mode }: Props) {
           <div className="mb-5">
             <NumberInput
               label="จำนวนห้องทั้งหมด"
-              value={room?.amount}
-              defaultValue={room?.amount}
+              value={room?.amount?.toString()}
+              defaultValue={room?.amount?.toString()}
               {...form.getInputProps('amount')}
             />
           </div>

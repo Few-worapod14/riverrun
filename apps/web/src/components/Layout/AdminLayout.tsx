@@ -1,8 +1,8 @@
+import logo from '@/assets/logo.png'
 import { useStore } from '@/store/store'
 import { AppShell, Burger, Center, Grid, NavLink } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useNavigate } from 'react-router-dom'
-import logo from '../../assets/logo.png'
 import './AdminLayout.scss'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

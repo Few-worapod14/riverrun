@@ -25,9 +25,11 @@ import RoomViewPage from './pages/room/view'
 import SignUpPage from './pages/user/SignUp'
 
 function App() {
+  const baseName = import.meta.env.VITE_BASE_URL
+  console.log('baseName', baseName)
   return (
     <>
-      <BrowserRouter>
+      <BrowserRouter basename={baseName}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/search" element={<SearchRoomPage />} />

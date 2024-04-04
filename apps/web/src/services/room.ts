@@ -8,7 +8,7 @@ export const getFilterRoom = async (roomId: number): Promise<IResponsePaginate<R
 }
 
 export const getAllRooms = async () => {
-  const api: IResponsePaginate<RoomDto> = await ApiClient().get(`/rooms`)
+  const api: IResponsePaginate<RoomDto[]> = await ApiClient().get(`/rooms`)
 
   return api
 }
