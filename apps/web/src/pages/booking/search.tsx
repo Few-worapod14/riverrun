@@ -22,7 +22,7 @@ export default function SearchRoomPage() {
 
   const [startBooking] = useState(searchParams.get('startDate') || today)
   const [endBooking] = useState(searchParams.get('endDate') || nextDay)
-  const [roomAmount] = useState(Number(searchParams.get('room')))
+  const [roomAmount] = useState(Number(searchParams.get('room')) || 1)
 
   const [rooms, setRooms] = useState<RoomDto[]>([])
 

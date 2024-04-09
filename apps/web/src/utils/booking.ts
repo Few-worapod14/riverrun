@@ -5,7 +5,7 @@ export const convertBookingStatus = (status: string) => {
     case 'PAID':
       return 'จ่ายเงินเรียบร้อย'
     case 'DONE':
-      return 'เรียบร้อย'
+      return 'เช็คเอ้าท์แล้ว'
     default:
       return 'ยกเลิก'
   }

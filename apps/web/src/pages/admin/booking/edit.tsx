@@ -158,7 +158,7 @@ export default function AdminBookingEditPage() {
                         value: BOOKING_STATUS.PAID
                       },
                       {
-                        label: 'เรียบร้อย',
+                        label: 'เช็คเอ้าท์แล้ว',
                         value: BOOKING_STATUS.DONE
                       },
                       {
