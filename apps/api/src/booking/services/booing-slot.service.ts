@@ -36,7 +36,7 @@ export class BookingSlotService {
 
     const allRooms: RoomDto[] = rooms
 
-    // หาห้องที่จอง แล้วลบจำนวน
+    // // หาห้องที่จอง แล้วลบจำนวน
     if (bookingSlots.length > 0) {
       rooms.forEach((x, i) => {
         bookingSlots.forEach((y) => {
@@ -52,7 +52,7 @@ export class BookingSlotService {
       })
     }
 
-    return allRooms.filter((x) => x.amount >= amount)
+    return allRooms.filter((x) => x.amount >= amount || x.amount > 0)
   }
 
   async count(startDateTime: string, endDateTime: string) {
@@ -99,11 +99,9 @@ export class BookingSlotService {
       })
       .getMany()
 
-      console.log("---",check)
-
     let total = 0
-    check.map(x => {
-      total = x.roomAmount+ total
+    check.map((x) => {
+      total = x.roomAmount + total
     })
 
     const room = await this.roomService

@@ -43,7 +43,7 @@ export class ContactAdminController {
       perPage: perPage,
       data: query
     }
-    res.status(HttpStatus.OK).json(response)
+    return res.status(HttpStatus.OK).json(response)
   }
 
   @Get(':id')
@@ -62,7 +62,7 @@ export class ContactAdminController {
       success: true
     }
 
-    res.status(HttpStatus.OK).json(response)
+    return res.status(HttpStatus.OK).json(response)
   }
 
   @Put(':id')
@@ -83,7 +83,7 @@ export class ContactAdminController {
       success: true
     }
 
-    res.status(HttpStatus.OK).json(response)
+    return res.status(HttpStatus.OK).json(response)
   }
 
   @Delete(':id')
@@ -103,6 +103,6 @@ export class ContactAdminController {
       success: true
     }
 
-    res.status(HttpStatus.OK).json(response)
+    return res.status(HttpStatus.OK).json(response)
   }
 }

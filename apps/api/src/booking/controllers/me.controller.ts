@@ -41,7 +41,7 @@ export class MeController {
       perPage: perPage,
       data: query
     }
-    res.status(HttpStatus.OK).json(response)
+    return res.status(HttpStatus.OK).json(response)
   }
 
   @Get(':id')
@@ -60,6 +60,6 @@ export class MeController {
       success: true
     }
 
-    res.status(HttpStatus.OK).json(response)
+    return res.status(HttpStatus.OK).json(response)
   }
 }

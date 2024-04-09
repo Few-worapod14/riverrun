@@ -49,7 +49,7 @@ export class BookingController {
         success: false
       }
 
-      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errors)
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errors)
     }
 
     const startBookingDate = dayjs(dayjs(startDate, 'DD-MM-YYYY').toDate()).format(
@@ -73,7 +73,7 @@ export class BookingController {
       perPage: -1,
       data: query
     }
-    res.status(HttpStatus.OK).json(response)
+    return res.status(HttpStatus.OK).json(response)
   }
 
   @Post('/')
@@ -105,7 +105,7 @@ export class BookingController {
         success: false
       }
 
-      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errors)
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errors)
     }
 
     const query = await this.bookingService.create(body, userId)
@@ -113,6 +113,6 @@ export class BookingController {
       data: query,
       success: true
     }
-    res.status(HttpStatus.OK).json(response)
+    return res.status(HttpStatus.OK).json(response)
   }
 }

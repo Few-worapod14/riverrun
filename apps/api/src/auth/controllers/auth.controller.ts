@@ -1,6 +1,6 @@
-import { Body, Controller, HttpException, HttpStatus, Post, Res } from '@nestjs/common'
+import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common'
 
-import { CustomerSignIn } from '@riverrun/interface'
+import { CustomerSignIn, ERROR_MSG_TYPE, IErrorDto } from '@riverrun/interface'
 import { Response } from 'express'
 import { AdminService } from '../services/admin.service'
 import { CustomerService } from '../services/customer.service'
@@ -16,16 +16,20 @@ export class AuthController {
   async userSignIn(@Res() res: Response, @Body() body: CustomerSignIn) {
     const validate = await this.customerService.validateUser(body)
     if (!validate) {
-      throw new HttpException(
-        {
-          message: 'Email or password not match.',
-          success: false
-        },
-        HttpStatus.UNAUTHORIZED
-      )
+      const errors: IErrorDto = {
+        message: [
+          {
+            property: ERROR_MSG_TYPE.SYSTEM,
+            message: 'Email or password not match.'
+          }
+        ],
+        success: false
+      }
+
+      return res.status(HttpStatus.UNAUTHORIZED).json(errors)
     }
 
-    res.status(HttpStatus.OK).json({
+    return res.status(HttpStatus.OK).json({
       data: validate,
       success: true
     })
@@ -35,16 +39,20 @@ export class AuthController {
   async adminSignIn(@Res() res: Response, @Body() body: CustomerSignIn) {
     const validate = await this.adminService.validateUser(body)
     if (!validate) {
-      throw new HttpException(
-        {
-          message: 'Username or password not match.',
-          success: false
-        },
-        HttpStatus.UNAUTHORIZED
-      )
+      const errors: IErrorDto = {
+        message: [
+          {
+            property: ERROR_MSG_TYPE.SYSTEM,
+            message: 'Username or password not match.'
+          }
+        ],
+        success: false
+      }
+
+      return res.status(HttpStatus.UNAUTHORIZED).json(errors)
     }
 
-    res.status(HttpStatus.OK).json({
+    return res.status(HttpStatus.OK).json({
       data: validate,
       success: true
     })

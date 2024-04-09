@@ -15,6 +15,6 @@ export class ContactController {
       data: query,
       success: true
     }
-    res.status(HttpStatus.OK).json(response)
+    return res.status(HttpStatus.OK).json(response)
   }
 }
