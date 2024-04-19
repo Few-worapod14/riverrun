@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
   nginx:
     image: nginx:alpine
@@ -15,7 +15,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/Dockerfile-ui-pnpm
-    container_name: ui
+    container_name: frontend
     depends_on:
       - backend
 
@@ -23,7 +23,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/Dockerfile-api-pnpm
-    container_name: api
+    container_name: backend
     restart: always
     volumes:
       - ./apps/api/_uploads:/_uploads
