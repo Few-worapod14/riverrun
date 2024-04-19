@@ -1,31 +1,10 @@
-
-# FROM node:20-alpine3.18 AS base
-# ENV PNPM_HOME="/pnpm"
-# ENV PATH="$PNPM_HOME:$PATH"
-# RUN corepack enable
-
-# FROM base AS builder
-# WORKDIR /www
-# COPY ../ .
-# RUN pnpm install
-# RUN pnpm deploy --filter=web /www/web
-
-# FROM node:20-alpine3.18 AS web
-# WORKDIR /www/web
-# COPY --from=builder /www/web .
-# COPY ../.env-dev .env.production
-# RUN npm run build
-# EXPOSE 8080
-# CMD ["npm", "run", "preview"]
-
-
 FROM node:20-alpine3.18 AS base
 ENV YARN_VERSION=4.0.1
 RUN corepack enable && corepack prepare yarn@${YARN_VERSION}
 RUN yarn global add turbo
 WORKDIR /www
 COPY . .
-COPY ../.env-dev apps/web/.env.production
+COPY ../.env-dev ../apps/web/.env.production
 RUN yarn
 RUN turbo build
 
