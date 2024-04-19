@@ -12,6 +12,9 @@
     "dev": {
       "cache": false
     },
+    "preview": {
+      "cache": false
+    },
     "start:dev": {
       "cache": false
     },

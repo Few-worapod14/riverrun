@@ -14,16 +14,16 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: ./docker/Dockerfile-ui
-    container_name: frontend
+      dockerfile: ./docker/Dockerfile-ui-pnpm
+    container_name: ui
     depends_on:
       - backend
 
   backend:
     build:
       context: .
-      dockerfile: ./docker/Dockerfile-api
-    container_name: backend
+      dockerfile: ./docker/Dockerfile-api-pnpm
+    container_name: api
     restart: always
     volumes:
       - ./apps/api/_uploads:/_uploads

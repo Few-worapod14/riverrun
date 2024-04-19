@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { ServeStaticModule } from '@nestjs/serve-static'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { join } from 'path'
 import { AdminModule } from './admin/admin.module'
 import { AuthModule } from './auth/auth.module'
 import { BookingModule } from './booking/booking.module'
@@ -14,7 +13,7 @@ import { RoomModule } from './room/room.module'
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.env'
+      isGlobal: true
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -28,7 +27,7 @@ import { RoomModule } from './room/room.module'
       synchronize: true
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../', process.env.FILE_UPLOAD),
+      rootPath: process.env.FILE_UPLOAD,
       serveRoot: `/${process.env.FILE_UPLOAD}/`,
       exclude: ['/api/(.*)']
     }),

@@ -13,3 +13,6 @@ pnpm run dev
 ```
 pnpm add -filter api dayjs
 ```
+
+## Deploy
+.env change url server
