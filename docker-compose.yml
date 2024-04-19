@@ -14,7 +14,7 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: ./docker/Dockerfile-ui-pnpm
+      dockerfile: ./docker/Dockerfile-ui
     container_name: frontend
     depends_on:
       - backend
@@ -22,7 +22,7 @@ services:
   backend:
     build:
       context: .
-      dockerfile: ./docker/Dockerfile-api-pnpm
+      dockerfile: ./docker/Dockerfile-api
     container_name: backend
     restart: always
     volumes:
