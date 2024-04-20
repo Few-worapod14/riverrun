@@ -34,8 +34,8 @@ compose:
 
 .PHONY: install
 install:
-	bash ./script/install.sh
+	bash ./install.sh
 
 .PHONY: run
 run:
-	bash ./script/run.sh
+	bash ./run.sh

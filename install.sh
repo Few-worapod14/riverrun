@@ -15,7 +15,7 @@ curl -SL https://github.com/docker/compose/releases/download/v2.3.3/docker-compo
 chmod +x ~/.docker/cli-plugins/docker-compose
 
 # Install Nginx
-sudo apt install -y nginx
+y
 
 # Install Node.js version 20
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
@@ -25,7 +25,7 @@ sudo apt install -y nodejs
 npm install pm2@latest -g
 npm install -g pnpm
 
-cp ../nginx/dev.conf /etc/nginx/conf.d/default.conf
+cp ./nginx/dev.conf /etc/nginx/conf.d/default.conf
 
 # Display versions of installed software
 docker --version
