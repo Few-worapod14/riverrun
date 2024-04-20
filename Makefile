@@ -29,5 +29,5 @@ build-api-pnpm:
 	docker build -f ./docker/Dockerfile-api-pnpm . --tag api:pnpm
 
 .PHONY: compose
-build-api-pnpm:
+compose:
 	docker compose up -d --build
