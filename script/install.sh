@@ -24,14 +24,10 @@ sudo apt install -y nodejs
 # Install pm2
 npm install pm2@latest -g
 
-cp ../nginx/dev.conf:/etc/nginx/conf.d/default.conf
+cp ../nginx/dev.conf /etc/nginx/conf.d/default.conf
 
 # Display versions of installed software
-echo "Docker version:"
 docker --version
-echo "Docker Compose version:"
 docker compose version
-echo "Nginx version:"
 nginx -v
-echo "Node.js version:"
 node --version
