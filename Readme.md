@@ -15,4 +15,14 @@ pnpm add -filter api dayjs
 ```
 
 ## Deploy
-.env change url server
+- .env change url server
+- run bash install script
+  ```
+  bash ./script/install.sh
+  ```
+- config nginx
+  ```
+  cp ../nginx/dev.conf:/etc/nginx/conf.d/default.conf
+  ```
+- run pm2
+- restart nginx
