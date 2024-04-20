@@ -1,47 +1,48 @@
 version: '3.8'
 services:
-  # nginx:
-  #   image: nginx:alpine
-  #   container_name: nginx
-  #   volumes:
-  #     - ./docker/dev.conf:/etc/nginx/conf.d/default.conf
-  #   ports:
-  #     - 80:80
-  #   depends_on:
-  #     - backend
-  #     - frontend
-  #   restart: always
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    volumes:
+      - ./docker/dev.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
+    depends_on:
+      - backend
+      - frontend
+    restart: always
 
   frontend:
     build:
       context: .
       dockerfile: ./docker/Dockerfile-ui-pnpm
     container_name: frontend
-    # depends_on:
-    # - backend
+    depends_on:
+      - backend
     restart: always
 
-  # backend:
-  #   build:
-  #     context: .
-  #     dockerfile: ./docker/Dockerfile-api-pnpm
-  #   container_name: backend
-  #   restart: always
-  #   volumes:
-  #     - ./apps/api/_uploads:/_uploads
+  backend:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile-api-pnpm
+    container_name: backend
+    restart: always
+    volumes:
+      - ./apps/api/_uploads:/_uploads
 
-  # postgres:
-  #   image: postgres:13.3
-  #   container_name: db
-  #   restart: always
-  #   volumes:
-  #     - postgres-data:/var/lib/postgresql/data
-  #   environment:
-  #     - POSTGRES_USER=${DB_USERNAME}
-  #     - POSTGRES_PASSWORD=${DB_PASSWORD}
-  #     - POSTGRES_DB=${DB_DATABASE}
-  #   ports:
-  #     - 5432:5432
-# volumes:
-#   postgres-data:
-#     driver: local
+  postgres:
+    image: postgres:13.3
+    container_name: db
+    restart: always
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE}
+    ports:
+      - 5432:5432
+
+volumes:
+  postgres-data:
+    driver: local
