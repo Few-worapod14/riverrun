@@ -6,14 +6,16 @@ RUN corepack enable
 FROM base AS builder
 WORKDIR /www
 COPY ../ .
+COPY ../.env-dev ./apps/api/.env
 RUN pnpm install
+RUN pnpm run build
 # RUN pnpm deploy --filter=api /www/api
 
 FROM builder AS api
 WORKDIR /www/apps/api
 # COPY --from=builder /www/api .
-COPY ../.env-dev .env
-RUN npm run build
+# COPY ../.env-dev .env
+# RUN npm run build
 EXPOSE 3001
 CMD [ "npm", "run", "start:prod"]
 

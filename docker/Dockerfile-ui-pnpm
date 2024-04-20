@@ -6,14 +6,16 @@ RUN corepack enable
 FROM base AS builder
 WORKDIR /www
 COPY ../ .
+COPY ../.env-dev ./apps/web/.env.production
 RUN pnpm install
+RUN pnpm run build
 # RUN pnpm deploy --filter=web /www/web
 
 FROM builder AS web
 WORKDIR /www/apps/web
 # COPY --from=builder /www/web .
-COPY ../.env-dev .env.production
-RUN npm run build
+# COPY ../.env-dev .env.production
+# RUN npm run build
 EXPOSE 8080
 CMD ["npm", "run", "preview"]
 
