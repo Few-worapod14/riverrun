@@ -31,3 +31,7 @@ build-api-pnpm:
 .PHONY: compose
 compose:
 	docker compose up -d --build
+
+.PHONY: install
+install:
+	bash ./script/install.sh
