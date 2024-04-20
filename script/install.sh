@@ -21,8 +21,9 @@ sudo apt install -y nginx
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 sudo apt install -y nodejs
 
-# Install pm2
+# Install node module
 npm install pm2@latest -g
+npm install -g pnpm
 
 cp ../nginx/dev.conf /etc/nginx/conf.d/default.conf
 
