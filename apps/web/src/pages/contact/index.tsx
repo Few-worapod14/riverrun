@@ -10,8 +10,8 @@ export function ContactPage() {
     <RootLayout>
       <h3>ติดต่อเรา</h3>
 
-      <form onSubmit={handleSubmit}>
-        <Grid className="pb-4">
+      <form onSubmit={handleSubmit} className='bg-white p-4 rounded-lg'>
+        <Grid className="pb-4 ">
           <Grid.Col>
             {' '}
             <Input placeholder="ชื่อ" />

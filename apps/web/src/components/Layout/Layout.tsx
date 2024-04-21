@@ -14,7 +14,7 @@ export const RootLayout = ({ children }: { children: React.ReactNode }) => {
           <div className="py-4">{children}</div>
         </Container>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </>
   )
 }
