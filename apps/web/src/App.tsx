@@ -23,6 +23,7 @@ import HomePage from './pages/home'
 import RoomIndexPage from './pages/room'
 import RoomViewPage from './pages/room/view'
 import SignUpPage from './pages/user/SignUp'
+import CottageHousePage from './pages/room/cottage'
 
 function App() {
   const baseName = import.meta.env.VITE_BASE_URL
@@ -37,6 +38,7 @@ function App() {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/room" element={<RoomIndexPage />} />
           <Route path="/room/:slug" element={<RoomViewPage />} />
+          <Route path="/room/cottage" element={<CottageHousePage/>} />
           <Route path="/contact" element={<ContactPage />} />
 
           {/* Admin management */}

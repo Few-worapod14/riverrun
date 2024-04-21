@@ -40,15 +40,15 @@ export default function HomePage() {
           <CarouselBox data={images.map((x) => ({ image: x }))} height={400} />
         </Grid.Col>
 
-        <Grid.Col span={12}>
+        {/* <Grid.Col span={12}>
           <BookingDate onSearch={handleSearch} />
-        </Grid.Col>
+        </Grid.Col> */}
 
-        <Grid.Col span={12}>
+        {/* <Grid.Col span={12}>
           <video width="100%" height="100%" controls autoPlay playsInline loop muted>
             <source src={video} type="video/mp4" />
           </video>
-        </Grid.Col>
+        </Grid.Col> */}
 
         <Grid.Col span={12}>
           <iframe

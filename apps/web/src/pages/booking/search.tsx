@@ -9,6 +9,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat'
 import queryString from 'query-string'
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import bgVideo from '@/assets/bg-video.mp4'
 
 dayjs.extend(customParseFormat)
 
@@ -60,39 +61,45 @@ export default function SearchRoomPage() {
 
   return (
     <RootLayout>
-      <div className="mb-5">
-        <BookingDate
-          startBooking={startBooking}
-          endBooking={endBooking}
-          roomBooking={roomAmount}
-          onSearch={handleSearch}
-        />
-      </div>
+      <div className="relative flex items-start justify-center -mt-4 w-full h-full overflow-hidden bg-[#CCB494] bg-no-repeat bg-cover">
+          <video autoPlay loop muted className="fixed z-0 w-auto min-w-full min-h-full max-w-none">
+              <source src={bgVideo} type="video/mp4" />
+          </video>
 
-      <div>
-        {rooms?.map((room, i) => {
-          return (
-            <Paper className="mb-5" shadow="xs" p="xl" key={i}>
-              <Grid>
-                <Grid.Col span={4}>
-                  <Image src={room?.images?.[0]?.fullPath} />
-                </Grid.Col>
+        <div className="my-[25%] py-[40%] sm:py-[25%] md:py-[20%] lg:py-[10%] w-full max-w-xl h-fit max-h-max">
+          <BookingDate
+            startBooking={startBooking}
+            endBooking={endBooking}
+            roomBooking={roomAmount}
+            onSearch={handleSearch}
+          />
+        </div>
 
-                <Grid.Col span={8}>
-                  <Grid>
-                    <Grid.Col>{room.name}</Grid.Col>
-                    <Grid.Col>{room.pricePerNight} ฿</Grid.Col>
-                    <Grid.Col>
-                      <Flex gap="md" justify="center" direction="row" wrap="wrap">
-                        <Button onClick={() => handleBooking(room.id)}>จองรอง</Button>
-                      </Flex>
-                    </Grid.Col>
-                  </Grid>
-                </Grid.Col>
-              </Grid>
-            </Paper>
-          )
-        })}
+        <div>
+          {rooms?.map((room, i) => {
+            return (
+              <Paper className="mb-5" shadow="xs" p="xl" key={i}>
+                <Grid>
+                  <Grid.Col span={4}>
+                    <Image src={room?.images?.[0]?.fullPath} />
+                  </Grid.Col>
+
+                  <Grid.Col span={8}>
+                    <Grid>
+                      <Grid.Col>{room?.name}</Grid.Col>
+                      <Grid.Col>{room?.pricePerNight} ฿</Grid.Col>
+                      <Grid.Col>
+                        <Flex gap="md" justify="center" direction="row" wrap="wrap">
+                          <Button onClick={() => handleBooking(room.id)}>จองรอง</Button>
+                        </Flex>
+                      </Grid.Col>
+                    </Grid>
+                  </Grid.Col>
+                </Grid>
+              </Paper>
+            )
+          })}
+        </div>
       </div>
     </RootLayout>
   )
