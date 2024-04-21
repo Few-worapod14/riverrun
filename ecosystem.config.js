@@ -10,7 +10,7 @@ module.exports = {
       env_production: {
         NODE_ENV: "production"
       },
-      cwd: "/var/www/riverrun/api"
+      cwd: "/var/www/riverrun/apps/api"
     },
     {
       name: "ui",
@@ -22,7 +22,7 @@ module.exports = {
       env_production: {
         "NODE_ENV": "production"
       },
-      cwd: "/var/www/riverrun/web"
+      cwd: "/var/www/riverrun/apps/web"
     }
   ]
 };
