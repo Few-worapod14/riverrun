@@ -43,23 +43,23 @@ export const Header = () => {
           </div>
           <div className="hidden lg:flex lg:gap-x-12 lg:items-center">
             <Link to="/" className="text-sm font-semibold leading-6 text-gray-900">
-              หน้าแรก
+              Home
             </Link>
             <Link to="/room" className="text-sm font-semibold leading-6 text-gray-900">
-              ห้องพัก
+              Accommodation
             </Link>
             <Link
               to="/contact"
               onClick={() => navigate('/contact')}
               className="text-sm font-semibold leading-6 text-gray-900"
             >
-              ติดต่อเรา
+              Contact
             </Link>
             <Link
               to={'/search'}
               className="text-sm font-semibold text-white bg-yellow-700 p-4 rounded-xl"
             >
-              จองห้อง
+              Booking
             </Link>
           </div>
         </nav>

@@ -20,12 +20,13 @@ export function ContactPage() {
       <Container className="my-6 p-8 mx-auto max-w-full bg-white text-[#333] rounded-xl">
         <h1>Contact Us</h1>
         <Grid>
-          <Grid.Col span={6}>
+          <Grid.Col span={12}>
             <div>
-              <h1 className="text-3xl font-extrabold">Let's Talk</h1>
+              <h1 className="text-3xl font-extrabold">แบบฟอร์มติดต่อ</h1>
+              <p className='text-md'>The River Runs ChiangKlang</p>
               <p className="text-sm text-gray-400 mt-3">
-                Have some big idea or brand to develop and need help? Then reach out we'd love to hear
-                about your project and provide help.
+              กรุณากรอกข้อมูลส่วนตัวของท่าน เราจะติดต่อกลับโดยเร็วที่สุด
+              ขอบพระคุณที่สนใจเข้าพักที่ The River Runs ChiangKlang
               </p>
             </div>
             <form className="ml-auo space-y-4">
@@ -56,7 +57,7 @@ export function ContactPage() {
               </Button>
             </form>
           </Grid.Col>
-          <Grid.Col span={6}>
+          <Grid.Col span={12}>
             <div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-700 mb-2">Our Address</h3>
