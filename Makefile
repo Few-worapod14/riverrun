@@ -40,7 +40,7 @@ install:
 run:
 	bash ./run.sh
 
-.PHONY: resetart
-resetart:
+.PHONY: restart
+restart:
 	bash ./restart.sh
 
