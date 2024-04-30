@@ -39,3 +39,8 @@ install:
 .PHONY: run
 run:
 	bash ./run.sh
+
+.PHONY: resetart
+resetart:
+	bash ./restart.sh
+
