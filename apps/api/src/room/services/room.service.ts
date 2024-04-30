@@ -63,18 +63,6 @@ export class RoomService {
     })
   }
 
-  findBySlug(slug: string) {
-    return this.roomRepository.findOne({
-      where: {
-        slug: slug
-      },
-      relations: {
-        category: true,
-        images: true
-      }
-    })
-  }
-
   async update(id: number, data: RoomUpdateDto, files?: Array<Express.Multer.File>) {
     const save = {
       ...data,

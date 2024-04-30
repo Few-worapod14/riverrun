@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { AdminCreateDto, AdminUpdateDto } from '@riverrun/interface'
 import { hashSync } from 'bcrypt'
-import { DeleteResult, Repository } from 'typeorm'
+import { DeleteResult, Like, Or, Repository } from 'typeorm'
 import { Admin } from '../entities/admin.entity'
 @Injectable()
 export class AdminService {
@@ -30,16 +30,40 @@ export class AdminService {
     }
   }
 
-  async findAll(page: number, limit: number): Promise<Admin[]> {
+  async findAll(page: number, limit: number, keyword?: string): Promise<Admin[]> {
     const skip: number = page == 1 ? 0 : limit * (page - 1)
+    if (!keyword) {
+      return this.adminRepository.find({
+        skip: skip,
+        take: limit
+      })
+    }
+
     return this.adminRepository.find({
       skip: skip,
-      take: limit
+      take: limit,
+      where: [
+        { firstName: Or(Like(`%${keyword}%`)) },
+        { lastName: Or(Like(`%${keyword}%`)) },
+        { email: Or(Like(`%${keyword}%`)) },
+        { username: Or(Like(`%${keyword}%`)) }
+      ]
     })
   }
 
-  count(): Promise<number> {
-    return this.adminRepository.count()
+  count(keyword?: string): Promise<number> {
+    if (!keyword) {
+      return this.adminRepository.count()
+    }
+
+    return this.adminRepository.count({
+      where: [
+        { firstName: Or(Like(`%${keyword}%`)) },
+        { lastName: Or(Like(`%${keyword}%`)) },
+        { email: Or(Like(`%${keyword}%`)) },
+        { username: Or(Like(`%${keyword}%`)) }
+      ]
+    })
   }
 
   findByID(id: number) {
@@ -60,7 +84,16 @@ export class AdminService {
   }
 
   update(id: number, data: AdminUpdateDto) {
-    return this.adminRepository.update(id, data)
+    if (data?.password) {
+      const password = hashSync(data.password, 10)
+      const update = {
+        ...data,
+        password: password
+      }
+      return this.adminRepository.update(id, update)
+    } else {
+      return this.adminRepository.update(id, data)
+    }
   }
 
   async remove(id: number): Promise<DeleteResult> {

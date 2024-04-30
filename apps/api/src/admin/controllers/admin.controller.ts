@@ -17,6 +17,8 @@ import {
 import {
   AdminCreateDto,
   AdminUpdateDto,
+  ERROR_MSG_TYPE,
+  IErrorDto,
   IResponseData,
   IResponsePaginate
 } from '@riverrun/interface'
@@ -41,17 +43,18 @@ export class AdminController {
     res.status(HttpStatus.OK).json(response)
   }
 
-  @Get('/')
+  @Get()
   async findAll(
     @Req() req: IRequestWithAdmin,
     @Res() res: Response,
     @Query('page') page: number,
-    @Query('limit') limit: number
+    @Query('limit') limit: number,
+    @Query('keyword') keyword?: string
   ) {
     const currentPage = page || 1
     const perPage = limit || 20
-    const query = await this.adminService.findAll(currentPage, perPage)
-    const total = await this.adminService.count()
+    const query = await this.adminService.findAll(currentPage, perPage, keyword)
+    const total = await this.adminService.count(keyword)
     const response: IResponsePaginate<Admin[]> = {
       success: true,
       total: total,
@@ -101,11 +104,40 @@ export class AdminController {
   }
 
   @Delete(':id')
-  async remove(@Req() req: Request, @Res() res: Response, @Param('id', ParseIntPipe) id: number) {
+  async remove(
+    @Req() req: IRequestWithAdmin,
+    @Res() res: Response,
+    @Param('id', ParseIntPipe) id: number
+  ) {
+    if (req.user.sub === id) {
+      const errors: IErrorDto = {
+        message: [
+          {
+            property: ERROR_MSG_TYPE.SYSTEM,
+            message: 'ไม่สามารถลบแอคเค้าตัวเองได้'
+          }
+        ],
+        success: false
+      }
+
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errors)
+    }
+
     const query = await this.adminService.findByID(id)
     if (!query) {
-      throw new NotFoundException('id not found')
+      const errors: IErrorDto = {
+        message: [
+          {
+            property: ERROR_MSG_TYPE.SYSTEM,
+            message: 'ไม่มี user ในระบบ'
+          }
+        ],
+        success: false
+      }
+
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errors)
     }
+
     await this.adminService.remove(id)
     const response: IResponseData<string> = {
       message: 'Delete successfully',

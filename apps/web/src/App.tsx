@@ -16,14 +16,18 @@ import AdminRoomPage from './pages/admin/room'
 import AdminRoomCategoryPage from './pages/admin/room/category'
 import AdminRoomCreatePage from './pages/admin/room/create'
 import AdminRoomViewPage from './pages/admin/room/view'
+import AdminUserIndexPage from './pages/admin/user'
+import AdminUserEditPage from './pages/admin/user/edit'
+import AdminUserViewPage from './pages/admin/user/view'
 import BookingPage from './pages/booking'
 import SearchRoomPage from './pages/booking/search'
 import { ContactPage } from './pages/contact'
 import HomePage from './pages/home'
 import RoomIndexPage from './pages/room'
+import CottageHousePage from './pages/room/cottage'
 import RoomViewPage from './pages/room/view'
 import SignUpPage from './pages/user/SignUp'
-import CottageHousePage from './pages/room/cottage'
+import { MODE } from './utils/booking'
 
 function App() {
   const baseName = import.meta.env.VITE_BASE_URL
@@ -38,7 +42,7 @@ function App() {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/room" element={<RoomIndexPage />} />
           <Route path="/room/:slug" element={<RoomViewPage />} />
-          <Route path="/room/cottage" element={<CottageHousePage/>} />
+          <Route path="/room/cottage" element={<CottageHousePage />} />
           <Route path="/contact" element={<ContactPage />} />
 
           {/* Admin management */}
@@ -91,7 +95,7 @@ function App() {
             path="/admin/room/create"
             element={
               <AuthorizedAdminRoute>
-                <AdminRoomCreatePage mode={'create'} />
+                <AdminRoomCreatePage mode={MODE.CREATE} />
               </AuthorizedAdminRoute>
             }
           />
@@ -107,7 +111,7 @@ function App() {
             path="/admin/room/edit/:id"
             element={
               <AuthorizedAdminRoute>
-                <AdminRoomCreatePage mode={'edit'} />
+                <AdminRoomCreatePage mode={MODE.EDIT} />
               </AuthorizedAdminRoute>
             }
           />
@@ -178,6 +182,40 @@ function App() {
             element={
               <AuthorizedAdminRoute>
                 <AdminRoomPaymentPage />
+              </AuthorizedAdminRoute>
+            }
+          />
+
+          {/* Admin management */}
+          <Route
+            path="/admin/user"
+            element={
+              <AuthorizedAdminRoute>
+                <AdminUserIndexPage />
+              </AuthorizedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/user/create"
+            element={
+              <AuthorizedAdminRoute>
+                <AdminUserEditPage mode={MODE.CREATE} />
+              </AuthorizedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/user/edit/:id"
+            element={
+              <AuthorizedAdminRoute>
+                <AdminUserEditPage mode={MODE.EDIT} />
+              </AuthorizedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/user/view/:id"
+            element={
+              <AuthorizedAdminRoute>
+                <AdminUserViewPage />
               </AuthorizedAdminRoute>
             }
           />

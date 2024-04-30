@@ -19,10 +19,10 @@ export default function AdminCustomerIndexPage() {
   const [keyword, setKeyword] = useState<string | null>(null)
 
   useEffect(() => {
-    handleFetchBooking(currentPage)
+    handleFetchCustomer(currentPage)
   }, [])
 
-  const handleFetchBooking = async (currentPage: number) => {
+  const handleFetchCustomer = async (currentPage: number) => {
     const res: IResponsePaginate<CustomerDto[]> | IErrorMessage = await apiAdminCustomer.getAll(
       currentPage
     )
@@ -38,7 +38,7 @@ export default function AdminCustomerIndexPage() {
     const searchParams = new URLSearchParams(location.search)
     searchParams.set('page', value.toString())
     navigate(`?${searchParams.toString()}`)
-    handleFetchBooking(value)
+    handleFetchCustomer(value)
   }
 
   const handleSearch = async () => {

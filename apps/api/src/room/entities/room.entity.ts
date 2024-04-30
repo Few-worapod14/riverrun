@@ -23,9 +23,6 @@ export class Room {
   @Column()
   name: string
 
-  @Column({ unique: true })
-  slug: string
-
   @Column()
   pricePerNight: number
 

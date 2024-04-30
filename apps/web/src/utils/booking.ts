@@ -17,3 +17,9 @@ export enum BOOKING_STATUS {
   DONE = 'DONE',
   CANCEL = 'CANCEL'
 }
+
+export enum MODE {
+  CREATE = 'create',
+  VIEW = 'view',
+  EDIT = 'edit'
+}
