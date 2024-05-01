@@ -23,7 +23,7 @@ export const RoomA = ({ data }: Props) => {
       </div>
 
       <div className="float-right">
-        <Link to={`/room/${data.slug}`}>ดูรายละเอียด </Link>
+        <Link to={`/room/${data.id}`}>ดูรายละเอียด </Link>
       </div>
     </div>
   )

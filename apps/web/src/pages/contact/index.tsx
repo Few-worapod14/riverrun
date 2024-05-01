@@ -4,10 +4,8 @@ import {
   IconBrandFacebook,
   IconBrandInstagram,
   IconBrandLine,
-  IconLine,
   IconMail,
-  IconPhone,
-  IconRecordMail
+  IconPhone
 } from '@tabler/icons-react'
 
 export function ContactPage() {
@@ -16,17 +14,17 @@ export function ContactPage() {
   }
 
   return (
-    <RootLayout >
+    <RootLayout>
       <Container className="my-6 p-8 mx-auto max-w-full bg-white text-[#333] rounded-xl">
         <h1>Contact Us</h1>
         <Grid>
           <Grid.Col span={12}>
             <div>
               <h1 className="text-3xl font-extrabold">แบบฟอร์มติดต่อ</h1>
-              <p className='text-md'>The River Runs ChiangKlang</p>
+              <p className="text-md">The River Runs ChiangKlang</p>
               <p className="text-sm text-gray-400 mt-3">
-              กรุณากรอกข้อมูลส่วนตัวของท่าน เราจะติดต่อกลับโดยเร็วที่สุด
-              ขอบพระคุณที่สนใจเข้าพักที่ The River Runs ChiangKlang
+                กรุณากรอกข้อมูลส่วนตัวของท่าน เราจะติดต่อกลับโดยเร็วที่สุด
+                ขอบพระคุณที่สนใจเข้าพักที่ The River Runs ChiangKlang
               </p>
             </div>
             <form className="ml-auo space-y-4">
@@ -63,24 +61,24 @@ export function ContactPage() {
                 <h3 className="text-lg font-semibold text-gray-700 mb-2">Our Address</h3>
                 <p>117 ​หมู่7​ บ้านดอนสบเปือ ต.เปือ อ.เชียงกลาง จ.น่าน</p>
               </div>
-              <div className='flex items-center gap-2'>
-                <IconPhone/>
+              <div className="flex items-center gap-2">
+                <IconPhone />
                 <p>098 750 5614</p>
               </div>
-              <div className='flex items-center gap-2'>
-                <IconMail/>
+              <div className="flex items-center gap-2">
+                <IconMail />
                 <p>theriverrunchiangklang@gmail.com</p>
               </div>
-              <div className='flex items-center gap-2'>
-                <IconBrandLine/>
+              <div className="flex items-center gap-2">
+                <IconBrandLine />
                 <p>@theriverruns</p>
               </div>
-              <div className='flex items-center gap-2'>
-                <IconBrandFacebook/>
+              <div className="flex items-center gap-2">
+                <IconBrandFacebook />
                 <p>The River Runs ChiangKlang</p>
               </div>
-              <div className='flex items-center gap-2'>
-                <IconBrandInstagram/>
+              <div className="flex items-center gap-2">
+                <IconBrandInstagram />
                 <p>theriverrunschiangklang</p>
               </div>
               {/* <div className="flex items-center justify-start">

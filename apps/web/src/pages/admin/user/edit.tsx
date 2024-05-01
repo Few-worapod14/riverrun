@@ -97,7 +97,7 @@ export default function AdminUserEditPage({ mode }: Props) {
                     defaultValue={user?.username}
                     value={user?.username}
                     {...form.getInputProps('username')}
-                    disabled={mode === MODE.EDIT ?? false}
+                    disabled={mode === MODE.EDIT ? true : false}
                   />
                 </Grid.Col>
               </Grid>

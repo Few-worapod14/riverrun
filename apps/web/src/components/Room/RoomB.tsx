@@ -23,7 +23,7 @@ export const RoomB = ({ data }: Props) => {
       </div>
 
       <div>
-        <Link to={`/room/${data.slug}`}>ดูรายละเอียด </Link>
+        <Link to={`/room/${data.id}`}>ดูรายละเอียด </Link>
       </div>
     </div>
   )
