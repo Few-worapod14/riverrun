@@ -37,7 +37,8 @@ export default function AdminBookingEditPage() {
 
   const handleUpdate = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
-    if (form.validate()) {
+    form.validate()
+    if (form.isValid()) {
       const data = form.values
       const res = await adminBooking.update(Number(id), data)
       if (res.success) {

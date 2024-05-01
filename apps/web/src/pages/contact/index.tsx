@@ -1,5 +1,6 @@
 import { RootLayout } from '@/components/Layout/Layout'
-import { Button, Container, Grid, Input, Textarea } from '@mantine/core'
+import { Alert, Button, Container, Grid, Input, Textarea } from '@mantine/core'
+import { isEmail, isNotEmpty, useForm } from '@mantine/form'
 import {
   IconBrandFacebook,
   IconBrandInstagram,
@@ -7,10 +8,50 @@ import {
   IconMail,
   IconPhone
 } from '@tabler/icons-react'
+import { useState } from 'react'
+import * as contactApi from '../../services/contact.ts'
 
 export function ContactPage() {
+  const [success, setSuccess] = useState(false)
+
+  const initData = {
+    name: null,
+    email: null,
+    tel: null,
+    title: null,
+    message: null
+  }
+
+  const form = useForm({
+    initialValues: initData,
+    validate: {
+      name: isNotEmpty(),
+      email: isEmail(),
+      tel: isNotEmpty(),
+      title: isNotEmpty(),
+      message: isNotEmpty()
+    }
+  })
+
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
+    form.validate()
+    if (form.isValid()) {
+      const data = form.values
+      const res = await contactApi.create(data)
+      if (res.success) {
+        setSuccess(true)
+        return
+      }
+    }
+  }
+
+  const SuccessBox = () => {
+    return (
+      <Grid.Col span={12}>
+        <Alert>ส่งข้อมูลสำเร็จ</Alert>
+      </Grid.Col>
+    )
   }
 
   return (
@@ -18,43 +59,55 @@ export function ContactPage() {
       <Container className="my-6 p-8 mx-auto max-w-full bg-white text-[#333] rounded-xl">
         <h1>Contact Us</h1>
         <Grid>
-          <Grid.Col span={12}>
-            <div>
-              <h1 className="text-3xl font-extrabold">แบบฟอร์มติดต่อ</h1>
-              <p className="text-md">The River Runs ChiangKlang</p>
-              <p className="text-sm text-gray-400 mt-3">
-                กรุณากรอกข้อมูลส่วนตัวของท่าน เราจะติดต่อกลับโดยเร็วที่สุด
-                ขอบพระคุณที่สนใจเข้าพักที่ The River Runs ChiangKlang
-              </p>
-            </div>
-            <form className="ml-auo space-y-4">
-              <Input
-                type="text"
-                placeholder="Name"
-                className="w-full rounded-md py-3 px-4 bg-gray-100 text-sm outline-[#A16207]"
-              />
-              <Input
-                type="email"
-                placeholder="Email"
-                className="w-full rounded-md py-3 px-4 bg-gray-100 text-sm outline-[#A16207]"
-              />
-              <Input
-                type="text"
-                placeholder="Subject"
-                className="w-full rounded-md py-3 px-4 bg-gray-100 text-sm outline-[#A16207]"
-              />
-              <Textarea
-                placeholder="Message"
-                className="w-full rounded-md px-4 bg-gray-100 text-sm pt-3 outline-[#A16207]"
-              ></Textarea>
-              <Button
-                type="button"
-                className="text-white bg-[#A16207] hover:bg-[#A16207] font-semibold rounded-md text-sm px-4 py-3 w-full"
-              >
-                Send
-              </Button>
-            </form>
-          </Grid.Col>
+          {success ? (
+            <SuccessBox />
+          ) : (
+            <Grid.Col span={12}>
+              <div>
+                <h1 className="text-3xl font-extrabold">แบบฟอร์มติดต่อ</h1>
+                <p className="text-md">The River Runs ChiangKlang</p>
+                <p className="text-sm text-gray-400 mt-3">
+                  กรุณากรอกข้อมูลส่วนตัวของท่าน เราจะติดต่อกลับโดยเร็วที่สุด
+                  ขอบพระคุณที่สนใจเข้าพักที่ The River Runs ChiangKlang
+                </p>
+              </div>
+              <form onSubmit={handleSubmit} className="ml-auo space-y-4">
+                <Input
+                  placeholder="Name"
+                  className="w-full rounded-md py-3 px-4 bg-gray-100 text-sm outline-[#A16207]"
+                  {...form.getInputProps('name')}
+                />
+                <Input
+                  type="email"
+                  placeholder="Email"
+                  className="w-full rounded-md py-3 px-4 bg-gray-100 text-sm outline-[#A16207]"
+                  {...form.getInputProps('email')}
+                />
+                <Input
+                  placeholder="Tel"
+                  className="w-full rounded-md py-3 px-4 bg-gray-100 text-sm outline-[#A16207]"
+                  {...form.getInputProps('tel')}
+                />
+                <Input
+                  placeholder="Subject"
+                  className="w-full rounded-md py-3 px-4 bg-gray-100 text-sm outline-[#A16207]"
+                  {...form.getInputProps('title')}
+                />
+                <Textarea
+                  placeholder="Message"
+                  className="w-full rounded-md px-4 bg-gray-100 text-sm pt-3 outline-[#A16207]"
+                  {...form.getInputProps('message')}
+                />
+                <Button
+                  type="submit"
+                  className="text-white bg-[#A16207] hover:bg-[#A16207] font-semibold rounded-md text-sm px-4 py-3 w-full"
+                >
+                  Send
+                </Button>
+              </form>
+            </Grid.Col>
+          )}
+
           <Grid.Col span={12}>
             <div>
               <div>

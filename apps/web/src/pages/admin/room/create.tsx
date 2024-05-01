@@ -92,8 +92,8 @@ export default function AdminRoomCreatePage({ mode }: Props) {
 
   const handleCreate = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
-
-    if (form.validate()) {
+    form.validate()
+    if (form.isValid()) {
       const f = form.values
       const formData = new FormData()
       formData.append('categoryId', f.categoryId.toString())
@@ -113,8 +113,8 @@ export default function AdminRoomCreatePage({ mode }: Props) {
   const handleUpdate = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
     const formData = new FormData()
-    if (form.validate()) {
-      const f = form.values
+    form.validate()
+    if (form.isValid()) {
       formData.append('categoryId', f.categoryId.toString())
       formData.append('name', f.name)
       formData.append('pricePerNight', f.pricePerNight.toString())

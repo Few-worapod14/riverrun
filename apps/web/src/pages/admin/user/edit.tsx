@@ -57,7 +57,8 @@ export default function AdminUserEditPage({ mode }: Props) {
 
   const handleCreate = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
-    if (form.validate()) {
+    form.validate()
+    if (form.isValid()) {
       const data = form.values
       const res = await adminUser.create(data)
       if (res.success) {
