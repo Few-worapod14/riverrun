@@ -55,12 +55,12 @@ export const Header = () => {
             >
               Contact
             </Link>
-            <Link
+            {/* <Link
               to={'/search'}
               className="text-sm font-semibold text-white bg-yellow-700 p-4 rounded-xl"
             >
               Booking
-            </Link>
+            </Link> */}
           </div>
         </nav>
 

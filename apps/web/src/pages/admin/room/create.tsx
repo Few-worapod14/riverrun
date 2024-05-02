@@ -113,6 +113,7 @@ export default function AdminRoomCreatePage({ mode }: Props) {
   const handleUpdate = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
     const formData = new FormData()
+    const f = form.values
     form.validate()
     if (form.isValid()) {
       formData.append('categoryId', f.categoryId.toString())

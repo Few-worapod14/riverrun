@@ -9,6 +9,7 @@ import slide7 from '@/assets/slide7.jpeg'
 import slide8 from '@/assets/slide8.jpeg'
 import slide9 from '@/assets/slide9.jpeg'
 import video from '@/assets/video.mp4'
+import { BookingDate } from '@/components/BookingDate/BookingDate'
 import { CarouselBox } from '@/components/Carousel/Carousel'
 import { RootLayout } from '@/components/Layout/Layout'
 import { Grid } from '@mantine/core'
@@ -39,9 +40,9 @@ export default function HomePage() {
           <CarouselBox data={images.map((x) => ({ image: x }))} height={400} />
         </Grid.Col>
 
-        {/* <Grid.Col span={12}>
+        <Grid.Col span={12}>
           <BookingDate onSearch={handleSearch} />
-        </Grid.Col> */}
+        </Grid.Col>
 
         <Grid.Col span={12}>
           <video width="100%" height="100%" controls autoPlay playsInline loop muted>

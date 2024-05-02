@@ -25,7 +25,6 @@ import { ContactPage } from './pages/contact'
 import HomePage from './pages/home'
 import RoomIndexPage from './pages/room'
 import CottageHousePage from './pages/room/cottage'
-import RoomViewPage from './pages/room/view'
 import SignUpPage from './pages/user/SignUp'
 import { MODE } from './utils/booking'
 
@@ -41,7 +40,7 @@ function App() {
           <Route path="/booking" element={<BookingPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/room" element={<RoomIndexPage />} />
-          <Route path="/room/:slug" element={<RoomViewPage />} />
+          <Route path="/room/:id" element={<CottageHousePage />} />
           <Route path="/room/cottage" element={<CottageHousePage />} />
           <Route path="/contact" element={<ContactPage />} />
 

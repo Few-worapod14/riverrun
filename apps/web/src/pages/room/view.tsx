@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 export default function RoomViewPage() {
-  const { slug } = useParams()
+  const { id } = useParams()
 
   const [loading, setLoading] = useState<boolean>(true)
   const [room, setRoom] = useState<RoomDto | null>(null)
@@ -17,7 +17,7 @@ export default function RoomViewPage() {
   }, [])
 
   const handleFetchRooms = async () => {
-    const res = await apiRoom.getRoomById(slug)
+    const res = await apiRoom.getRoomById(Number(id))
 
     if (res.success) {
       setRoom(res.data)

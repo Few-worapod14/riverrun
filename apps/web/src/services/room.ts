@@ -13,8 +13,8 @@ export const getAllRooms = async () => {
   return api
 }
 
-export const getRoomById = async (slug: string) => {
-  const api: IResponsePaginate<RoomDto> = await ApiClient().get(`/rooms/view/${slug}`)
+export const getRoomById = async (id: number) => {
+  const api: IResponsePaginate<RoomDto> = await ApiClient().get(`/rooms/${id}`)
 
   return api
 }
