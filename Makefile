@@ -34,13 +34,13 @@ compose:
 
 .PHONY: install
 install:
-	bash ./install.sh
+	bash ./scripts/install.sh
 
 .PHONY: run
 run:
-	bash ./run.sh
+	bash ./scripts/run.sh
 
 .PHONY: restart
 restart:
-	bash ./restart.sh
+	bash ./scripts/restart.sh
 
