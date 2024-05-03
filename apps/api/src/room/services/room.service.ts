@@ -20,7 +20,8 @@ export class RoomService {
       ...data,
       category: {
         id: data.categoryId
-      }
+      },
+      isActive: data.isActive === 'true' ? true : false
     }
     delete save.categoryId
     const room = await this.roomRepository.save(save)
@@ -69,7 +70,8 @@ export class RoomService {
       id: id,
       category: {
         id: data.categoryId
-      }
+      },
+      isActive: data.isActive === 'true' ? true : false
     }
     delete save.categoryId
 

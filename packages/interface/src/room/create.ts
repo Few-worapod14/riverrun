@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer'
-import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator'
+import { IsNumber, IsOptional, IsString } from 'class-validator'
 
 export class RoomCreateDto {
   @IsNumber()
@@ -20,7 +20,6 @@ export class RoomCreateDto {
   @IsOptional()
   detail?: string
 
-  @IsBoolean()
-  @Transform(({ value }) => (value === 'true' ? true : false))
-  isActive: boolean
+  @IsString()
+  isActive: string
 }
