@@ -30,7 +30,7 @@ import { MODE } from './utils/booking'
 
 function App() {
   const baseName = import.meta.env.VITE_BASE_URL
-  console.log('baseName', baseName)
+
   return (
     <>
       <BrowserRouter basename={baseName}>

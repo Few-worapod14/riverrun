@@ -28,8 +28,7 @@ import { RoomModule } from './room/room.module'
     }),
     ServeStaticModule.forRoot({
       rootPath: process.env.FILE_UPLOAD,
-      serveRoot: `/${process.env.FILE_UPLOAD}/`,
-      exclude: ['/api/(.*)']
+      serveRoot: `/${process.env.FILE_UPLOAD}/`
     }),
     HealthModule,
     AdminModule,

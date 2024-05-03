@@ -20,9 +20,20 @@ pnpm add -filter api dayjs
   ```
   bash ./script/install.sh
   ```
-- config nginx
+- copy nginx
   ```
   cp ../nginx/dev.conf:/etc/nginx/conf.d/default.conf
+  ```
+- config upload nginx
+  ```
+    http {
+    ...
+    client_max_body_size 100M;
+    ...
+    server {
+      ...
+    }
+    }
   ```
 - run pm2
 - restart nginx
