@@ -44,3 +44,7 @@ run:
 restart:
 	bash ./scripts/restart.sh
 
+.PHONY: update
+update:
+	bash ./scripts/update.sh
+
