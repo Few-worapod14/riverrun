@@ -3,10 +3,7 @@ import axios, { AxiosError } from 'axios'
 import { localStorageName } from '../store/store'
 
 export const baseApi = import.meta.env.VITE_APP_API
-const baseName = import.meta.env.VITE_BASE_URL
-const loginUrl = `${baseName}/admin/login`
-
-console.log('xxx', loginUrl)
+const loginUrl = `/admin/login`
 
 export const ApiClient = () => {
   const instance = axios.create({
