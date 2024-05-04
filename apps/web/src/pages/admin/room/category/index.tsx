@@ -142,6 +142,7 @@ export default function AdminRoomCategoryPage() {
             onClick={() => {
               setAction('view')
               const data = categories.find((x) => x.id == category.id)
+              form.setValues({ ...data })
               setCategory(data!)
               setOpenModal(true)
             }}
@@ -153,6 +154,7 @@ export default function AdminRoomCategoryPage() {
             onClick={() => {
               setAction('update')
               const data = categories.find((x) => x.id == category.id)
+              form.setValues({ ...data })
               setCategory(data!)
               setOpenModal(true)
             }}
@@ -196,7 +198,6 @@ export default function AdminRoomCategoryPage() {
               เพิ่มประเภทห้อง
             </Button>
           </Flex>
-
           <Table withTableBorder withColumnBorders className="mb-5">
             <Table.Thead>
               <Table.Tr>
@@ -210,7 +211,6 @@ export default function AdminRoomCategoryPage() {
           </Table>
 
           <Pagination total={total} defaultValue={currentPage} onChange={handleChangePage} />
-
           <ModalBox
             title={action == 'create' ? 'เพิ่ม' : 'แก้ไข'}
             isOpen={isOpenModal}
@@ -251,7 +251,6 @@ export default function AdminRoomCategoryPage() {
               </Flex>
             </form>
           </ModalBox>
-
           <ConfirmModalBox
             title="ยืนยันการลบ"
             message="ยืนยันการลบ"
