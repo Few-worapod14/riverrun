@@ -8,6 +8,7 @@ import {
   UpdateDateColumn
 } from 'typeorm'
 import { RoomCategory } from './category-room.entity'
+import { RoomAmenity } from './room-amenity.entity'
 import { RoomImage } from './room-image.entity'
 
 @Entity({
@@ -43,4 +44,7 @@ export class Room {
 
   @OneToMany(() => RoomImage, (images) => images.room)
   images: RoomImage[]
+
+  @OneToMany(() => RoomAmenity, (amenities) => amenities.room)
+  amenities: RoomAmenity[]
 }

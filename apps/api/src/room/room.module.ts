@@ -10,6 +10,8 @@ import { AdminRoomImageController } from './controllers/admin-room-image.control
 import { AdminRoomController } from './controllers/admin-room.controller'
 import { RoomController } from './controllers/room.controller'
 import { RoomCategory } from './entities/category-room.entity'
+import { RoomAmenityList } from './entities/room-amenity-lists.entity'
+import { RoomAmenity } from './entities/room-amenity.entity'
 import { RoomImage } from './entities/room-image.entity'
 import { Room } from './entities/room.entity'
 import { RoomCategoryService } from './services/room-category.service'
@@ -31,7 +33,7 @@ import { RoomService } from './services/room.service'
         }
       })
     }),
-    TypeOrmModule.forFeature([RoomCategory, Room, RoomImage]),
+    TypeOrmModule.forFeature([RoomCategory, Room, RoomImage, RoomAmenity, RoomAmenityList]),
     AuthModule
   ],
   controllers: [
