@@ -79,6 +79,30 @@ export default function AdminRoomViewPage() {
               </Grid>
             ) : null}
 
+            {room?.amenities.length != 0 ? (
+              <>
+                <Grid className="mb-5">
+                  <Grid.Col span={12}>สิ่งอำนวยความสะดวก</Grid.Col>
+                </Grid>
+                <Grid className="mb-5">
+                  {room?.amenities.map((x) => {
+                    return (
+                      <Grid.Col span={12}>
+                        {x.name}
+                        {x.lists.map((l) => {
+                          return (
+                            <ul>
+                              <li>{l.name}</li>
+                            </ul>
+                          )
+                        })}
+                      </Grid.Col>
+                    )
+                  })}
+                </Grid>
+              </>
+            ) : null}
+
             <Flex gap="md" direction="row" wrap="wrap" className="mb-5">
               <Button
                 onClick={() => {

@@ -3,7 +3,6 @@ import { Button, Container, Grid, Image, Overlay } from '@mantine/core'
 import { RoomDto } from '@riverrun/interface'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import room1 from '../../assets/image1.jpg'
 import { RootLayout } from '../../components/Layout/Layout'
 
 export default function RoomIndexPage() {
@@ -44,7 +43,10 @@ export default function RoomIndexPage() {
               onMouseLeave={handleMouseLeave}
               style={{ position: 'relative' }}
             >
-              <Image src={room1} radius="md" />
+              {room?.images?.length !== 0 ? (
+                <Image src={room?.images?.[0].fullPath} radius="md" />
+              ) : null}
+
               {hoveredRoom?.id === room.id && (
                 <Overlay
                   style={{

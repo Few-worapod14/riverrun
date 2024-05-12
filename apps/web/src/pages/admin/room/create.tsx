@@ -14,7 +14,7 @@ import {
   Textarea
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { RoomCategoryDto, RoomDto, RoomImageDto } from '@riverrun/interface'
+import { AmenityListDto, RoomCategoryDto, RoomDto, RoomImageDto } from '@riverrun/interface'
 import { useEffect, useState } from 'react'
 import ImageUploading, { ImageListType } from 'react-images-uploading'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -22,6 +22,8 @@ import AdminLayout from '../../../components/Layout/AdminLayout'
 import * as apiCategory from '../../../services/admin-room-category.ts'
 
 import { ConfirmModalBox } from '@/components/Modal/ConfirmModal.tsx'
+import { Amenity } from '@/components/Room/Amenity.tsx'
+import { AmenityDto } from '@riverrun/interface/src'
 import './create.scss'
 
 type Props = {
@@ -48,7 +50,7 @@ export default function AdminRoomCreatePage({ mode }: Props) {
     handleFetchCategory()
   }, [])
 
-  const initAmenityLists = [
+  const initAmenityLists: AmenityListDto[] = [
     {
       name: ''
     }
@@ -60,7 +62,7 @@ export default function AdminRoomCreatePage({ mode }: Props) {
       lists: initAmenityLists
     }
   ]
-  const [amenities, setAmenities] = useState(initAmenities)
+  const [amenities, setAmenities] = useState<AmenityDto[]>(initAmenities)
 
   const initData = {
     categoryId: 0,
@@ -69,7 +71,7 @@ export default function AdminRoomCreatePage({ mode }: Props) {
     amount: 1,
     detail: '',
     isActive: 'true',
-    amenities: initAmenities.toString()
+    amenities: initAmenities
   }
   const form = useForm({
     initialValues: initData
@@ -92,6 +94,7 @@ export default function AdminRoomCreatePage({ mode }: Props) {
     const res = await apiRoom.getById(Number(id))
     if (res.success) {
       setRoom(res.data)
+      setAmenities(res.data.amenities)
 
       const init = {
         categoryId: res.data.category.id,
@@ -105,19 +108,20 @@ export default function AdminRoomCreatePage({ mode }: Props) {
     }
   }
 
+  const formData = new FormData()
+
   const handleCreate = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
     form.validate()
     if (form.isValid()) {
       const f = form.values
-      const formData = new FormData()
       formData.append('categoryId', f.categoryId.toString())
       formData.append('name', f.name)
       formData.append('pricePerNight', f.pricePerNight.toString())
       formData.append('amount', f.amount.toString())
       formData.append('detail', f.detail!)
       formData.append('isActive', f.isActive)
-      // formData.append('amenities', f.amenities)
+      formData.append('amenities', JSON.stringify(amenities))
 
       const res = await apiRoom.create(formData)
       if (res.success) {
@@ -128,7 +132,6 @@ export default function AdminRoomCreatePage({ mode }: Props) {
 
   const handleUpdate = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
-    const formData = new FormData()
     const f = form.values
     form.validate()
     if (form.isValid()) {
@@ -138,16 +141,16 @@ export default function AdminRoomCreatePage({ mode }: Props) {
       formData.append('amount', f.amount.toString())
       formData.append('detail', f.detail!)
       formData.append('isActive', f.isActive)
-      formData.append('amenities', f.amenities)
+      formData.append('amenities', JSON.stringify(amenities))
 
       images.forEach(async (image) => {
         formData.append(`files`, image.file!, image.file?.name)
       })
-
-      // const res = await apiRoom.update(Number(id), formData)
-      // if (res.success) {
-      //   navigate('/admin/room')
-      // }
+      console.log('update', f)
+      const res = await apiRoom.update(Number(id), formData)
+      if (res.success) {
+        navigate('/admin/room')
+      }
     }
   }
 
@@ -170,40 +173,13 @@ export default function AdminRoomCreatePage({ mode }: Props) {
 
   const handleAddAmenity = () => {
     const add = amenities.concat(initAmenities)
-    setAmenities(add)
-  }
-
-  const handleDeleteAmenity = (index: number) => {
-    const update = amenities.filter((_, i) => i !== index)
-    setAmenities(update)
-  }
-
-  const handleAddAmenityList = (index: number) => {
-    const add = amenities.map((x, i) => {
-      if (i === index) {
-        return {
-          ...x,
-          lists: x.lists.concat(initAmenityLists)
-        }
-      }
-      return x
+    add.map((x, i) => {
+      formData.append(`amenities[${i}].name`, '')
+      x.lists.map((_, idx) => {
+        formData.append(`amenities[${i}].lists[${idx}].name`, '')
+      })
     })
     setAmenities(add)
-  }
-
-  const handleDeleteAmenityList = (index: number, listIndex: number) => {
-    const update = amenities.map((x, i) => {
-      if (i === index) {
-        const lists = x.lists.filter((_, idx) => idx !== listIndex)
-
-        return {
-          ...x,
-          lists: lists
-        }
-      }
-      return x
-    })
-    setAmenities(update)
   }
 
   return (
@@ -308,59 +284,14 @@ export default function AdminRoomCreatePage({ mode }: Props) {
               เพิ่มประเภท
             </Button>
 
-            {amenities.map((amenity, index) => {
+            {amenities?.map((amenity: AmenityDto, index: number) => {
               return (
-                <>
-                  <Grid>
-                    <Grid.Col span={4}>
-                      <Input.Wrapper label="ประเภทอำนวยความสะดวก">
-                        <Input
-                          value={amenity?.name}
-                          defaultValue={amenity?.name}
-                          {...form.getInputProps(`amenities.[${index}].name`)}
-                        />
-                      </Input.Wrapper>
-                    </Grid.Col>
-
-                    <Grid.Col span={4}>
-                      <Button onClick={() => handleDeleteAmenity(index)} color="red">
-                        ลบ
-                      </Button>
-                    </Grid.Col>
-                  </Grid>
-
-                  <Grid>
-                    <Grid.Col span={12}>
-                      <Button onClick={() => handleAddAmenityList(index)} color="teal">
-                        เพิ่มรายการ
-                      </Button>
-                      <hr />
-                    </Grid.Col>
-                  </Grid>
-
-                  {amenity.lists.map((list, i) => {
-                    return (
-                      <ul>
-                        <li>
-                          <Grid>
-                            <Grid.Col span={4}>
-                              <Input
-                                value={list?.name}
-                                defaultValue={list?.name}
-                                {...form.getInputProps(`amenities.[${index}].lists.[${i}].name`)}
-                              />
-                            </Grid.Col>
-                            <Grid.Col span={4}>
-                              <Button onClick={() => handleDeleteAmenityList(index, i)} color="red">
-                                ลบ
-                              </Button>
-                            </Grid.Col>
-                          </Grid>
-                        </li>
-                      </ul>
-                    )
-                  })}
-                </>
+                <Amenity
+                  amenities={amenities}
+                  amenity={amenity}
+                  index={index}
+                  setAmenities={setAmenities}
+                />
               )
             })}
           </div>
