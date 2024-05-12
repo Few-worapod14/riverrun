@@ -14,7 +14,13 @@ import {
   Textarea
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { AmenityListDto, RoomCategoryDto, RoomDto, RoomImageDto } from '@riverrun/interface'
+import {
+  AmenityDto,
+  AmenityListDto,
+  RoomCategoryDto,
+  RoomDto,
+  RoomImageDto
+} from '@riverrun/interface'
 import { useEffect, useState } from 'react'
 import ImageUploading, { ImageListType } from 'react-images-uploading'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -23,7 +29,6 @@ import * as apiCategory from '../../../services/admin-room-category.ts'
 
 import { ConfirmModalBox } from '@/components/Modal/ConfirmModal.tsx'
 import { Amenity } from '@/components/Room/Amenity.tsx'
-import { AmenityDto } from '@riverrun/interface/src'
 import './create.scss'
 
 type Props = {
@@ -56,7 +61,7 @@ export default function AdminRoomCreatePage({ mode }: Props) {
     }
   ]
 
-  const initAmenities: AmenityDto = [
+  const initAmenities = [
     {
       name: '',
       lists: initAmenityLists
