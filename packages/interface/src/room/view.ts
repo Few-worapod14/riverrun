@@ -1,3 +1,4 @@
+import { AmenityDto } from './amenity'
 import { RoomCategoryDto } from './category'
 import { RoomImageDto } from './image'
 
@@ -21,4 +22,6 @@ export class RoomDto {
   updatedAt: Date
 
   images: RoomImageDto[]
+
+  amenities: AmenityDto[]
 }

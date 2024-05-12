@@ -22,4 +22,7 @@ export class RoomCreateDto {
 
   @IsString()
   isActive: string
+
+  @IsString()
+  amenities: string
 }
