@@ -42,9 +42,9 @@ export class Room {
   @UpdateDateColumn()
   updatedAt: Date
 
-  @OneToMany(() => RoomImage, (images) => images.room)
+  @OneToMany(() => RoomImage, (images) => images.room, { cascade: true })
   images: RoomImage[]
 
-  @OneToMany(() => RoomAmenity, (amenities) => amenities.room)
+  @OneToMany(() => RoomAmenity, (amenities) => amenities.room, { cascade: true })
   amenities: RoomAmenity[]
 }

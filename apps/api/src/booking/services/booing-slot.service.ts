@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { RoomDto } from '@riverrun/interface'
 import { Repository } from 'typeorm'
 import { Room } from '../../room/entities/room.entity'
 import { BookingSlot } from '../entities/booking-slot.entity'
@@ -34,7 +33,7 @@ export class BookingSlotService {
       .leftJoinAndSelect('rooms.images', 'images')
       .getMany()
 
-    const allRooms: RoomDto[] = rooms
+    const allRooms: Room[] = rooms
 
     // // หาห้องที่จอง แล้วลบจำนวน
     if (bookingSlots.length > 0) {

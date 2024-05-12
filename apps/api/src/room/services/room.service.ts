@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { RoomCreateDto, RoomUpdateDto } from '@riverrun/interface'
+import { AmenityDto, AmenityListDto, RoomCreateDto, RoomUpdateDto } from '@riverrun/interface'
 
 import { Repository } from 'typeorm'
+import { RoomAmenityList } from '../entities/room-amenity-lists.entity'
+import { RoomAmenity } from '../entities/room-amenity.entity'
 import { RoomImage } from '../entities/room-image.entity'
 import { Room } from '../entities/room.entity'
 
@@ -12,18 +14,25 @@ export class RoomService {
     @InjectRepository(Room)
     private roomRepository: Repository<Room>,
     @InjectRepository(RoomImage)
-    private roomImageRepository: Repository<RoomImage>
+    private roomImageRepository: Repository<RoomImage>,
+    @InjectRepository(RoomAmenity)
+    private roomAmenityRepository: Repository<RoomAmenity>,
+    @InjectRepository(RoomAmenityList)
+    private roomAmenityListRepository: Repository<RoomAmenityList>
   ) {}
 
   async create(data: RoomCreateDto, files?: Array<Express.Multer.File>) {
     const save = {
-      ...data,
       category: {
         id: data.categoryId
       },
+      name: data.name,
+      pricePerNight: data.pricePerNight,
+      amount: data.amount,
+      detail: data.detail,
       isActive: data.isActive === 'true' ? true : false
     }
-    delete save.categoryId
+
     const room = await this.roomRepository.save(save)
 
     files?.forEach(async (file) => {
@@ -36,6 +45,28 @@ export class RoomService {
       }
       await this.roomImageRepository.save(image)
     })
+    if (data.amenities.length > 0) {
+      const amenities: AmenityDto[] = JSON.parse(data.amenities)
+
+      amenities.forEach(async (amenity: AmenityDto) => {
+        const data = await this.roomAmenityRepository.save({
+          name: amenity.name,
+          room: {
+            id: room.id
+          }
+        })
+
+        amenity.lists.forEach(async (list: AmenityListDto) => {
+          const add = {
+            name: list.name,
+            roomAmenity: {
+              id: data.id
+            }
+          }
+          await this.roomAmenityListRepository.save(add)
+        })
+      })
+    }
 
     return room
   }
@@ -47,7 +78,11 @@ export class RoomService {
       take: limit,
       relations: {
         category: true,
-        images: true
+        images: true,
+        amenities: true
+      },
+      order: {
+        id: 'asc'
       }
     })
   }
@@ -59,21 +94,26 @@ export class RoomService {
       },
       relations: {
         category: true,
-        images: true
+        images: true,
+        amenities: {
+          lists: true
+        }
       }
     })
   }
 
   async update(id: number, data: RoomUpdateDto, files?: Array<Express.Multer.File>) {
     const save = {
-      ...data,
       id: id,
       category: {
         id: data.categoryId
       },
+      name: data.name,
+      pricePerNight: data.pricePerNight,
+      amount: data.amount,
+      detail: data.detail,
       isActive: data.isActive === 'true' ? true : false
     }
-    delete save.categoryId
 
     const room = await this.roomRepository.findOne({ where: { id: id } })
 
@@ -88,6 +128,49 @@ export class RoomService {
       }
       await this.roomImageRepository.save(image)
     })
+
+    if (data.amenities.length > 0) {
+      const amenities: AmenityDto[] = JSON.parse(data.amenities)
+
+      for (const amenity of amenities) {
+        const findAmenity = await this.roomAmenityRepository.find({
+          where: {
+            room: {
+              id
+            }
+          }
+        })
+        for (const list of findAmenity) {
+          const findData = await this.roomAmenityListRepository.findOne({
+            where: {
+              roomAmenity: {
+                id: list.id
+              }
+            }
+          })
+          if (findData) {
+            await this.roomAmenityListRepository.delete(findData?.id)
+            await this.roomAmenityRepository.delete(list?.id)
+          }
+        }
+
+        const data = await this.roomAmenityRepository.save({
+          name: amenity.name,
+          room: {
+            id: id
+          }
+        })
+        amenity.lists.forEach(async (list: AmenityListDto) => {
+          const add = {
+            name: list.name,
+            roomAmenity: {
+              id: data.id
+            }
+          }
+          await this.roomAmenityListRepository.save(add)
+        })
+      }
+    }
 
     return this.roomRepository.save(save)
   }

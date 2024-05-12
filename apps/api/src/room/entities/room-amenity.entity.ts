@@ -15,6 +15,6 @@ export class RoomAmenity {
   @Column()
   name: string
 
-  @OneToMany(() => RoomAmenityList, (lists) => lists.roomAmenity)
+  @OneToMany(() => RoomAmenityList, (lists) => lists.roomAmenity, { cascade: true })
   lists: RoomAmenityList[]
 }
