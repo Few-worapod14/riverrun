@@ -1,4 +1,4 @@
-import { BookingSlotViewDto } from 'src/booking-slot'
+import { BookingSlotViewDto } from '../booking-slot'
 import { CustomerDto } from '../customer'
 import { RoomDto } from '../room'
 

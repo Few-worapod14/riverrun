@@ -13,7 +13,7 @@ export class RoomDto {
 
   amount: number
 
-  detail?: string | undefined
+  detail?: string
 
   isActive: boolean | string
 

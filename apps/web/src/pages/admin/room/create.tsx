@@ -56,7 +56,7 @@ export default function AdminRoomCreatePage({ mode }: Props) {
     }
   ]
 
-  const initAmenities = [
+  const initAmenities: AmenityDto = [
     {
       name: '',
       lists: initAmenityLists

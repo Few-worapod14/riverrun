@@ -1,14 +1,14 @@
 import { RoomDto } from '../view'
 
 export class AmenityDto {
-  id: number
+  id?: number
   name: string
-  room: RoomDto
+  room?: RoomDto
   lists: AmenityListDto[]
 }
 
 export class AmenityListDto {
-  id: number
-  roomAmenity: AmenityDto
+  id?: number
+  roomAmenity?: AmenityDto
   name: string
 }

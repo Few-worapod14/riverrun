@@ -1,4 +1,3 @@
-import { Room } from 'src/room/entities/room.entity'
 import {
   Column,
   CreateDateColumn,
@@ -9,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm'
+import { Room } from '../../room/entities/room.entity'
 import { Booking } from './booking.entity'
 
 @Entity({

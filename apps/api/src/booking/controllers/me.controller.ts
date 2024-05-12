@@ -12,8 +12,8 @@ import {
 } from '@nestjs/common'
 import { IResponseData, IResponsePaginate } from '@riverrun/interface'
 import { Response } from 'express'
-import { IRequestWithUser } from 'src/auth/request.interface'
 import { AuthGuard } from '../../auth/guards/auth.guard'
+import { IRequestWithUser } from '../../auth/request.interface'
 import { Booking } from '../entities/booking.entity'
 import { BookingService } from '../services/booking.service'
 
