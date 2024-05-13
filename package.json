@@ -6,7 +6,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "dotenv -- turbo run dev start:dev",
-    "prod": "dotenv -- turbo run start:prod",
+    "prod": "dotenv -- turbo run start:prod preview",
     "prepare": "husky install",
     "lint": "turbo run lint",
     "lint-staged": "lint-staged"
