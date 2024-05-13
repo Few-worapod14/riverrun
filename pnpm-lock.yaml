@@ -337,6 +337,9 @@ importers:
       eslint-plugin-react-refresh:
         specifier: 0.4.5
         version: 0.4.5(eslint@8.55.0)
+      rimraf:
+        specifier: 3.0.2
+        version: 3.0.2
       sass:
         specifier: 1.69.7
         version: 1.69.7
