@@ -42,6 +42,20 @@ export default function RoomViewPage() {
         </Grid>
         <Grid>฿ {room.pricePerNight}</Grid>
         <Grid>{room.detail}</Grid>
+
+        <Grid>
+          <Grid.Col span={12}>
+            <h3>สิ่งอำนวยความสะดวกในห้อง</h3>
+          </Grid.Col>
+          {room.amenities?.map((amenity) => (
+            <Grid.Col span={12}>
+              <h3>{amenity.name}</h3>
+              {amenity.lists.map((list) => {
+                return <li>{list.name}</li>
+              })}
+            </Grid.Col>
+          ))}
+        </Grid>
       </Paper>
     </RootLayout>
   )
