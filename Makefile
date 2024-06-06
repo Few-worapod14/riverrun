@@ -48,3 +48,6 @@ restart:
 update:
 	bash ./scripts/update.sh
 
+.PHONY: build
+build:
+	pnpm run build

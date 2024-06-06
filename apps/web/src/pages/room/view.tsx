@@ -40,22 +40,32 @@ export default function RoomViewPage() {
             <CarouselBox data={room.images.map((x) => ({ image: x.fullPath }))} height={400} />
           </Grid.Col>
         </Grid>
-        <Grid>฿ {room.pricePerNight}</Grid>
-        <Grid>{room.detail}</Grid>
-
         <Grid>
-          <Grid.Col span={12}>
-            <h3>สิ่งอำนวยความสะดวกในห้อง</h3>
-          </Grid.Col>
-          {room.amenities?.map((amenity) => (
-            <Grid.Col span={12}>
-              <h3>{amenity.name}</h3>
-              {amenity.lists.map((list) => {
-                return <li>{list.name}</li>
-              })}
-            </Grid.Col>
-          ))}
+          <Grid.Col span={12}>฿ {room.pricePerNight}</Grid.Col>
         </Grid>
+        {room.detail?.length > 0 ? (
+          <Grid>
+            <Grid.Col span={12}>{room.detail}</Grid.Col>
+          </Grid>
+        ) : null}
+
+        {room.amenities?.length > 0 ? (
+          <Grid>
+            <Grid.Col span={12}>
+              <strong>สิ่งอำนวยความสะดวกในห้อง</strong>
+            </Grid.Col>
+            <Grid.Col span={12}>
+              {room.amenities?.map((amenity) => (
+                <>
+                  <strong>{amenity.name}</strong>
+                  {amenity.lists.map((list) => {
+                    return <li>{list.name}</li>
+                  })}
+                </>
+              ))}
+            </Grid.Col>
+          </Grid>
+        ) : null}
       </Paper>
     </RootLayout>
   )
