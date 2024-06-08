@@ -1,7 +1,7 @@
 import { Grid } from '@mantine/core'
-import { RootLayout } from '../../../components/Layout/Layout'
 import { IconArrowDown, IconArrowUp, IconBed } from '@tabler/icons-react'
 import { useState } from 'react'
+import { RootLayout } from '../../../components/Layout/Layout'
 
 type AmenityItem = {
   id: number
@@ -97,7 +97,7 @@ export default function CottageHousePage() {
             >
               <summary className="flex items-center justify-between py-2 text-xl font-semibold">
                 {category.name}
-                {openCategory === category.id ? <IconArrowUp/> : <IconArrowDown />}
+                {openCategory === category.id ? <IconArrowUp /> : <IconArrowDown />}
               </summary>
               <div className="grid grid-cols-2 gap-2">
                 {category.amenities?.map((amenity) => (
